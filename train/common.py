@@ -16,7 +16,10 @@ def unpack_batch(batch, device):
     return x, y
 
 def val(tensor):
-    return tensor.detach().cpu().numpy()
+    if isinstance(tensor, torch.Tensor):
+        return tensor.detach().cpu().numpy()
+    else:
+        return tensor
 
 def acc(logits, labels):
     logits, labels = val(logits), val(labels)

@@ -161,7 +161,8 @@ class Generator(nn.Module):
         return self.feature_reconstructor(x)
 
 class Autoencoder(nn.Module):
-    def __init__(self, input_shape, bottleneck_features=64, resample_blocks=2, endomorphic_blocks=2, use_spectral_norm=True):
+    def __init__(self, input_shape, output_classes=10, bottleneck_features=64, resample_blocks=2, endomorphic_blocks=2,
+                 use_spectral_norm=True):
         super().__init__()
         
         self.feature_extractor = FeatureExtractor(
@@ -169,11 +170,18 @@ class Autoencoder(nn.Module):
             use_spectral_norm=use_spectral_norm, use_batch_norm=True, activation=lambda: nn.ReLU(inplace=True)
         )
         self.feature_reconstructor = FeatureReconstructor(
-            bottleneck_features, bottleneck_features//4, input_shape, resample_blocks, endomorphic_blocks,
+            bottleneck_features, bottleneck_features//4, input_shape, resample_blocks, 0,
             use_spectral_norm=use_spectral_norm, use_batch_norm=True, activation=lambda: nn.ReLU(inplace=True)
         )
+        self.label_classifier = nn.Linear(bottleneck_features, output_classes)
+        if use_spectral_norm:
+            self.label_classifier = spectral_norm(self.label_classifier)
         
-    def forward(self, x):
-        x_fe = self.feature_extractor(x)
-        out = self.feature_reconstructor(x_fe)
-        return out
+    def get_features(self, x):
+        return self.feature_extractor(x)
+    
+    def reconstruct_features(self, x):
+        return self.feature_reconstructor(x)
+    
+    def classify_labels(self, x):
+        return self.label_classifier(x)
