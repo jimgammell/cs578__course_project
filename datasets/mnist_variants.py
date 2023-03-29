@@ -1,6 +1,7 @@
  # Based on DomainBed implementations here:
  #   https://github.com/facebookresearch/DomainBed/blob/main/domainbed/datasets.py
 
+import numpy as np
 import torch
 from torchvision import datasets, transforms
 from torch.utils.data import Dataset
@@ -31,9 +32,43 @@ def color_dataset(data, targets, spurious_correlation):
     targets = (targets < 5).float()
     targets = torch_xor(targets, torch_bernoulli(0.25, len(targets)))
     colors = torch_xor(targets, torch_bernoulli(spurious_correlation, len(targets)))
-    data = torch.stack([data, data], dim=1).float()
+    data = torch.stack([data, data], dim=1)
     data[torch.tensor(range(len(data))), (1-colors).long(), :, :] *= 0
-    data = 2*(data/255.0)-1
+    data = 2*(data.float()/255.0)-1
+    targets = targets.view(-1).long()
+    
+    return data, targets
+
+def watermark_dataset(data, targets, spurious_correlation):
+    def add_square_watermark(image, center, radius):
+        for ridx in range(center[0]-radius, center[0]+radius+1):
+            for cidx in range(center[1]-radius, center[1]+radius+1):
+                if (0 <= ridx < image.shape[1]) and(0 <= cidx < image.shape[2]) and (((center[0]-ridx).abs() == radius) or (np.abs(center[1]-cidx) == radius)):
+                    image[:, ridx, cidx] = 1.0
+        return image
+    def add_plus_watermark(image, center, radius):
+        for ridx in range(center[0]-radius, center[0]+radius+1):
+            for cidx in range(center[1]-radius, center[1]+radius+1):
+                if (0 <= ridx < image.shape[1]) and (0 <= cidx < image.shape[2]) and ((ridx == center[0]) or (cidx == center[1])):
+                    image[:, ridx, cidx] = 1.0
+        return image
+    def torch_bernoulli(p, size):
+        return (torch.rand(size) < p).float()
+    def torch_xor(a, b):
+        return (a-b).abs()
+    
+    targets = (targets < 5).float()
+    targets = torch_xor(targets, torch_bernoulli(0.25, len(targets)))
+    watermarks = torch_xor(targets, torch_bernoulli(spurious_correlation, len(targets)))
+    data = 2*(data.float()/255.0)-1
+    data = data.view(-1, 1, 28, 28)
+    for idx, x in enumerate(data):
+        watermark_center = torch.randint(2, 26, size=(2,))
+        watermark_radius = torch.randint(1, 4, size=(1,))
+        if watermarks[idx] == 0:
+            data[idx] = add_square_watermark(x, watermark_center, watermark_radius)
+        elif watermarks[idx] == 1:
+            data[idx] = add_plus_watermark(x, watermark_center, watermark_radius)
     targets = targets.view(-1).long()
     
     return data, targets
@@ -73,6 +108,12 @@ class ColoredMNIST(MultiEnvironmentDataset):
     num_classes = 2
     def __init__(self, spurious_correlations, *args, **kwargs):
         super().__init__(*args, color_dataset, spurious_correlations, **kwargs)
+
+class WatermarkedMNIST(MultiEnvironmentDataset):
+    input_shape = (1, 28, 28)
+    num_classes = 2
+    def __init__(self, spurious_correlations, *args, **kwargs):
+        super().__init__(*args, watermark_dataset, spurious_correlations, **kwargs)
 
 class RotatedMNIST(MultiEnvironmentDataset):
     input_shape = (1, 28, 28)
