@@ -2,6 +2,7 @@ import numpy as np
 import torch
 from torch import nn, optim
 from torch.nn.utils import spectral_norm
+from models.common import *
 
 class ResidualBlock(nn.Module):
     def __init__(self, in_channels, out_channels,
@@ -21,12 +22,13 @@ class ResidualBlock(nn.Module):
             residual_modules[-1] = spectral_norm(residual_modules[-1])
         if use_batch_norm:
             residual_modules.append(nn.BatchNorm2d(out_channels))
+        residual_modules.append(activation())
         if downsample:
             residual_modules.append(nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=2, padding=1))
         elif upsample:
-            residual_modules.append(nn.ConvTranspose2d(out_channels, out_channels, kernel_size=3, stride=2, padding=1))
+            residual_modules.append(nn.ConvTranspose2d(out_channels, out_channels, kernel_size=2, stride=2, padding=0))
         else:
-            residual_modules.append(nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=0))
+            residual_modules.append(nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1))
         if use_spectral_norm:
             residual_modules[-1] = spectral_norm(residual_modules[-1])
         self.residual_connection = nn.Sequential(*residual_modules)
@@ -61,7 +63,7 @@ class FeatureExtractor(nn.Module):
         modules = []
         for n in range(downsample_blocks):
             modules.append(ResidualBlock(
-                out_channels//(2**(downsample_blocks-n)), out_channels//(2**(downsample_blocks-n-1)),
+                out_channels//(2**(downsample_blocks-n)), out_channels//(2**(downsample_blocks-n-1)), downsample=True,
                 use_spectral_norm=use_spectral_norm, use_batch_norm=use_batch_norm, activation=activation
             ))
         for n in range(endomorphic_blocks):
@@ -92,7 +94,7 @@ class FeatureReconstructor(nn.Module):
         modules = []
         for n in range(upsample_blocks):
             modules.append(ResidualBlock(
-                out_channels*2**(upsample_blocks-n), out_channels*2**(upsample_blocks-n-1),
+                out_channels*2**(upsample_blocks-n), out_channels*2**(upsample_blocks-n-1), upsample=True,
                 use_spectral_norm=use_spectral_norm, use_batch_norm=use_batch_norm, activation=activation
             ))
         for n in range(endomorphic_blocks-1):
@@ -158,13 +160,14 @@ class Generator(nn.Module):
         )
         
     def forward(self, x):
-        return self.feature_reconstructor(x)
+        return self.feature_reconstructor(x.view(-1, self.latent_features, 1, 1))
 
 class Autoencoder(nn.Module):
     def __init__(self, input_shape, output_classes=10, bottleneck_features=64, resample_blocks=2, endomorphic_blocks=2,
                  use_spectral_norm=True):
         super().__init__()
         
+        self.bottleneck_features = bottleneck_features
         self.feature_extractor = FeatureExtractor(
             input_shape[0], bottleneck_features, resample_blocks, endomorphic_blocks,
             use_spectral_norm=use_spectral_norm, use_batch_norm=True, activation=lambda: nn.ReLU(inplace=True)
@@ -181,7 +184,7 @@ class Autoencoder(nn.Module):
         return self.feature_extractor(x)
     
     def reconstruct_features(self, x):
-        return self.feature_reconstructor(x)
+        return self.feature_reconstructor(x.view(-1, self.bottleneck_features, 1, 1))
     
     def classify_labels(self, x):
         return self.label_classifier(x)

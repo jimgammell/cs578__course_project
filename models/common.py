@@ -14,4 +14,4 @@ class GlobalPool2d(nn.Module):
         return out
     
     def __repr__(self):
-        return self.__class__.__name__+'({})'.format(self.pool_fn.__class__.__name__)
+        return self.__class__.__name__+'({})'.format(self.pool_fn.__name__)
