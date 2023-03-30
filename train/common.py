@@ -7,6 +7,12 @@ def preprocess_image_for_display(image):
     image = image.to(torch.uint8)
     image = image.to(torch.float)
     image = image/255.0
+    if len(image.shape) == 3:
+        image = image.unsqueeze(0)
+    elif image.shape[1] == 2:
+        image = torch.cat((image, torch.zeros(
+            (image.size(0), 1, image.size()[2:]), device=image.device, dtype=image.dtype)), dim=1)
+    image = image.permute(1, 2, 0)
     image = val(image)
     return image
 

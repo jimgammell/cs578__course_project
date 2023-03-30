@@ -79,7 +79,8 @@ def train_step(batch, gen, gen_opt, disc, disc_opt, device,
     
 @torch.no_grad()
 def eval_step(batch, gen, disc, device,
-              autoencoder_gen=False, dnae_noise_magnitude=1.0):
+              autoencoder_gen=False, dnae_noise_magnitude=1.0,
+              auxillary_gen_classifier=False, auxillary_disc_classifier=False):
     x, y = unpack_batch(batch, device)
     gen.eval()
     disc.eval()
@@ -131,6 +132,7 @@ def eval_step(batch, gen, disc, device,
 def train_epoch(dataloader, gen, gen_opt, disc, disc_opt, device, **step_kwargs):
     return run_epoch(dataloader, train_step, gen, gen_opt, disc, disc_opt, device, **step_kwargs)
 
+@torch.no_grad()
 def eval_epoch(dataloader, gen, disc, device,
                get_sample_images=False, autoencoder_gen=False, dnae_noise_magnitude=1.0, **step_kwargs):
     rv = run_epoch(dataloader, eval_step, gen, disc, device,
@@ -138,14 +140,16 @@ def eval_epoch(dataloader, gen, disc, device,
     if get_sample_images:
         if not hasattr(dataloader, gen_input):
             if autoencoder_gen:
-                dataloader.gen_input = next(iter(dataloader))[0]
+                dataloader.gen_input = next(iter(dataloader))[0][:64]
             else:
                 dataloader.gen_input = torch.randn(
                     next(iter(dataloader))[0].size(0), gen.latent_features,
                     dtype=torch.float, device=device
                 )
-        x = dataloader.gen_input
-        x_fake = gen(x + dnae_noise_magnitude*torch.randn_like(x))
+        x = dataloader.gen_input.to(device).clone()
+        if autoencoder_gen:
+            x += dnae_noise_magnitude*torch.randn_like(x)
+        x_fake = gen(x)
         rv.update({'generated_images': preprocess_image_for_display(x_fake)})
         if autoencoder_gen:
             rv.update({'reference images': preprocess_image_for_display(x)})

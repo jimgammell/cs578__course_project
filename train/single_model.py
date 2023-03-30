@@ -52,7 +52,7 @@ def eval_step(batch, model, loss_fn, device,
         reconstruction_loss = loss_fn(reconstruction, x)
         if auxillary_classifier:
             label_logits = model.classify_labels(model_features)
-            label_loss = nn.functional.multi_margin_loss(label_logits, y)
+            label_loss = nn.functional.cross_entropy_loss(label_logits, y)
             loss = 0.5*reconstruction_loss + 0.5*label_loss
         else:
             label_loss = None
