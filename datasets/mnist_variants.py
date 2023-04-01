@@ -100,8 +100,7 @@ class MultiEnvironmentDataset(datasets.MNIST):
             x = self.data_transform(x)
         if self.target_transform is not None:
             y = self.target_transform(y)
-        mdata = {'environment': self.env_labels[idx]}
-        return x, y, mdata
+        return x, (y, self.env_labels[idx])
 
 class ColoredMNIST(MultiEnvironmentDataset):
     input_shape = (2, 28, 28)

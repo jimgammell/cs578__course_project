@@ -24,7 +24,7 @@ class ResidualBlock(nn.Module):
             residual_modules.append(nn.BatchNorm2d(out_channels))
         residual_modules.append(activation())
         if downsample:
-            residual_modules.append(nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=2, padding=1))
+            residual_modules.append(nn.Conv2d(out_channels, out_channels, kernel_size=2, stride=2, padding=0))
         elif upsample:
             residual_modules.append(nn.ConvTranspose2d(out_channels, out_channels, kernel_size=2, stride=2, padding=0))
         else:
@@ -54,9 +54,11 @@ class FeatureExtractor(nn.Module):
     def __init__(self, in_channels, out_channels, downsample_blocks, endomorphic_blocks,
                  use_spectral_norm=False,
                  use_batch_norm=False,
+                 use_dropout=False,
                  activation=lambda: nn.ReLU(inplace=True)):
         super().__init__()
         
+        self.features = out_channels
         self.input_transform = nn.Conv2d(in_channels, out_channels//(2**downsample_blocks), kernel_size=3, stride=1, padding=1)
         if use_spectral_norm:
             self.input_transform = spectral_norm(self.input_transform)
@@ -72,6 +74,8 @@ class FeatureExtractor(nn.Module):
                 use_spectral_norm=use_spectral_norm, use_batch_norm=use_batch_norm, activation=activation
             ))
         modules.append(GlobalPool2d(torch.sum))
+        if use_dropout:
+            modules.append(nn.Dropout(p=0.5))
         self.model = nn.Sequential(*modules)
         
     def forward(self, x):
@@ -115,19 +119,20 @@ class FeatureReconstructor(nn.Module):
         return out
 
 class Classifier(nn.Module):
-    def __init__(self, input_shape, output_classes=10, features=64, downsample_blocks=2, endomorphic_blocks=2):
+    def __init__(self, input_shape, output_classes=10, features=64, downsample_blocks=2, endomorphic_blocks=2, use_dropout=False):
         super().__init__()
         
         self.feature_extractor = FeatureExtractor(
-            input_shape[0], features, downsample_blocks, endomorphic_blocks,
+            input_shape[0], features, downsample_blocks, endomorphic_blocks, use_dropout=use_dropout,
             use_spectral_norm=False, use_batch_norm=True, activation=lambda: nn.ReLU(inplace=True)
         )
         self.classifier = nn.Linear(features, output_classes)
         
-    def forward(self, x):
-        x_fe = self.feature_extractor(x)
-        out = self.classifier(x_fe)
-        return out
+    def get_features(self, x):
+        return self.feature_extractor(x)
+    
+    def classify_features(self, x):
+        return self.classifier(x)
 
 class Discriminator(nn.Module):
     def __init__(self, input_shape, output_classes=10, features=64, downsample_blocks=2, endomorphic_blocks=2):
@@ -167,7 +172,7 @@ class Autoencoder(nn.Module):
                  use_spectral_norm=True):
         super().__init__()
         
-        self.bottleneck_features = bottleneck_features
+        self.features = bottleneck_features
         self.feature_extractor = FeatureExtractor(
             input_shape[0], bottleneck_features, resample_blocks, endomorphic_blocks,
             use_spectral_norm=use_spectral_norm, use_batch_norm=True, activation=lambda: nn.ReLU(inplace=True)
@@ -184,7 +189,7 @@ class Autoencoder(nn.Module):
         return self.feature_extractor(x)
     
     def reconstruct_features(self, x):
-        return self.feature_reconstructor(x.view(-1, self.bottleneck_features, 1, 1))
+        return self.feature_reconstructor(x.view(-1, self.features, 1, 1))
     
     def classify_labels(self, x):
         return self.label_classifier(x)

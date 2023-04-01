@@ -8,8 +8,14 @@ def hinge_loss(logits, y):
 
 def train_step(batch, gen, gen_opt, disc, disc_opt, device,
                autoencoder_gen=False, dnae_noise_magnitude=1.0,
+               feature_covariance_decay=0.0, mixup_alpha=0.0,
                auxillary_gen_classifier=False, auxillary_disc_classifier=False):
     x, y = unpack_batch(batch, device)
+    if mixup_alpha != 0.0:
+        x, y_a, y_b, lbd = apply_mixup_to_data(x, y, mixup_alpha)
+        criterion = lambda logits: apply_mixup_to_criterion(nn.functional.multi_margin_loss, logits, y_a, y_b)
+    else:
+        criterion = lambda logits: nn.functional.multi_margin_loss(logits, y)
     gen.train()
     disc.train()
     
@@ -32,11 +38,12 @@ def train_step(batch, gen, gen_opt, disc, disc_opt, device,
     disc_realism_loss = 0.5*hinge_loss(pos_realism_logits, 1) + 0.5*hinge_loss(neg_realism_logits, -1)
     if auxillary_disc_classifier:
         pos_label_logits = disc.classify_label(pos_features)
-        disc_label_loss = nn.functional.multi_margin_loss(pos_label_logits, y)
+        disc_label_loss = criterion(pos_label_logits)
         disc_loss = 0.5*disc_realism_loss + 0.5*disc_label_loss
     else:
         disc_label_loss = 0.0
         disc_loss = disc_realism_loss
+    disc_loss = disc_loss + 0.5*feature_covariance_decay*(covariance_penalty(pos_features) + covariance_penalty(neg_features))
     disc_opt.zero_grad(set_to_none=True)
     disc_loss.backward()
     disc_opt.step()
@@ -57,8 +64,8 @@ def train_step(batch, gen, gen_opt, disc, disc_opt, device,
     if auxillary_gen_classifier:
         assert autoencoder_gen
         gen_label_logits = gen.classify_labels(gen_features)
-        gen_label_loss = nn.functional.multi_margin_loss(gen_label_logits, y)
-        gen_loss = 0.5*gen_realism_loss + 0.5*gen_label_loss
+        gen_label_loss = criterion(gen_label_logits)
+        gen_loss = 0.5*gen_realism_loss + 0.5*gen_label_loss + feature_covariance_decay*covariance_penalty(gen_features)
     else:
         gen_label_loss = 0.0
         gen_loss = gen_realism_loss
@@ -67,8 +74,10 @@ def train_step(batch, gen, gen_opt, disc, disc_opt, device,
     gen_opt.step()
     
     rv = {
+        'disc_loss': val(disc_loss),
         'disc_realism_loss': val(disc_realism_loss),
         'disc_label_loss': val(disc_label_loss),
+        'gen_loss': val(gen_loss),
         'gen_realism_loss': val(gen_realism_loss),
         'gen_label_loss': val(gen_label_loss),
         'disc_realism_acc': 0.5*hinge_acc(pos_realism_logits, 1)+0.5*hinge_acc(neg_realism_logits, -1),
@@ -80,6 +89,7 @@ def train_step(batch, gen, gen_opt, disc, disc_opt, device,
 @torch.no_grad()
 def eval_step(batch, gen, disc, device,
               autoencoder_gen=False, dnae_noise_magnitude=1.0,
+              feature_covariance_decay=0.0,
               auxillary_gen_classifier=False, auxillary_disc_classifier=False):
     x, y = unpack_batch(batch, device)
     gen.eval()
@@ -108,19 +118,22 @@ def eval_step(batch, gen, disc, device,
     else:
         disc_label_loss = 0.0
         disc_loss = disc_realism_loss
+    disc_loss = disc_loss + 0.5*feature_covariance_decay(covariance_penalty(pos_features) + covariance_penalty(neg_features))
     gen_realism_loss = -neg_realism_logits.mean()
     if auxillary_gen_classifier:
         assert autoencoder_gen
         gen_label_logits = gen.classify_labels(gen_features)
         gen_label_loss = nn.functional.multi_margin_loss(gen_label_logits, y)
-        gen_loss = 0.5*gen_realism_loss + 0.5*gen_label_loss
+        gen_loss = 0.5*gen_realism_loss + 0.5*gen_label_loss + feature_covariance_decay*covariance_penalty(gen_features)
     else:
         gen_label_loss = 0.0
         gen_loss = gen_realism_loss
     
     rv = {
+        'disc_loss': val(disc_loss),
         'disc_realism_loss': val(disc_realism_loss),
         'disc_label_loss': val(disc_label_loss),
+        'gen_loss': val(gen_loss),
         'gen_realism_loss': val(gen_realism_loss),
         'gen_label_loss': val(gen_label_loss),
         'disc_realism_acc': 0.5*hinge_acc(pos_realism_logits, 1)+0.5*hinge_acc(neg_realism_logits, -1),

@@ -65,7 +65,8 @@ def train_feature_extractor(
         for epoch_idx in range(1, num_epochs+1):
             train_rv, val_rv = epoch_fn(**trial_objects, **epoch_kwargs)
             save_results(train_rv, val_rv, epoch_idx)
-    fe_save_path = os.path.join('.', 'trained_models', fe_type, 'feature_extractor.pth')
+    fe_save_path = os.path.join('.', 'trained_models', constructor_kwargs['dataset_constructor'].__name__,
+                                fe_type, 'feature_extractor.pth')
     os.makedirs(fe_save_path, exist_ok=True)
     if fe_type in ('random', 'erm', 'fixed_loss_autoencoder'):
         torch.save(trial_objects['model'].state_dict(), fe_save_path)
@@ -73,6 +74,8 @@ def train_feature_extractor(
         torch.save(trial_objects['disc'].state_dict(), fe_save_path)
     elif fe_type == 'learned_loss_autoencoder__gen_fe':
         torch.save(trial_objects['gen'].state_dict(), fe_save_path)
+    else:
+        assert False
 
 def learned_loss_autoencoder_epoch(
     disc=None, gen=None, disc_optimizer=None, gen_optimizer=None, train_dataloader=None, val_dataloader=None, device=None,

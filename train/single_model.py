@@ -3,9 +3,15 @@ import torch
 from torch import nn
 from train.common import *
 
-def train_step(batch, model, optimizer, loss_fn, device,
-               autoencoder=False, dnae_noise_magnitude=1.0, auxillary_classifier=False):
+def train_step(batch, model, optimizer, loss_fn, device, feature_covariance_decay=0.0,
+               autoencoder=False, dnae_noise_magnitude=1.0, auxillary_classifier=False,
+               mixup_alpha=0.0):
     x, y = unpack_batch(batch, device)
+    if mixup_alpha != 0.0:
+        x, y_a, y_b, lbd = apply_mixup_to_data(x, y, mixup_alpha)
+        criterion = lambda logits: apply_mixup_to_criterion(nn.functional.multi_margin_loss, logits, y_a, y_b, lbd)
+    else:
+        criterion = lambda logits: nn.functional.multi_margin_loss(logits, y)
     model.train()
     
     if autoencoder:
@@ -15,15 +21,17 @@ def train_step(batch, model, optimizer, loss_fn, device,
         reconstruction_loss = loss_fn(reconstruction, x)
         if auxillary_classifier:
             label_logits = model.classify_labels(model_features)
-            label_loss = nn.functional.multi_margin_loss(label_logits, y)
+            label_loss = criterion(label_logits)
             loss = 0.5*reconstruction_loss + 0.5*label_loss
         else:
             label_loss = None
             loss = reconstruction_loss
     else:
         label_loss = reconstruction_loss = None
-        logits = model(x)
-        loss = loss_fn(logits, y)
+        model_features = model.get_features(x)
+        logits = model.classify_features(model_features)
+        loss = criterion(logits)
+    loss = loss + feature_covariance_decay*covariance_penalty(model_features)
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()
@@ -40,7 +48,7 @@ def train_step(batch, model, optimizer, loss_fn, device,
     return rv
 
 @torch.no_grad()
-def eval_step(batch, model, loss_fn, device,
+def eval_step(batch, model, loss_fn, device, feature_covariance_decay=0.0,
               autoencoder=False, dnae_noise_magnitude=1.0, auxillary_classifier=False):
     x, y = unpack_batch(batch, device)
     model.eval()
@@ -59,8 +67,10 @@ def eval_step(batch, model, loss_fn, device,
             loss = reconstruction_loss
     else:
         label_loss = reconstruction_loss = None
-        logits = model(x)
+        model_features = model.get_features(x)
+        logits = model.classify_features(model_features)
         loss = loss_fn(logits, y)
+    loss = loss + feature_covariance_decay*covariance_penalty(model_features)
     
     rv = {}
     if autoencoder:

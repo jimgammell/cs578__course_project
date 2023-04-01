@@ -2,6 +2,17 @@ import numpy as np
 import torch
 from torch import nn, optim
 
+def apply_mixup_to_data(x, y, alpha):
+    lbd = np.random.beta(alpha, alpha)
+    batch_size = x.size(0)
+    index = torch.randperm(batch_size).to(x.device)
+    x = lbd*x + (1-lbd)*x[index, :]
+    y_a, y_b = y, y[index]
+    return x, y_a, y_b, lbd
+
+def apply_mixup_to_criterion(criterion, logits, y_a, y_b, lbd):
+    return lbd*criterion(logits, y_a) + (1-lbd)*criterion(logits, y_b)
+
 def preprocess_image_for_display(image):
     image = 255.0*(0.5*image+0.5)
     image = image.to(torch.uint8)
@@ -34,6 +45,13 @@ def acc(logits, labels):
 def hinge_acc(logits, y):
     logits = val(logits)
     return np.mean(np.equal(np.sign(logits), y))
+
+def covariance_penalty(features):
+    features_mn = features.mean(dim=0, keepdims=True)
+    features_zc = features - features_mn
+    covariance = torch.mm(features_zc.permute(1, 0), features_zc)
+    penalty = (covariance - torch.diagonal(covariance)).norm(p=2) / len(features)
+    return penalty
 
 def run_epoch(dataloader, step_fn, *step_args, compress_fn=np.mean, **step_kwargs):
     rv = {}
