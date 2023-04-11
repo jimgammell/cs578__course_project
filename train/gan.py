@@ -3,27 +3,30 @@ import torch
 from torch import nn
 from train.common import *
 
+def add_noise(x, noise_magnitude=1.0):
+    return nn.functional.hardtanh(x + noise_magnitude*torch.randn_like(x))
+
 def hinge_loss(logits, y):
     return nn.functional.relu(1-y*logits).mean()
 
 def train_step(batch, gen, gen_opt, disc, disc_opt, device,
-               autoencoder_gen=False, dnae_noise_magnitude=1.0,
+               autoencoder_gen=False, dnae_noise_magnitude=0.0,
                feature_covariance_decay=0.0, mixup_alpha=0.0,
                auxillary_gen_classifier=False, auxillary_disc_classifier=False):
     x, y = unpack_batch(batch, device)
     if mixup_alpha != 0.0:
         x, y_a, y_b, lbd = apply_mixup_to_data(x, y, mixup_alpha)
-        criterion = lambda logits: apply_mixup_to_criterion(nn.functional.multi_margin_loss, logits, y_a, y_b)
+        criterion = lambda logits: apply_mixup_to_criterion(nn.functional.cross_entropy, logits, y_a, y_b, lbd)
     else:
-        criterion = lambda logits: nn.functional.multi_margin_loss(logits, y)
+        criterion = lambda logits: nn.functional.cross_entropy(logits, y)
     gen.train()
     disc.train()
     
     # Train discriminator
     with torch.no_grad():
         if autoencoder_gen:
-            gen_input_noise = dnae_noise_magnitude*torch.randn_like(x)
-            fake_x = gen(x + gen_input_noise)
+            noisy_x = add_noise(x, dnae_noise_magnitude)
+            fake_x = gen(noisy_x)
             pos_input = torch.cat((x, x), dim=1)
             neg_input = torch.cat((x, fake_x), dim=1)
         else:
@@ -43,15 +46,14 @@ def train_step(batch, gen, gen_opt, disc, disc_opt, device,
     else:
         disc_label_loss = 0.0
         disc_loss = disc_realism_loss
-    disc_loss = disc_loss + 0.5*feature_covariance_decay*(covariance_penalty(pos_features) + covariance_penalty(neg_features))
     disc_opt.zero_grad(set_to_none=True)
     disc_loss.backward()
     disc_opt.step()
     
     # Train generator
     if autoencoder_gen:
-        gen_input_noise = dnae_noise_magnitude*torch.randn_like(x)
-        gen_features = gen.get_features(x + gen_input_noise)
+        noisy_x = add_noise(x, dnae_noise_magnitude)
+        gen_features = gen.get_features(noisy_x)
         fake_x = gen.reconstruct_features(gen_features)
         neg_input = torch.cat((x, fake_x), dim=1)
     else:
@@ -65,7 +67,7 @@ def train_step(batch, gen, gen_opt, disc, disc_opt, device,
         assert autoencoder_gen
         gen_label_logits = gen.classify_labels(gen_features)
         gen_label_loss = criterion(gen_label_logits)
-        gen_loss = 0.5*gen_realism_loss + 0.5*gen_label_loss + feature_covariance_decay*covariance_penalty(gen_features)
+        gen_loss = 0.5*gen_realism_loss + 0.5*gen_label_loss
     else:
         gen_label_loss = 0.0
         gen_loss = gen_realism_loss
@@ -80,15 +82,17 @@ def train_step(batch, gen, gen_opt, disc, disc_opt, device,
         'gen_loss': val(gen_loss),
         'gen_realism_loss': val(gen_realism_loss),
         'gen_label_loss': val(gen_label_loss),
-        'disc_realism_acc': 0.5*hinge_acc(pos_realism_logits, 1)+0.5*hinge_acc(neg_realism_logits, -1),
-        'disc_label_acc': acc(pos_label_logits, y),
-        'gen_label_acc': acc(gen_label_logits, y)
+        'disc_realism_acc': 0.5*hinge_acc(pos_realism_logits, 1)+0.5*hinge_acc(neg_realism_logits, -1)
     }
+    if auxillary_disc_classifier:
+        rv.update({'disc_label_acc': acc(pos_label_logits, y)})
+    if auxillary_gen_classifier:
+        rv.update({'gen_label_acc': acc(gen_label_logits, y)})
     return rv
     
 @torch.no_grad()
 def eval_step(batch, gen, disc, device,
-              autoencoder_gen=False, dnae_noise_magnitude=1.0,
+              autoencoder_gen=False, dnae_noise_magnitude=0.0,
               feature_covariance_decay=0.0,
               auxillary_gen_classifier=False, auxillary_disc_classifier=False):
     x, y = unpack_batch(batch, device)
@@ -96,8 +100,8 @@ def eval_step(batch, gen, disc, device,
     disc.eval()
     
     if autoencoder_gen:
-        gen_input_noise = dnae_noise_magnitude*torch.randn_like(x)
-        gen_features = gen.get_features(x + gen_input_noise)
+        noisy_x = add_noise(x, dnae_noise_magnitude)
+        gen_features = gen.get_features(noisy_x)
         fake_x = gen.reconstruct_features(gen_features)
         pos_input = torch.cat((x, x), dim=1)
         neg_input = torch.cat((x, fake_x), dim=1)
@@ -118,13 +122,12 @@ def eval_step(batch, gen, disc, device,
     else:
         disc_label_loss = 0.0
         disc_loss = disc_realism_loss
-    disc_loss = disc_loss + 0.5*feature_covariance_decay(covariance_penalty(pos_features) + covariance_penalty(neg_features))
     gen_realism_loss = -neg_realism_logits.mean()
     if auxillary_gen_classifier:
         assert autoencoder_gen
         gen_label_logits = gen.classify_labels(gen_features)
         gen_label_loss = nn.functional.multi_margin_loss(gen_label_logits, y)
-        gen_loss = 0.5*gen_realism_loss + 0.5*gen_label_loss + feature_covariance_decay*covariance_penalty(gen_features)
+        gen_loss = 0.5*gen_realism_loss + 0.5*gen_label_loss
     else:
         gen_label_loss = 0.0
         gen_loss = gen_realism_loss
@@ -136,10 +139,12 @@ def eval_step(batch, gen, disc, device,
         'gen_loss': val(gen_loss),
         'gen_realism_loss': val(gen_realism_loss),
         'gen_label_loss': val(gen_label_loss),
-        'disc_realism_acc': 0.5*hinge_acc(pos_realism_logits, 1)+0.5*hinge_acc(neg_realism_logits, -1),
-        'disc_label_acc': acc(pos_label_logits, y),
-        'gen_label_acc': acc(gen_label_logits, y)
+        'disc_realism_acc': 0.5*hinge_acc(pos_realism_logits, 1)+0.5*hinge_acc(neg_realism_logits, -1)
     }
+    if auxillary_disc_classifier:
+        rv.update({'disc_label_acc': acc(pos_label_logits, y)})
+    if auxillary_gen_classifier:
+        rv.update({'gen_label_acc': acc(gen_label_logits, y)})
     return rv
 
 def train_epoch(dataloader, gen, gen_opt, disc, disc_opt, device, **step_kwargs):
@@ -151,7 +156,7 @@ def eval_epoch(dataloader, gen, disc, device,
     rv = run_epoch(dataloader, eval_step, gen, disc, device,
                    autoencoder_gen=autoencoder_gen, dnae_noise_magnitude=dnae_noise_magnitude, **step_kwargs)
     if get_sample_images:
-        if not hasattr(dataloader, gen_input):
+        if not hasattr(dataloader, 'gen_input'):
             if autoencoder_gen:
                 dataloader.gen_input = next(iter(dataloader))[0][:64]
             else:
@@ -161,9 +166,9 @@ def eval_epoch(dataloader, gen, disc, device,
                 )
         x = dataloader.gen_input.to(device).clone()
         if autoencoder_gen:
-            x += dnae_noise_magnitude*torch.randn_like(x)
+            x = add_noise(x, dnae_noise_magnitude)
         x_fake = gen(x)
         rv.update({'generated_images': preprocess_image_for_display(x_fake)})
         if autoencoder_gen:
-            rv.update({'reference images': preprocess_image_for_display(x)})
+            rv.update({'reference_images': preprocess_image_for_display(x)})
     return rv

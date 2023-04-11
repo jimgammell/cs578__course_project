@@ -19,16 +19,16 @@ def preprocess_image_for_display(image):
     image = image.to(torch.float)
     image = image/255.0
     if len(image.shape) == 3:
-        image = image.unsqueeze(0)
+        image = image.unsqueeze(1)
     elif image.shape[1] == 2:
         image = torch.cat((image, torch.zeros(
-            (image.size(0), 1, image.size()[2:]), device=image.device, dtype=image.dtype)), dim=1)
-    image = image.permute(1, 2, 0)
+            (image.size(0), 1, image.size(2), image.size(3)), device=image.device, dtype=image.dtype)), dim=1)
+    image = image.permute(0, 2, 3, 1)
     image = val(image)
     return image
 
 def unpack_batch(batch, device):
-    x, y = batch
+    x, (y, _) = batch
     x, y = x.to(device), y.to(device)
     return x, y
 

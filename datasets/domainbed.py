@@ -3,18 +3,18 @@ import shutil
 import json
 from datasets.common import *
 
-def get_default_transform():
+def get_default_transform(size=64):
     transform = transforms.Compose([
-        transforms.Resize((224, 224)),
+        transforms.Resize((size, size)),
         transforms.ToTensor(),
         transforms.Lambda(lambda x: torch.cat(3*[x]) if x.size(0)==1 else x),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
     return transform
 
-def get_augmentation_transform():
+def get_augmentation_transform(size=64):
     transform = transforms.Compose([
-        transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
+        transforms.RandomResizedCrop(size, scale=(0.7, 1.0)),
         transforms.RandomHorizontalFlip(),
         transforms.ColorJitter(0.3, 0.3, 0.3, 0.3),
         transforms.RandomGrayscale(),
@@ -24,13 +24,22 @@ def get_augmentation_transform():
     ])
     return transform
 
+def get_default_target_transform():
+    transform = transforms.Lambda(lambda x: torch.tensor(x, dtype=torch.long))
+    return transform
+
 class OfficeHome(MultiDomainDataset):
     domains = ['Art', 'Clipart', 'Product', 'Real World']
+    input_shape = (3, 64, 64)
     num_classes = 65
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
         if domains_to_use == 'all':
             domains_to_use = self.__class__.domains
+        if not 'data_transform' in kwargs:
+            kwargs['data_transform'] = get_default_transform()
+        if not 'target_transform' in kwargs:
+            kwargs['target_transform'] = get_default_target_transform()
         assert all(domain in OfficeHome.domains for domain in domains_to_use)
         root = os.path.join('.', 'downloads', 'OfficeHomeDataset')
         if not os.path.exists(root):
@@ -43,11 +52,16 @@ class OfficeHome(MultiDomainDataset):
 
 class VLCS(MultiDomainDataset):
     domains = ['Caltech101', 'LabelMe', 'SUN09', 'VOC2007']
+    input_shape = (3, 64, 64)
     num_classes = 5
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
         if domains_to_use == 'all':
             domains_to_use = self.__class__.domains
+        if not 'data_transform' in kwargs:
+            kwargs['data_transform'] = get_default_transform()
+        if not 'target_transform' in kwargs:
+            kwargs['target_transform'] = get_default_target_transform()
         assert all(domain in VLCS.domains for domain in domains_to_use)
         root = os.path.join('.', 'downloads', 'VLCS')
         if not os.path.exists(root):
@@ -59,11 +73,16 @@ class VLCS(MultiDomainDataset):
 
 class PACS(MultiDomainDataset):
     domains = ['art_painting', 'cartoon', 'photo', 'sketch']
+    input_shape = (3, 64, 64)
     num_classes = 7
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
         if domains_to_use == 'all':
             domains_to_use = self.__class__.domains
+        if not 'data_transform' in kwargs:
+            kwargs['data_transform'] = get_default_transform()
+        if not 'target_transform' in kwargs:
+            kwargs['target_transform'] = get_default_target_transform()
         root = os.path.join('.', 'downloads', 'PACS')
         if not os.path.exists(root):
             assert download
@@ -75,11 +94,16 @@ class PACS(MultiDomainDataset):
 
 class Sviro(MultiDomainDataset):
     domains = ['aclass', 'escape', 'hilux', 'i3', 'lexus', 'tesla', 'tiguan', 'tucson', 'x5', 'zoe']
+    input_shape = (3, 64, 64)
     num_classes = 7
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
         if domains_to_use == 'all':
             domains_to_use = self.__class__.domains
+        if not 'data_transform' in kwargs:
+            kwargs['data_transform'] = get_default_transform()
+        if not 'target_transform' in kwargs:
+            kwargs['target_transform'] = get_default_target_transform()
         root = os.path.join('.', 'downloads', 'Sviro')
         if not os.path.exists(root):
             assert download
@@ -91,11 +115,16 @@ class Sviro(MultiDomainDataset):
 
 class DomainNet(MultiDomainDataset):
     domains = ['clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch']
+    input_shape = (3, 64, 64)
     num_classes = 345
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
         if domains_to_use == 'all':
-            domains_to_use = self.__class__.domains        
+            domains_to_use = self.__class__.domains
+        if not 'data_transform' in kwargs:
+            kwargs['data_transform'] = get_default_transform()
+        if not 'target_transform' in kwargs:
+            kwargs['target_transform'] = get_default_target_transform()
         root = os.path.join('.', 'downloads', 'DomainNet')
         if not os.path.exists(root):
             assert download
@@ -121,11 +150,16 @@ class DomainNet(MultiDomainDataset):
 
 class TerraIncognita(MultiDomainDataset):
     domains = ['location_100', 'location_38', 'location_43', 'location_46']
+    input_shape = (3, 64, 64)
     num_classes = 10
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
         if domains_to_use == 'all':
             domains_to_use = self.__class__.domains
+        if not 'data_transform' in kwargs:
+            kwargs['data_transform'] = get_default_transform()
+        if not 'target_transform' in kwargs:
+            kwargs['target_transform'] = get_default_target_transform()
         root = os.path.join('.', 'downloads', 'TerraIncognita')
         if not os.path.exists(root):
             assert download

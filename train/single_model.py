@@ -3,22 +3,25 @@ import torch
 from torch import nn
 from train.common import *
 
+def add_noise(x, noise_magnitude=1.0):
+    return nn.functional.hardtanh(x + noise_magnitude*torch.randn_like(x))
+
 def train_step(batch, model, optimizer, loss_fn, device, feature_covariance_decay=0.0,
-               autoencoder=False, dnae_noise_magnitude=1.0, auxillary_classifier=False,
+               autoencoder=False, dnae_noise_magnitude=0.0, auxillary_classifier=False,
                mixup_alpha=0.0):
     x, y = unpack_batch(batch, device)
     if mixup_alpha != 0.0:
         x, y_a, y_b, lbd = apply_mixup_to_data(x, y, mixup_alpha)
-        criterion = lambda logits: apply_mixup_to_criterion(nn.functional.multi_margin_loss, logits, y_a, y_b, lbd)
+        criterion = lambda logits: apply_mixup_to_criterion(loss_fn, logits, y_a, y_b, lbd)
     else:
-        criterion = lambda logits: nn.functional.multi_margin_loss(logits, y)
+        criterion = lambda logits: loss_fn(logits, y)
     model.train()
     
     if autoencoder:
-        x_noise = dnae_noise_magnitude*torch.randn_like(x)
-        model_features = model.get_features(x + x_noise)
+        noisy_x = add_noise(x, dnae_noise_magnitude)
+        model_features = model.get_features(noisy_x)
         reconstruction = model.reconstruct_features(model_features)
-        reconstruction_loss = loss_fn(reconstruction, x)
+        reconstruction_loss = nn.functional.mse_loss(reconstruction, x)
         if auxillary_classifier:
             label_logits = model.classify_labels(model_features)
             label_loss = criterion(label_logits)
@@ -31,7 +34,7 @@ def train_step(batch, model, optimizer, loss_fn, device, feature_covariance_deca
         model_features = model.get_features(x)
         logits = model.classify_features(model_features)
         loss = criterion(logits)
-    loss = loss + feature_covariance_decay*covariance_penalty(model_features)
+    #loss = loss + feature_covariance_decay*covariance_penalty(model_features)
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()
@@ -49,18 +52,18 @@ def train_step(batch, model, optimizer, loss_fn, device, feature_covariance_deca
 
 @torch.no_grad()
 def eval_step(batch, model, loss_fn, device, feature_covariance_decay=0.0,
-              autoencoder=False, dnae_noise_magnitude=1.0, auxillary_classifier=False):
+              autoencoder=False, dnae_noise_magnitude=0.0, auxillary_classifier=False):
     x, y = unpack_batch(batch, device)
     model.eval()
     
     if autoencoder:
-        x_noise = dnae_noise_magnitude*torch.randn_like(x)
-        model_features = model.get_features(x + x_noise)
+        noisy_x = add_noise(x, dnae_noise_magnitude)
+        model_features = model.get_features(noisy_x)
         reconstruction = model.reconstruct_features(model_features)
-        reconstruction_loss = loss_fn(reconstruction, x)
+        reconstruction_loss = nn.functional.mse_loss(reconstruction, x)
         if auxillary_classifier:
             label_logits = model.classify_labels(model_features)
-            label_loss = nn.functional.cross_entropy_loss(label_logits, y)
+            label_loss = loss_fn(label_logits, y)
             loss = 0.5*reconstruction_loss + 0.5*label_loss
         else:
             label_loss = None
@@ -70,11 +73,11 @@ def eval_step(batch, model, loss_fn, device, feature_covariance_decay=0.0,
         model_features = model.get_features(x)
         logits = model.classify_features(model_features)
         loss = loss_fn(logits, y)
-    loss = loss + feature_covariance_decay*covariance_penalty(model_features)
+    #loss = loss + feature_covariance_decay*covariance_penalty(model_features)
     
     rv = {}
     if autoencoder:
-        rv.update({'reconstruction_loss', val(reconstruction_loss)})
+        rv.update({'reconstruction_loss': val(reconstruction_loss)})
         if label_loss is not None:
             rv.update({'label_loss': val(label_loss)})
             rv.update({'label_acc': acc(label_logits, y)})
@@ -87,17 +90,18 @@ def train_epoch(dataloader, model, optimizer, loss_fn, device, **step_kwargs):
     return run_epoch(dataloader, train_step, model, optimizer, loss_fn, device, **step_kwargs)
 
 def eval_epoch(dataloader, model, loss_fn, device, 
-               autoencoder_gen=False, dnae_noise_magnitude=1.0, get_sample_images=False, **step_kwargs):
+               autoencoder=False, dnae_noise_magnitude=0.0, get_sample_images=False, **step_kwargs):
     rv = run_epoch(dataloader, eval_step, model, loss_fn, device,
-                   autoencoder_gen=autoencoder_gen, dnae_noise_magnitude=dnae_noise_magnitude, **step_kwargs)
+                   autoencoder=autoencoder, dnae_noise_magnitude=dnae_noise_magnitude, **step_kwargs)
     if get_sample_images:
-        assert autoencoder_gen
-        if not hasattr(dataloader, gen_input):
+        assert autoencoder
+        if not hasattr(dataloader, 'gen_input'):
             dataloader.gen_input = next(iter(dataloader))[0]
-        x = dataloader.gen_input
-        fake_x = model(x + dnae_noise_magnitude*torch.randn_like(x))
+        x = dataloader.gen_input.to(device)
+        noisy_x = add_noise(x, dnae_noise_magnitude)
+        fake_x = model(noisy_x)
         rv.update({
             'generated_images': preprocess_image_for_display(fake_x),
-            'reference_images': preprocess_image_for_display(x)
+            'reference_images': preprocess_image_for_display(noisy_x)
         })
     return rv

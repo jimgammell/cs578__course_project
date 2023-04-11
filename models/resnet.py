@@ -55,6 +55,7 @@ class FeatureExtractor(nn.Module):
                  use_spectral_norm=False,
                  use_batch_norm=False,
                  use_dropout=False,
+                 pooling_fn=torch.mean,
                  activation=lambda: nn.ReLU(inplace=True)):
         super().__init__()
         
@@ -62,25 +63,32 @@ class FeatureExtractor(nn.Module):
         self.input_transform = nn.Conv2d(in_channels, out_channels//(2**downsample_blocks), kernel_size=3, stride=1, padding=1)
         if use_spectral_norm:
             self.input_transform = spectral_norm(self.input_transform)
-        modules = []
+        fe_modules = []
         for n in range(downsample_blocks):
-            modules.append(ResidualBlock(
+            fe_modules.append(ResidualBlock(
                 out_channels//(2**(downsample_blocks-n)), out_channels//(2**(downsample_blocks-n-1)), downsample=True,
                 use_spectral_norm=use_spectral_norm, use_batch_norm=use_batch_norm, activation=activation
             ))
         for n in range(endomorphic_blocks):
-            modules.append(ResidualBlock(
+            fe_modules.append(ResidualBlock(
                 out_channels, out_channels,
                 use_spectral_norm=use_spectral_norm, use_batch_norm=use_batch_norm, activation=activation
             ))
-        modules.append(GlobalPool2d(torch.sum))
+        self.feature_extractor = nn.Sequential(*fe_modules)
+        pooling_modules = [GlobalPool2d(pooling_fn)]
         if use_dropout:
-            modules.append(nn.Dropout(p=0.5))
-        self.model = nn.Sequential(*modules)
+            pooling_modules.append(nn.Dropout(p=0.5))
+        self.pooling_layer = nn.Sequential(*pooling_modules)
+        
+    def get_features(self, x):
+        x_i = self.input_transform(x)
+        out = self.feature_extractor(x_i)
+        return out
         
     def forward(self, x):
         x_i = self.input_transform(x)
-        out = self.model(x_i)
+        x_fe = self.feature_extractor(x_i)
+        out = self.pooling_layer(x_fe)
         return out
 
 class FeatureReconstructor(nn.Module):
@@ -90,9 +98,12 @@ class FeatureReconstructor(nn.Module):
                  activation=lambda: nn.ReLU(inplace=True)):
         super().__init__()
         
-        self.input_transform = nn.ConvTranspose2d(
+        #self.input_transform = nn.ConvTranspose2d(
+        #    in_channels, out_channels*2**upsample_blocks,
+        #    kernel_size=output_shape[1]//(2**upsample_blocks), stride=1, padding=0)
+        self.input_transform = nn.Conv2d(
             in_channels, out_channels*2**upsample_blocks,
-            kernel_size=output_shape[1]//(2**upsample_blocks), stride=1, padding=0)
+            kernel_size=3, stride=1, padding=1)
         if use_spectral_norm:
             self.input_transform = spectral_norm(self.input_transform)
         modules = []
@@ -115,15 +126,15 @@ class FeatureReconstructor(nn.Module):
     
     def forward(self, x):
         x_i = self.input_transform(x)
-        out = self.model(x_i)
+        out = torch.tanh(self.model(x_i))
         return out
 
 class Classifier(nn.Module):
-    def __init__(self, input_shape, output_classes=10, features=64, downsample_blocks=2, endomorphic_blocks=2, use_dropout=False):
+    def __init__(self, input_shape, output_classes, features=64, resample_blocks=2, endomorphic_blocks=2, use_dropout=False):
         super().__init__()
         
         self.feature_extractor = FeatureExtractor(
-            input_shape[0], features, downsample_blocks, endomorphic_blocks, use_dropout=use_dropout,
+            input_shape[0], features, resample_blocks, endomorphic_blocks, use_dropout=use_dropout, pooling_fn=torch.mean,
             use_spectral_norm=False, use_batch_norm=True, activation=lambda: nn.ReLU(inplace=True)
         )
         self.classifier = nn.Linear(features, output_classes)
@@ -135,11 +146,11 @@ class Classifier(nn.Module):
         return self.classifier(x)
 
 class Discriminator(nn.Module):
-    def __init__(self, input_shape, output_classes=10, features=64, downsample_blocks=2, endomorphic_blocks=2):
+    def __init__(self, input_shape, output_classes, features=64, resample_blocks=2, endomorphic_blocks=2):
         super().__init__()
         
         self.feature_extractor = FeatureExtractor(
-            input_shape[0], features, downsample_blocks, endomorphic_blocks,
+            input_shape[0], features, resample_blocks, endomorphic_blocks, pooling_fn=torch.sum, 
             use_spectral_norm=True, use_batch_norm=False, activation=lambda: nn.LeakyReLU(0.1)
         )
         self.realism_classifier = spectral_norm(nn.Linear(features, 1))
@@ -155,41 +166,48 @@ class Discriminator(nn.Module):
         return self.label_classifier(x)
 
 class Generator(nn.Module):
-    def __init__(self, output_shape, latent_features=64, upsample_blocks=2, endomorphic_blocks=2):
+    def __init__(self, output_shape, num_classes, features=64, resample_blocks=2, endomorphic_blocks=2):
         super().__init__()
         
-        self.latent_features = latent_features
+        self.latent_features = features
+        self.input_transform = nn.ConvTranspose2d(
+            features, features*2**resample_blocks,
+            kernel_size=output_shape[1]//(2**resample_blocks), stride=1, padding=0)
         self.feature_reconstructor = FeatureReconstructor(
-            latent_features, latent_features//4, output_shape, upsample_blocks, endomorphic_blocks,
+            features, features//4, output_shape, resample_blocks, endomorphic_blocks,
             use_spectral_norm=True, use_batch_norm=True, activation=lambda: nn.ReLU(0.1)
         )
         
     def forward(self, x):
-        return self.feature_reconstructor(x.view(-1, self.latent_features, 1, 1))
+        x_i = self.input_transform(x.view(-1, self.latent_features, 1, 1))
+        return self.feature_reconstructor(x_i)
 
 class Autoencoder(nn.Module):
-    def __init__(self, input_shape, output_classes=10, bottleneck_features=64, resample_blocks=2, endomorphic_blocks=2,
+    def __init__(self, input_shape, output_classes, features=64, resample_blocks=2, endomorphic_blocks=2,
                  use_spectral_norm=True):
         super().__init__()
         
-        self.features = bottleneck_features
+        self.features = features
         self.feature_extractor = FeatureExtractor(
-            input_shape[0], bottleneck_features, resample_blocks, endomorphic_blocks,
+            input_shape[0], features, resample_blocks, endomorphic_blocks, pooling_fn=torch.mean, 
             use_spectral_norm=use_spectral_norm, use_batch_norm=True, activation=lambda: nn.ReLU(inplace=True)
         )
         self.feature_reconstructor = FeatureReconstructor(
-            bottleneck_features, bottleneck_features//4, input_shape, resample_blocks, 0,
+            features, features//4, input_shape, resample_blocks, 0,
             use_spectral_norm=use_spectral_norm, use_batch_norm=True, activation=lambda: nn.ReLU(inplace=True)
         )
-        self.label_classifier = nn.Linear(bottleneck_features, output_classes)
+        self.label_classifier = nn.Linear(features, output_classes)
         if use_spectral_norm:
             self.label_classifier = spectral_norm(self.label_classifier)
         
     def get_features(self, x):
-        return self.feature_extractor(x)
+        return self.feature_extractor.get_features(x)
     
     def reconstruct_features(self, x):
-        return self.feature_reconstructor(x.view(-1, self.features, 1, 1))
+        return self.feature_reconstructor(x)
     
     def classify_labels(self, x):
-        return self.label_classifier(x)
+        return self.label_classifier(self.feature_extractor.pooling_layer(x))
+    
+    def forward(self, x):
+        return self.reconstruct_features(self.get_features(x))

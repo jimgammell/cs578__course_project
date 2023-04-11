@@ -1,20 +1,101 @@
 import random
 import os
+import time
+import pickle
 import numpy as np
+from matplotlib import pyplot as plt
 import torch
 from torch import nn, optim
 from train.common import *
 from train import single_model, gan
+from models import resnet
+from train.plot_results import *
 
 def train_feature_extractor(
-    fe_type=None, num_epochs=25, constructor_kwargs=None, epoch_kwargs=None, save_dir=None, random_seed=0):
-    assert all(arg is not None for arg in (constructor_kwargs, epoch_kwargs))
+    fe_type=None, num_epochs=25, constructor_kwargs={}, save_dir=None, random_seed=0, omitted_domain=0):
+    
+    def set_default(key, val):
+        if not key in constructor_kwargs.keys():
+            constructor_kwargs[key] = val
+    assert 'dataset_constructor' in constructor_kwargs.keys()
+    constructor_kwargs['dataset_kwargs'] = {'domains_to_use': [
+        d for idx, d in enumerate(constructor_kwargs['dataset_constructor'].domains) if idx!=omitted_domain
+    ]}
+    set_default('dataloader_kwargs', {'batch_size': 32, 'num_workers': 8})
+    set_default('device', 'cuda' if torch.cuda.is_available() else 'cpu')
+    if fe_type in ('random', 'erm', 'fixed_loss_autoencoder'):
+        if fe_type in ('random', 'erm'):
+            set_default('model_constructor', resnet.Classifier)
+        else:
+            set_default('model_constructor', resnet.Autoencoder)
+        if 'MNIST' in constructor_kwargs['dataset_constructor'].__name__:
+            set_default('model_kwargs', {
+                'features': 64,
+                'resample_blocks': 2,
+                'endomorphic_blocks': 2
+            })
+        else:
+            set_default('model_kwargs', {
+                'features': 256,
+                'resample_blocks': 3,
+                'endomorphic_blocks': 3
+            })
+        set_default('optimizer_constructor', optim.Adam)
+        set_default('optimizer_kwargs', {'lr': 2e-4, 'weight_decay': 1e-4})
+        set_default('loss_fn_constructor', nn.CrossEntropyLoss)
+        set_default('loss_fn_kwargs', {})
+    elif fe_type in ('learned_loss_autoencoder', 'gan', 'cyclegan'):
+        if fe_type in ('learned_loss_autoencoder', 'cyclegan'):
+            set_default('gen_constructor', resnet.Autoencoder)
+        else:
+            set_default('gen_constructor', resnet.Generator)
+        set_default('disc_constructor', resnet.Discriminator)
+        if 'MNIST' in constructor_kwargs['dataset_constructor'].__name__:
+            set_default('disc_kwargs', {
+                'features': 64,
+                'resample_blocks': 2,
+                'endomorphic_blocks': 2
+            })
+            set_default('gen_kwargs', {
+                'features': 64,
+                'resample_blocks': 2,
+                'endomorphic_blocks': 2
+            })
+        else:
+            set_default('disc_kwargs', {
+                'features': 256,
+                'resample_blocks': 3,
+                'endomorphic_blocks': 3
+            })
+            set_default('gen_kwargs', {
+                'features': 256,
+                'resample_blocks': 3,
+                'endomorphic_blocks': 3
+            })
+        set_default('disc_optimizer_constructor', optim.Adam)
+        set_default('disc_optimizer_kwargs', {'lr': 5e-5, 'betas': (0.0, 0.999)})
+        set_default('gen_optimizer_constructor', optim.Adam)
+        set_default('gen_optimizer_kwargs', {'lr': 1e-5, 'betas': (0.0, 0.999)})
+    else:
+        assert False
+    
     random.seed(random_seed)
-    np.random.seed(seed)
-    torch.random.manual_seed(seed)
+    np.random.seed(random_seed)
+    torch.random.manual_seed(random_seed)
+    
+    if save_dir is None:
+        save_dir = os.path.join(
+            '.', 'results', constructor_kwargs['dataset_constructor'].__name__,
+            'omit_{}'.format(constructor_kwargs['dataset_constructor'].domains[omitted_domain]),
+            fe_type, 'trial_{}'.format(random_seed)
+        )
+    os.makedirs(save_dir, exist_ok=True)
+    
+    print('Training a feature extractor.')
+    print('Save dir: {}'.format(save_dir))
+    print('Constructor kwargs: {}'.format(constructor_kwargs))
+    
     def save_results(train_rv, val_rv, epoch_idx):
-        if save_dir is None:
-            return
         train_dir = os.path.join(save_dir, 'results', 'train')
         val_dir = os.path.join(save_dir, 'results', 'validation')
         os.makedirs(train_dir, exist_ok=True)
@@ -23,27 +104,35 @@ def train_feature_extractor(
             pickle.dump(train_rv, F)
         with open(os.path.join(val_dir, 'epoch_{}.pickle'.format(epoch_idx)), 'wb') as F:
             pickle.dump(val_rv, F)
-        if 'generated_images' in val_dir.keys():
-            num_plots = len(val_dir['generated_images'])
+        if 'generated_images' in val_rv.keys():
+            num_plots = len(val_rv['generated_images'])
             cols = int(np.sqrt(num_plots))
             rows = int(np.sqrt(num_plots))+(1 if int(np.sqrt(num_plots))**2 != num_plots else 0)
-            if 'reference_images' in val_dir.keys():
+            if 'reference_images' in val_rv.keys():
                 cols *= 2
             (fig, axes) = plt.subplots(rows, cols, figsize=(4*cols, 4*rows))
-            if 'reference_images' in val_dir.keys():
+            if 'reference_images' in val_rv.keys():
                 reference_axes = axes[:, :axes.shape[1]//2].flatten()
                 generated_axes = axes[:, axes.shape[1]//2:].flatten()
             else:
                 generated_axes = axes.flatten()
             frames_dir = os.path.join(save_dir, 'eg_frames')
             os.makedirs(frames_dir, exist_ok=True)
-            for ax, image in zip(generated_axes, val_dir['generated_images']):
-                cmap = 'binary' if image.shape[0] == 1 else 'plasma'
+            for ax, image in zip(generated_axes, val_rv['generated_images']):
+                cmap = 'binary' if image.shape[-1] == 1 else 'plasma'
                 ax.imshow(image, cmap=cmap)
                 ax.set_xticks([])
                 ax.set_yticks([])
+            if 'reference_images' in val_rv.keys():
+                for ax, image in zip(reference_axes, val_rv['reference_images']):
+                    cmap = 'binary' if image.shape[-1] == 1 else 'plasma'
+                    ax.imshow(image, cmap=cmap)
+                    ax.set_xticks([])
+                    ax.set_yticks([])
             fig.suptitle('Epoch {}'.format(epoch_idx))
             fig.savefig(os.path.join(frames_dir, 'frame_{}.jpg'.format(epoch_idx)), dpi=25)
+            plt.close('all')
+            
     if fe_type == 'random':
         trial_objects = construct_random_feature_extractor(**constructor_kwargs)
         epoch_fn = None
@@ -56,72 +145,93 @@ def train_feature_extractor(
     elif fe_type == 'gan':
         trial_objects = construct_adversarial_models(**constructor_kwargs)
         epoch_fn = gan_epoch
-    elif fe_type in ('learned_loss_autoencoder__disc_fe', 'learned_loss_autoencoder__gen_fe'):
-        trial_objects = construct_adversarial_models(**constructor_kwargs)
+    elif fe_type == 'learned_loss_autoencoder':
+        trial_objects = construct_adversarial_models(llae=True, **constructor_kwargs)
         epoch_fn = learned_loss_autoencoder_epoch
     else:
         assert False
+        
+    def print_dict(d):
+        for key, item in d.items():
+            if not hasattr(item, '__iter__'):
+                print('\t\t{}: {}'.format(key, item))
+
     if epoch_fn is not None:
         for epoch_idx in range(1, num_epochs+1):
-            train_rv, val_rv = epoch_fn(**trial_objects, **epoch_kwargs)
+            t0 = time.time()
+            train_rv, val_rv = epoch_fn(**trial_objects)
             save_results(train_rv, val_rv, epoch_idx)
-    fe_save_path = os.path.join('.', 'trained_models', constructor_kwargs['dataset_constructor'].__name__,
-                                fe_type, 'feature_extractor.pth')
-    os.makedirs(fe_save_path, exist_ok=True)
-    if fe_type in ('random', 'erm', 'fixed_loss_autoencoder'):
-        torch.save(trial_objects['model'].state_dict(), fe_save_path)
-    elif fe_type in ('gan', 'learned_loss_autoencoder__disc_fe'):
-        torch.save(trial_objects['disc'].state_dict(), fe_save_path)
-    elif fe_type == 'learned_loss_autoencoder__gen_fe':
-        torch.save(trial_objects['gen'].state_dict(), fe_save_path)
+            print('Epoch {} complete in {} seconds'.format(epoch_idx, time.time()-t0))
+            print('\tTrain rv:')
+            print_dict(train_rv)
+            print('\tVal rv:')
+            print_dict(val_rv)
+    fe_save_dir = os.path.join(
+        '.', 'trained_models', constructor_kwargs['dataset_constructor'].__name__,
+        'omit_{}'.format(constructor_kwargs['dataset_constructor'].domains[omitted_domain]), fe_type
+    )
+    os.makedirs(fe_save_dir, exist_ok=True)
+    if fe_type in ('random'):
+        torch.save(trial_objects['model'].state_dict(), os.path.join(fe_save_dir, 'model__{}.pth'.format(random_seed)))
+    elif fe_type in ('erm', 'fixed_loss_autoencoder'):
+        torch.save(trial_objects['model'].state_dict(), os.path.join(fe_save_dir, 'model__{}.pth'.format(random_seed)))
+        torch.save(trial_objects['optimizer'].state_dict(), os.path.join(fe_save_dir, 'optimizer__{}.pth'.format(random_seed)))
     else:
-        assert False
+        torch.save(trial_objects['disc'].state_dict(), os.path.join(fe_save_dir, 'disc__{}.pth'.format(random_seed)))
+        torch.save(trial_objects['disc_optimizer'].state_dict(), os.path.join(fe_save_dir, 'disc_opt__{}.pth'.format(random_seed)))
+        torch.save(trial_objects['gen'].state_dict(), os.path.join(fe_save_dir, 'gen__{}.pth'.format(random_seed)))
+        torch.save(trial_objects['gen_optimizer'].state_dict(), os.path.join(fe_save_dir, 'gen_opt__{}.pth'.format(random_seed)))
+    if not fe_type in ('random'):
+        plot_traces(save_dir)
+    if not fe_type in ('random', 'erm'):
+        generate_animation(save_dir)
 
 def learned_loss_autoencoder_epoch(
-    disc=None, gen=None, disc_optimizer=None, gen_optimizer=None, train_dataloader=None, val_dataloader=None, device=None,
-    dnae_noise_magnitude=0.0, auxillary_gen_classifier=False, auxillary_disc_classifier=False):
+    disc=None, gen=None, disc_optimizer=None, gen_optimizer=None, train_dataloader=None, val_dataloader=None, device=None):
     assert all(arg is not None for arg in locals())
-    train_rv = gan.train_epoch(train_dataloader, gen, gen_opt, disc, disc_opt, device,
-                               autoencoder_gen=True, dnae_noise_magnitude=dnae_noise_magnitude,
-                               auxillary_gen_classifier=auxillary_gen_classifier, auxillary_disc_classifier=auxillary_disc_classifier)
-    val_rv = gen.eval_epoch(val_dataloader, gen, disc, device,
-                            autoencoder_gen=True, dnae_noise_magnitude=dnae_noise_magnitude,
-                            auxillary_gen_classifier=auxillary_gen_classifier, auxillary_disc_classifier=auxillary_disc_classifier)
+    train_rv = gan.train_epoch(train_dataloader, gen, gen_optimizer, disc, disc_optimizer, device,
+                               autoencoder_gen=True, dnae_noise_magnitude=1.0, auxillary_gen_classifier=True)
+    val_rv = gan.eval_epoch(val_dataloader, gen, disc, device,
+                            autoencoder_gen=True, dnae_noise_magnitude=1.0,
+                            auxillary_gen_classifier=True, get_sample_images=True)
     return train_rv, val_rv
 
 def gan_epoch(
-    disc=None, gen=None, disc_optimizer=None, gen_optimizer=None, train_dataloader=None, val_dataloader=None, device=None,
-    auxillary_disc_classifier=False):
+    disc=None, gen=None, disc_optimizer=None, gen_optimizer=None, train_dataloader=None, val_dataloader=None, device=None):
     assert all(arg is not None for arg in locals())
-    train_rv = gan.train_epoch(train_dataloader, gen, gen_opt, disc, disc_opt, device,
-                               auxillary_disc_classifier=auxillary_disc_classifier)
+    train_rv = gan.train_epoch(train_dataloader, gen, gen_optimizer, disc, disc_optimizer, device,
+                               auxillary_disc_classifier=True, mixup_alpha=0.0)
     val_rv = gan.eval_epoch(val_dataloader, gen, disc, device,
-                            auxillary_disc_classifier=auxillary_disc_classifier)
+                            auxillary_disc_classifier=True, get_sample_images=True)
     return train_rv, val_rv
 
 def fixed_loss_autoencoder_epoch(
-    model=None, optimizer=None, loss_fn=None, train_dataloader=None, val_dataloader=None, device=None,
-    dnae_noise_magnitude=0.0, auxillary_classifier=False):
+    model=None, optimizer=None, loss_fn=None, train_dataloader=None, val_dataloader=None, device=None):
     assert all(arg is not None for arg in locals())
-    train_rv = single_model.train_epoch(train_dataloader, model, optimizer, loss_fn, device,
-                           autoencoder=True, dnae_noise_magnitude=dnae_noise_magnitude, auxillary_classifier=auxillary_classifier)
-    val_rv = single_model.eval_epoch(val_dataloader, model, loss_fn, device,
-                        autoencoder=True, dnae_noise_magnitude=dnae_noise_magnitude, auxillary_classifier=auxillary_classifier)
+    train_rv = single_model.train_epoch(
+        train_dataloader, model, optimizer, loss_fn, device,
+        autoencoder=True, dnae_noise_magnitude=1.0,
+        auxillary_classifier=True)
+    val_rv = single_model.eval_epoch(
+        val_dataloader, model, loss_fn, device,
+        autoencoder=True, dnae_noise_magnitude=1.0,
+        auxillary_classifier=True, get_sample_images=True)
     return train_rv, val_rv
 
 def erm_epoch(
     model=None, optimizer=None, loss_fn=None, train_dataloader=None, val_dataloader=None, device=None):
     assert all(arg is not None for arg in locals())
-    train_rv = single_model.train_epoch(train_dataloader, model, optimizer, loss_fn, device)
+    train_rv = single_model.train_epoch(train_dataloader, model, optimizer, loss_fn, device, mixup_alpha=1.0)
     val_rv = single_model.eval_epoch(val_dataloader, model, loss_fn, device)
     return train_rv, val_rv
 
 def construct_random_feature_extractor(
+    dataset_constructor,
     model_constructor,
     model_kwargs,
-    device):
-    model = model_constructor(**model_kwargs).to(device)
-    return model
+    device, **kwargs):
+    model = model_constructor(dataset_constructor.input_shape, dataset_constructor.num_classes, **model_kwargs).to(device)
+    return{'model': model}
 
 def construct_single_model(
     dataset_constructor=None,
@@ -133,13 +243,13 @@ def construct_single_model(
     optimizer_kwargs=None,
     loss_fn_constructor=None,
     loss_fn_kwargs=None,
-    device=None):
+    device=None, **kwargs):
     assert all(arg is not None for arg in locals())
-    model = model_constructor(**model_kwargs).to(device)
+    model = model_constructor(dataset_constructor.input_shape, dataset_constructor.num_classes, **model_kwargs).to(device)
     optimizer = optimizer_constructor(model.parameters(), **optimizer_kwargs)
     loss_fn = loss_fn_constructor(**loss_fn_kwargs).to(device)
-    dataset = dataset_constructor(train=True, **dataset_kwargs)
-    train_dataset, val_dataset = torch.utils.data.random_split(dataset, [4*len(dataset)//5, len(dataset)//5])
+    dataset = dataset_constructor(**dataset_kwargs)
+    train_dataset, val_dataset = torch.utils.data.random_split(dataset, [len(dataset)-len(dataset)//5, len(dataset)//5])
     train_dataloader = torch.utils.data.DataLoader(train_dataset, shuffle=True, **dataloader_kwargs)
     val_dataloader = torch.utils.data.DataLoader(val_dataset, shuffle=False, **dataloader_kwargs)
     return {'model': model, 'optimizer': optimizer,
@@ -158,14 +268,18 @@ def construct_adversarial_models(
     disc_optimizer_kwargs=None,
     gen_optimizer_constructor=None,
     gen_optimizer_kwargs=None,
-    device=None):
+    device=None, llae=False, **kwargs):
     assert all(arg is not None for arg in locals())
-    disc = disc_constructor(**disc_kwargs).to(device)
-    gen = gen_constructor(**gen_kwargs).to(device)
+    if llae:
+        disc_input_shape = [2*dataset_constructor.input_shape[0], *dataset_constructor.input_shape[1:]]
+    else:
+        disc_input_shape = dataset_constructor.input_shape
+    disc = disc_constructor(disc_input_shape, dataset_constructor.num_classes, **disc_kwargs).to(device)
+    gen = gen_constructor(dataset_constructor.input_shape, dataset_constructor.num_classes, **gen_kwargs).to(device)
     disc_optimizer = disc_optimizer_constructor(disc.parameters(), **disc_optimizer_kwargs)
     gen_optimizer = gen_optimizer_constructor(gen.parameters(), **gen_optimizer_kwargs)
-    dataset = dataset_constructor(train=True, **dataset_kwargs)
-    train_dataset, val_dataset = torch.utils.data.random_split(dataset, [4*len(dataset)//5, len(dataset)//5])
+    dataset = dataset_constructor(**dataset_kwargs)
+    train_dataset, val_dataset = torch.utils.data.random_split(dataset, [len(dataset)-len(dataset)//5, len(dataset)//5])
     train_dataloader = torch.utils.data.DataLoader(train_dataset, shuffle=True, **dataloader_kwargs)
     val_dataloader = torch.utils.data.DataLoader(val_dataset, shuffle=False, **dataloader_kwargs)
     return {'disc': disc, 'gen': gen,

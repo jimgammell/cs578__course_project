@@ -1,10 +1,10 @@
  # Based on DomainBed implementations here:
  #   https://github.com/facebookresearch/DomainBed/blob/main/domainbed/datasets.py
-
+import os
 import numpy as np
 import torch
-from torchvision import datasets, transforms
-from torch.utils.data import Dataset
+from torchvision import transforms, datasets
+from datasets.common import *
 
 def rotate_dataset(data, targets, angle):
     rotation_transform = transforms.Compose([
@@ -16,13 +16,12 @@ def rotate_dataset(data, targets, angle):
     
     data = data.float()
     data = data.view(-1, 1, 28, 28)
-    data = 2*(data/255.0)-1
     for idx, x in enumerate(data):
         data[idx] = rotation_transform(x)
     targets = targets.view(-1).long()
     
     return data, targets
-        
+
 def color_dataset(data, targets, spurious_correlation):
     def torch_bernoulli(p, size):
         return (torch.rand(size) < p).float()
@@ -32,9 +31,8 @@ def color_dataset(data, targets, spurious_correlation):
     targets = (targets < 5).float()
     targets = torch_xor(targets, torch_bernoulli(0.25, len(targets)))
     colors = torch_xor(targets, torch_bernoulli(spurious_correlation, len(targets)))
-    data = torch.stack([data, data], dim=1)
+    data = torch.cat([data, data], dim=1)
     data[torch.tensor(range(len(data))), (1-colors).long(), :, :] *= 0
-    data = 2*(data.float()/255.0)-1
     targets = targets.view(-1).long()
     
     return data, targets
@@ -60,7 +58,6 @@ def watermark_dataset(data, targets, spurious_correlation):
     targets = (targets < 5).float()
     targets = torch_xor(targets, torch_bernoulli(0.25, len(targets)))
     watermarks = torch_xor(targets, torch_bernoulli(spurious_correlation, len(targets)))
-    data = 2*(data.float()/255.0)-1
     data = data.view(-1, 1, 28, 28)
     for idx, x in enumerate(data):
         watermark_center = torch.randint(2, 26, size=(2,))
@@ -73,9 +70,19 @@ def watermark_dataset(data, targets, spurious_correlation):
     
     return data, targets
         
-class MultiEnvironmentDataset(datasets.MNIST):
-    def __init__(self, transform_fn, transform_args, *args, data_transform=None, target_transform=None, **kwargs):
-        super().__init__(*args, **kwargs)
+class MultiDomainMNIST(torch.utils.data.Dataset):
+    def __init__(self, transform_fn, transform_args, data_transform=None, target_transform=None):
+        super().__init__()
+        
+        mnist_dataset = torch.utils.data.ConcatDataset((
+            datasets.MNIST(root=os.path.join('.', 'downloads'), train=True, download=True),
+            datasets.MNIST(root=os.path.join('.', 'downloads'), train=False, download=True)
+        ))
+        self.data, self.targets = [], []
+        for data, target in mnist_dataset:
+            self.data.append(transforms.functional.to_tensor(data).float())
+            self.targets.append(torch.tensor(target, dtype=torch.long))
+        self.data, self.targets = torch.stack(self.data), torch.stack(self.targets)
         self.data_transform = data_transform
         self.target_transform = target_transform
         
@@ -93,6 +100,9 @@ class MultiEnvironmentDataset(datasets.MNIST):
             updated_targets.append(updated_targets_env)
         self.data = torch.cat(updated_data, dim=0)
         self.targets = torch.cat(updated_targets, dim=0)
+        for idx, data in enumerate(self.data):
+            data = (data-data.min())/(data.max()-data.min())
+            data = 0.5*data-0.5
             
     def __getitem__(self, idx):
         x, y = self.data[idx], self.targets[idx]
@@ -101,21 +111,33 @@ class MultiEnvironmentDataset(datasets.MNIST):
         if self.target_transform is not None:
             y = self.target_transform(y)
         return x, (y, self.env_labels[idx])
-
-class ColoredMNIST(MultiEnvironmentDataset):
+    
+    def __len__(self):
+        return len(self.data)
+    
+class ColoredMNIST(MultiDomainMNIST):
+    domains = ['p90pct', 'p80pct', 'n90pct']
     input_shape = (2, 28, 28)
     num_classes = 2
-    def __init__(self, spurious_correlations, *args, **kwargs):
-        super().__init__(*args, color_dataset, spurious_correlations, **kwargs)
+    def __init__(self, *args, domains_to_use='all', **kwargs):
+        if domains_to_use == 'all':
+            domains_to_use = self.__class__.domains
+        super().__init__(*args, color_dataset, [float(d[1:3])/100 for d in domains_to_use], **kwargs)
 
-class WatermarkedMNIST(MultiEnvironmentDataset):
+class WatermarkedMNIST(MultiDomainMNIST):
+    domains = ['p90pct', 'p80pct', 'n90pct']
     input_shape = (1, 28, 28)
     num_classes = 2
-    def __init__(self, spurious_correlations, *args, **kwargs):
-        super().__init__(*args, watermark_dataset, spurious_correlations, **kwargs)
+    def __init__(self, *args, domains_to_use='all', **kwargs):
+        if domains_to_use == 'all':
+            domains_to_use = self.__class__.domains
+        super().__init__(*args, watermark_dataset, [float(d[1:3])/100 for d in domains_to_use], **kwargs)
 
-class RotatedMNIST(MultiEnvironmentDataset):
+class RotatedMNIST(MultiDomainMNIST):
+    domains = ['0deg', '30deg', '60deg', '90deg']
     input_shape = (1, 28, 28)
     num_classes = 10
-    def __init__(self, rotations, *args, **kwargs):
-        super().__init__(*args, rotate_dataset, rotations, **kwargs)
+    def __init__(self, *args, domains_to_use='all', **kwargs):
+        if domains_to_use == 'all':
+            domains_to_use = self.__class__.domains
+        super().__init__(*args, rotate_dataset, [float(d[:-3]) for d in domains_to_use], **kwargs)
