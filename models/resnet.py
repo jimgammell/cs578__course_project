@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import torchvision
 from torch import nn, optim
 from torch.nn.utils import spectral_norm
 from models.common import *
@@ -211,3 +212,36 @@ class Autoencoder(nn.Module):
     
     def forward(self, x):
         return self.reconstruct_features(self.get_features(x))
+
+    
+# Based off of DomainBed implementation here:
+#   https://github.com/facebookresearch/DomainBed/blob/main/domainbed/networks.py
+class PretrainedRN18(nn.Module):
+    def __init__(self, input_shape, n_outputs, *args, pretrained=False, **kwargs):
+        super().__init__()
+        
+        self.feature_extractor = torchvision.models.resnet18(pretrained=pretrained)
+        del self.feature_extractor.fc
+        self.feature_extractor.fc = nn.Identity()
+        self.classifier = nn.Linear(512, n_outputs)
+        self.freeze_bn()
+        
+    def get_features(self, x):
+        x_fe = self.feature_extractor(x)
+        x_fe = x_fe.view(-1, x_fe.size(1))
+        return x_fe
+    
+    def classify_features(self, x):
+        return self.classifier(x)
+    
+    def forward(self, x):
+        return self.classify_features(self.get_features(x))
+    
+    def train(self, mode=True):
+        super().train(mode)
+        self.freeze_bn()
+        
+    def freeze_bn(self):
+        for m in self.feature_extractor.modules():
+            if isinstance(m, nn.BatchNorm2d):
+                m.eval()

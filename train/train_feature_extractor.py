@@ -2,32 +2,41 @@ import random
 import os
 import time
 import pickle
+from copy import deepcopy
 import numpy as np
 from matplotlib import pyplot as plt
 import torch
+import torchvision
 from torch import nn, optim
 from train.common import *
 from train import single_model, gan
 from models import resnet
 from train.plot_results import *
+from datasets.domainbed import get_default_transform, get_augmentation_transform
 
 def train_feature_extractor(
-    fe_type=None, num_epochs=25, constructor_kwargs={}, save_dir=None, random_seed=0, omitted_domain=0):
+    fe_type=None, num_epochs=25, constructor_kwargs={}, save_dir=None, random_seed=0, omitted_domain=0,
+    mixup=False, pretrained=False, augment_data=False, covariance_decay=False
+):
     
     def set_default(key, val):
         if not key in constructor_kwargs.keys():
             constructor_kwargs[key] = val
     assert 'dataset_constructor' in constructor_kwargs.keys()
-    constructor_kwargs['dataset_kwargs'] = {'domains_to_use': [
-        d for idx, d in enumerate(constructor_kwargs['dataset_constructor'].domains) if idx!=omitted_domain
-    ]}
+    constructor_kwargs['dataset_kwargs'] = {
+        'domains_to_use': [d for idx, d in enumerate(constructor_kwargs['dataset_constructor'].domains) if idx!=omitted_domain]
+    }
+    if not 'MNIST' in constructor_kwargs['dataset_constructor'].__name__:
+        constructor_kwargs['dataset_kwargs'].update({'data_transform': get_augmentation_transform() if augment_data else get_default_transform()})
     set_default('dataloader_kwargs', {'batch_size': 32, 'num_workers': 8})
     set_default('device', 'cuda' if torch.cuda.is_available() else 'cpu')
     if fe_type in ('random', 'erm', 'fixed_loss_autoencoder'):
-        if fe_type in ('random', 'erm'):
+        if fe_type == 'random':
             set_default('model_constructor', resnet.Classifier)
-        else:
+        elif fe_type == 'fixed_loss_autoencoder':
             set_default('model_constructor', resnet.Autoencoder)
+        elif fe_type == 'erm':
+            set_default('model_constructor', resnet.PretrainedRN18 if not 'MNIST' in constructor_kwargs['dataset_constructor'].__name__ else resnet.Classifier)
         if 'MNIST' in constructor_kwargs['dataset_constructor'].__name__:
             set_default('model_kwargs', {
                 'features': 64,
@@ -35,11 +44,16 @@ def train_feature_extractor(
                 'endomorphic_blocks': 2
             })
         else:
-            set_default('model_kwargs', {
-                'features': 256,
-                'resample_blocks': 3,
-                'endomorphic_blocks': 3
-            })
+            if fe_type == 'erm' and not 'MNIST' in constructor_kwargs['dataset_constructor'].__name__:
+                set_default('model_kwargs', {
+                    'pretrained': pretrained
+                })
+            else:
+                set_default('model_kwargs', {
+                    'features': 256,
+                    'resample_blocks': 3,
+                    'endomorphic_blocks': 3
+                })
         set_default('optimizer_constructor', optim.Adam)
         set_default('optimizer_kwargs', {'lr': 2e-4, 'weight_decay': 1e-4})
         set_default('loss_fn_constructor', nn.CrossEntropyLoss)
@@ -83,11 +97,21 @@ def train_feature_extractor(
     np.random.seed(random_seed)
     torch.random.manual_seed(random_seed)
     
+    fe_type_opt = fe_type
+    if mixup:
+        fe_type_opt += '_mixup'
+    if pretrained:
+        fe_type_opt += '_pretrained'
+    if augment_data:
+        fe_type_opt += '_augmented'
+    if covariance_decay:
+        fe_type_opt += '_covariance_decay'
+    
     if save_dir is None:
         save_dir = os.path.join(
             '.', 'results', constructor_kwargs['dataset_constructor'].__name__,
             'omit_{}'.format(constructor_kwargs['dataset_constructor'].domains[omitted_domain]),
-            fe_type, 'trial_{}'.format(random_seed)
+            fe_type_opt, 'trial_{}'.format(random_seed)
         )
     os.makedirs(save_dir, exist_ok=True)
     
@@ -156,26 +180,63 @@ def train_feature_extractor(
             if not hasattr(item, '__iter__'):
                 print('\t\t{}: {}'.format(key, item))
 
-    if epoch_fn is not None:
+    def train_erm_fe():
+        best_model = deepcopy(trial_objects['model'].state_dict())
+        best_val_acc = -np.inf
+        epochs_without_improvement = 0
         for epoch_idx in range(1, num_epochs+1):
             t0 = time.time()
-            train_rv, val_rv = epoch_fn(**trial_objects)
+            train_rv, val_rv = epoch_fn(
+                mixup_alpha=1.0 if mixup else 0.0,
+                feature_covariance_decay = 1.0 if covariance_decay else 0.0,
+                **trial_objects)
             save_results(train_rv, val_rv, epoch_idx)
             print('Epoch {} complete in {} seconds'.format(epoch_idx, time.time()-t0))
             print('\tTrain rv:')
             print_dict(train_rv)
             print('\tVal rv:')
             print_dict(val_rv)
+            val_acc = val_rv['acc']
+            if val_acc > best_val_acc:
+                print('New best model found.')
+                best_val_acc = val_acc
+                best_model = deepcopy(trial_objects['model'].state_dict())
+                epochs_without_improvement = 0
+            else:
+                epochs_without_improvement += 1
+            if epochs_without_improvement >= 5:
+                print('Performance gains have saturated. Ending training.')
+                return best_model
+        return best_model
+    
+    def train_fe():
+        if epoch_fn is not None:
+            for epoch_idx in range(1, num_epochs+1):
+                t0 = time.time()
+                train_rv, val_rv = epoch_fn(
+                    mixup_alpha=1.0 if mixup else 0.0,
+                    feature_covariance_decay=1.0 if covariance_decay else 0.0,
+                    **trial_objects)
+                save_results(train_rv, val_rv, epoch_idx)
+                print('Epoch {} complete in {} seconds'.format(epoch_idx, time.time()-t0))
+                print('\tTrain rv:')
+                print_dict(train_rv)
+                print('\tVal rv:')
+                print_dict(val_rv)
+        return trial_objects['model'].state_dict()
+    
+    if fe_type == 'erm':
+        best_model = train_erm_fe()
+    else:
+        best_model = train_fe()
+    
     fe_save_dir = os.path.join(
         '.', 'trained_models', constructor_kwargs['dataset_constructor'].__name__,
-        'omit_{}'.format(constructor_kwargs['dataset_constructor'].domains[omitted_domain]), fe_type
+        'omit_{}'.format(constructor_kwargs['dataset_constructor'].domains[omitted_domain]), fe_type_opt
     )
     os.makedirs(fe_save_dir, exist_ok=True)
-    if fe_type in ('random'):
-        torch.save(trial_objects['model'].state_dict(), os.path.join(fe_save_dir, 'model__{}.pth'.format(random_seed)))
-    elif fe_type in ('erm', 'fixed_loss_autoencoder'):
-        torch.save(trial_objects['model'].state_dict(), os.path.join(fe_save_dir, 'model__{}.pth'.format(random_seed)))
-        torch.save(trial_objects['optimizer'].state_dict(), os.path.join(fe_save_dir, 'optimizer__{}.pth'.format(random_seed)))
+    if fe_type in ('random', 'erm', 'fixed_loss_autoencoder'):
+        torch.save(best_model, os.path.join(fe_save_dir, 'model__{}.pth'.format(random_seed)))
     else:
         torch.save(trial_objects['disc'].state_dict(), os.path.join(fe_save_dir, 'disc__{}.pth'.format(random_seed)))
         torch.save(trial_objects['disc_optimizer'].state_dict(), os.path.join(fe_save_dir, 'disc_opt__{}.pth'.format(random_seed)))
@@ -219,9 +280,9 @@ def fixed_loss_autoencoder_epoch(
     return train_rv, val_rv
 
 def erm_epoch(
-    model=None, optimizer=None, loss_fn=None, train_dataloader=None, val_dataloader=None, device=None):
+    model=None, optimizer=None, loss_fn=None, train_dataloader=None, val_dataloader=None, device=None, mixup_alpha=0.0, feature_covariance_decay=0.0):
     assert all(arg is not None for arg in locals())
-    train_rv = single_model.train_epoch(train_dataloader, model, optimizer, loss_fn, device, mixup_alpha=1.0)
+    train_rv = single_model.train_epoch(train_dataloader, model, optimizer, loss_fn, device, mixup_alpha=mixup_alpha, feature_covariance_decay=feature_covariance_decay)
     val_rv = single_model.eval_epoch(val_dataloader, model, loss_fn, device)
     return train_rv, val_rv
 

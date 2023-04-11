@@ -57,6 +57,23 @@ def main():
         '--restart', default=True, type=bool,
         help='Specify whether to restart training if there are already model checkpoints for the specified configuration.'
     )
+    parser.add_argument(
+        '--mixup', default=False, type=bool,
+        help='Specify whether to use mixup in training.'
+    )
+    parser.add_argument(
+        '--pretrained', default=False, action='store_true',
+        help='Specify whether to use a feature extractor pretrained on ImageNet as a starting point.'
+    )
+    parser.add_argument(
+        '--augment-data', default=False, action='store_true',
+        help='Specify whether to use the standard DomainBet dataset augmentations.'
+    )
+    parser.add_argument(
+        '--covariance-decay', default=False, action='store_true',
+        help='Specify whether to use feature covariance decay.'
+    )
+    
     args = parser.parse_args()
     assert args.restart == True
     
@@ -82,7 +99,8 @@ def main():
                             print('Training a feature extractor using {} on {} with domain {} held out.'.format(fe_type, dataset, dataset.domains[omitted_domain]))
                             train_feature_extractor(
                                 fe_type=fe_type, num_epochs=num_epochs, constructor_kwargs=constructor_kwargs,
-                                random_seed=random_seed, omitted_domain=omitted_domain
+                                random_seed=random_seed, omitted_domain=omitted_domain, mixup=args.mixup,
+                                pretrained=args.pretrained, augment_data=args.augment_data, covariance_decay=args.covariance_decay
                             )
                             print('Done.')
                             print('\n\n\n')

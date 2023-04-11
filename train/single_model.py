@@ -8,7 +8,7 @@ def add_noise(x, noise_magnitude=1.0):
 
 def train_step(batch, model, optimizer, loss_fn, device, feature_covariance_decay=0.0,
                autoencoder=False, dnae_noise_magnitude=0.0, auxillary_classifier=False,
-               mixup_alpha=0.0):
+               mixup_alpha=0.0, **kwargs):
     x, y = unpack_batch(batch, device)
     if mixup_alpha != 0.0:
         x, y_a, y_b, lbd = apply_mixup_to_data(x, y, mixup_alpha)
@@ -34,7 +34,7 @@ def train_step(batch, model, optimizer, loss_fn, device, feature_covariance_deca
         model_features = model.get_features(x)
         logits = model.classify_features(model_features)
         loss = criterion(logits)
-    #loss = loss + feature_covariance_decay*covariance_penalty(model_features)
+    loss = loss + feature_covariance_decay*covariance_penalty(model_features)
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()
@@ -52,7 +52,7 @@ def train_step(batch, model, optimizer, loss_fn, device, feature_covariance_deca
 
 @torch.no_grad()
 def eval_step(batch, model, loss_fn, device, feature_covariance_decay=0.0,
-              autoencoder=False, dnae_noise_magnitude=0.0, auxillary_classifier=False):
+              autoencoder=False, dnae_noise_magnitude=0.0, auxillary_classifier=False, **kwargs):
     x, y = unpack_batch(batch, device)
     model.eval()
     
@@ -73,7 +73,7 @@ def eval_step(batch, model, loss_fn, device, feature_covariance_decay=0.0,
         model_features = model.get_features(x)
         logits = model.classify_features(model_features)
         loss = loss_fn(logits, y)
-    #loss = loss + feature_covariance_decay*covariance_penalty(model_features)
+    loss = loss + feature_covariance_decay*covariance_penalty(model_features)
     
     rv = {}
     if autoencoder:
