@@ -204,11 +204,13 @@ def train_feature_extractor(
                 epochs_without_improvement = 0
             else:
                 epochs_without_improvement += 1
-                print('Epochs without improvement: {}'.format(epochs_without_improvement))
-            #if epochs_without_improvement >= 5:
-            #    print('Performance gains have saturated. Ending training.')
-            #    return best_model
-        return best_model
+                print('Epochs without improvement (at current learning rate): {}'.format(epochs_without_improvement))
+            if epochs_without_improvement >= 10:
+                print('Performance gains have saturated. Dividing learning rate by 10.')
+                epochs_without_improvement = 0
+                for g in trial_objects['optimizer'].param_groups:
+                    g['lr'] /= 10.0
+        return best_model.cpu()
     
     def train_fe():
         if epoch_fn is not None:
@@ -224,7 +226,7 @@ def train_feature_extractor(
                 print_dict(train_rv)
                 print('\tVal rv:')
                 print_dict(val_rv)
-        return trial_objects['model'].state_dict()
+        return trial_objects['model'].cpu().state_dict()
     
     if fe_type == 'erm':
         best_model = train_erm_fe()

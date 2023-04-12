@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from torch import nn, optim
 from train.train_feature_extractor import train_feature_extractor
+from train.train_classifier import evaluate_all_trained_models
 from datasets import mnist_variants, domainbed
 
 FEATURE_EXTRACTOR_CHOICES = [
@@ -36,6 +37,10 @@ def main():
     parser.add_argument(
         '--train-fe', action='store_true', default=False,
         help='Train a feature extractor.'
+    )
+    parser.add_argument(
+        '--train-lc', action='store_true', default=False,
+        help='Run the available linear classifier algorithms on all pre-existing feature extractors.'
     )
     parser.add_argument(
         '--fe-trainer', choices=FEATURE_EXTRACTOR_CHOICES+['all'], default=[FEATURE_EXTRACTOR_CHOICES[0]], nargs='*',
@@ -106,6 +111,8 @@ def main():
                             print('\n\n\n')
                         except Exception:
                             traceback.print_exc()
+    if args.train_lc:
+        evaluate_all_trained_models(overwrite=False, batch_size=32, device=args.device, num_epochs=25)
     
 if __name__ == '__main__':
     main()
