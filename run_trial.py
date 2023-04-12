@@ -58,7 +58,7 @@ def main():
         help='Specify whether to restart training if there are already model checkpoints for the specified configuration.'
     )
     parser.add_argument(
-        '--mixup', default=False, type=bool,
+        '--mixup', default=False, action='store_true',
         help='Specify whether to use mixup in training.'
     )
     parser.add_argument(
@@ -87,8 +87,6 @@ def main():
         else:
             fe_types = [fe_arg for fe_arg in args.fe_trainer]
         seeds = [rs_arg for rs_arg in args.seed]
-        if args.device is not None:
-            constructor_kwargs.update({'device': args.device})
         num_epochs = args.num_epochs
         for dataset in datasets:
             for fe_type in fe_types:
@@ -96,6 +94,8 @@ def main():
                     for omitted_domain in range(len(dataset.domains)):
                         try:
                             constructor_kwargs = {'dataset_constructor': dataset}
+                            if args.device is not None:
+                                constructor_kwargs.update({'device': args.device})
                             print('Training a feature extractor using {} on {} with domain {} held out.'.format(fe_type, dataset, dataset.domains[omitted_domain]))
                             train_feature_extractor(
                                 fe_type=fe_type, num_epochs=num_epochs, constructor_kwargs=constructor_kwargs,

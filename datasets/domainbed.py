@@ -3,7 +3,7 @@ import shutil
 import json
 from datasets.common import *
 
-def get_default_transform(size=64):
+def get_default_transform(size=224):
     transform = transforms.Compose([
         transforms.Resize((size, size)),
         transforms.ToTensor(),
@@ -12,7 +12,7 @@ def get_default_transform(size=64):
     ])
     return transform
 
-def get_augmentation_transform(size=64):
+def get_augmentation_transform(size=224):
     transform = transforms.Compose([
         transforms.RandomResizedCrop(size, scale=(0.7, 1.0)),
         transforms.RandomHorizontalFlip(),
@@ -30,7 +30,7 @@ def get_default_target_transform():
 
 class OfficeHome(MultiDomainDataset):
     domains = ['Art', 'Clipart', 'Product', 'Real World']
-    input_shape = (3, 64, 64)
+    input_shape = (3, 224, 224)
     num_classes = 65
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
@@ -52,7 +52,7 @@ class OfficeHome(MultiDomainDataset):
 
 class VLCS(MultiDomainDataset):
     domains = ['Caltech101', 'LabelMe', 'SUN09', 'VOC2007']
-    input_shape = (3, 64, 64)
+    input_shape = (3, 224, 224)
     num_classes = 5
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
@@ -73,7 +73,7 @@ class VLCS(MultiDomainDataset):
 
 class PACS(MultiDomainDataset):
     domains = ['art_painting', 'cartoon', 'photo', 'sketch']
-    input_shape = (3, 64, 64)
+    input_shape = (3, 224, 224)
     num_classes = 7
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
@@ -94,7 +94,7 @@ class PACS(MultiDomainDataset):
 
 class Sviro(MultiDomainDataset):
     domains = ['aclass', 'escape', 'hilux', 'i3', 'lexus', 'tesla', 'tiguan', 'tucson', 'x5', 'zoe']
-    input_shape = (3, 64, 64)
+    input_shape = (3, 224, 224)
     num_classes = 7
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
@@ -115,7 +115,7 @@ class Sviro(MultiDomainDataset):
 
 class DomainNet(MultiDomainDataset):
     domains = ['clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch']
-    input_shape = (3, 64, 64)
+    input_shape = (3, 224, 224)
     num_classes = 345
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):
@@ -150,7 +150,7 @@ class DomainNet(MultiDomainDataset):
 
 class TerraIncognita(MultiDomainDataset):
     domains = ['location_100', 'location_38', 'location_43', 'location_46']
-    input_shape = (3, 64, 64)
+    input_shape = (3, 224, 224)
     num_classes = 10
     
     def __init__(self, domains_to_use='all', download=True, **kwargs):

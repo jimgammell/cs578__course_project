@@ -1,0 +1,6512 @@
+Training a feature extractor using erm on <class 'datasets.domainbed.OfficeHome'> with domain Art held out.
+Training a feature extractor.
+Save dir: ./results/OfficeHome/omit_Art/erm_pretrained/trial_0
+Constructor kwargs: {'dataset_constructor': <class 'datasets.domainbed.OfficeHome'>, 'device': 'cuda:2', 'dataset_kwargs': {'domains_to_use': ['Clipart', 'Product', 'Real World'], 'data_transform': Compose(
+    Resize(size=(224, 224), interpolation=bilinear)
+    ToTensor()
+    Lambda()
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+)}, 'dataloader_kwargs': {'batch_size': 32, 'num_workers': 10}, 'model_constructor': <class 'models.resnet.PretrainedRN50'>, 'model_kwargs': {'pretrained': True}, 'optimizer_constructor': <class 'torch.optim.adam.Adam'>, 'optimizer_kwargs': {'lr': 0.0002, 'weight_decay': 0.0001}, 'loss_fn_constructor': <class 'torch.nn.modules.loss.CrossEntropyLoss'>, 'loss_fn_kwargs': {}}
+Epoch 1 complete in 74.38628959655762 seconds
+	Train rv:
+		loss: 3.041217803955078
+		acc: 0.23484848484848486
+	Val rv:
+		loss: 2.4989371299743652
+		acc: 0.3753765060240964
+New best model found.
+Epoch 2 complete in 75.07986235618591 seconds
+	Train rv:
+		loss: 1.6735515594482422
+		acc: 0.549810606060606
+	Val rv:
+		loss: 1.714106559753418
+		acc: 0.5466867469879518
+New best model found.
+Epoch 3 complete in 73.92507529258728 seconds
+	Train rv:
+		loss: 1.0831185579299927
+		acc: 0.6983901515151515
+	Val rv:
+		loss: 1.589443325996399
+		acc: 0.5941265060240963
+New best model found.
+Epoch 4 complete in 73.66492486000061 seconds
+	Train rv:
+		loss: 0.8026911020278931
+		acc: 0.7690340909090909
+	Val rv:
+		loss: 1.179785132408142
+		acc: 0.6814759036144579
+New best model found.
+Epoch 5 complete in 73.12304639816284 seconds
+	Train rv:
+		loss: 0.5479248762130737
+		acc: 0.8349431818181818
+	Val rv:
+		loss: 1.3587992191314697
+		acc: 0.651355421686747
+Epochs without improvement: 1
+Epoch 6 complete in 75.247642993927 seconds
+	Train rv:
+		loss: 0.4549180567264557
+		acc: 0.8635416666666667
+	Val rv:
+		loss: 1.1837974786758423
+		acc: 0.7319277108433735
+New best model found.
+Epoch 7 complete in 72.45362186431885 seconds
+	Train rv:
+		loss: 0.2841939628124237
+		acc: 0.9111742424242424
+	Val rv:
+		loss: 1.1495953798294067
+		acc: 0.7477409638554217
+New best model found.
+Epoch 8 complete in 72.49143052101135 seconds
+	Train rv:
+		loss: 0.2666670083999634
+		acc: 0.9191287878787879
+	Val rv:
+		loss: 1.0645520687103271
+		acc: 0.7345632530120482
+Epochs without improvement: 1
+Epoch 9 complete in 73.28615880012512 seconds
+	Train rv:
+		loss: 0.20544396340847015
+		acc: 0.9367424242424243
+	Val rv:
+		loss: 1.2351505756378174
+		acc: 0.7338102409638554
+Epochs without improvement: 2
+Epoch 10 complete in 72.91986179351807 seconds
+	Train rv:
+		loss: 0.23341965675354004
+		acc: 0.9300189393939394
+	Val rv:
+		loss: 1.2427548170089722
+		acc: 0.7413403614457831
+Epochs without improvement: 3
+Epoch 11 complete in 73.63110852241516 seconds
+	Train rv:
+		loss: 0.15033474564552307
+		acc: 0.9537878787878787
+	Val rv:
+		loss: 1.5322617292404175
+		acc: 0.7157379518072289
+Epochs without improvement: 4
+Epoch 12 complete in 71.87522172927856 seconds
+	Train rv:
+		loss: 0.16055099666118622
+		acc: 0.9511363636363637
+	Val rv:
+		loss: 1.2087806463241577
+		acc: 0.7515060240963856
+New best model found.
+Epoch 13 complete in 73.03592205047607 seconds
+	Train rv:
+		loss: 0.13248160481452942
+		acc: 0.9598484848484848
+	Val rv:
+		loss: 1.3145167827606201
+		acc: 0.7097138554216867
+Epochs without improvement: 1
+Epoch 14 complete in 72.46863770484924 seconds
+	Train rv:
+		loss: 0.12305606156587601
+		acc: 0.9654356060606061
+	Val rv:
+		loss: 1.1802382469177246
+		acc: 0.7564006024096386
+New best model found.
+Epoch 15 complete in 72.51250624656677 seconds
+	Train rv:
+		loss: 0.12864786386489868
+		acc: 0.9604166666666667
+	Val rv:
+		loss: 1.459372878074646
+		acc: 0.7447289156626506
+Epochs without improvement: 1
+Epoch 16 complete in 71.91182208061218 seconds
+	Train rv:
+		loss: 0.13877712190151215
+		acc: 0.9573863636363636
+	Val rv:
+		loss: 1.1909350156784058
+		acc: 0.7458584337349398
+Epochs without improvement: 2
+Epoch 17 complete in 72.38021898269653 seconds
+	Train rv:
+		loss: 0.14297376573085785
+		acc: 0.9579545454545455
+	Val rv:
+		loss: 1.2640655040740967
+		acc: 0.7349397590361446
+Epochs without improvement: 3
+Epoch 18 complete in 72.31616473197937 seconds
+	Train rv:
+		loss: 0.13532839715480804
+		acc: 0.9607007575757576
+	Val rv:
+		loss: 1.2886033058166504
+		acc: 0.7270331325301205
+Epochs without improvement: 4
+Epoch 19 complete in 72.06421542167664 seconds
+	Train rv:
+		loss: 0.11985822767019272
+		acc: 0.9668560606060606
+	Val rv:
+		loss: 1.2219886779785156
+		acc: 0.7707078313253012
+New best model found.
+Epoch 20 complete in 72.85277366638184 seconds
+	Train rv:
+		loss: 0.09262801706790924
+		acc: 0.971875
+	Val rv:
+		loss: 1.3620001077651978
+		acc: 0.7387048192771084
+Epochs without improvement: 1
+Epoch 21 complete in 73.26034474372864 seconds
+	Train rv:
+		loss: 0.10012990981340408
+		acc: 0.9696022727272727
+	Val rv:
+		loss: 1.3440032005310059
+		acc: 0.7300451807228916
+Epochs without improvement: 2
+Epoch 22 complete in 71.94841647148132 seconds
+	Train rv:
+		loss: 0.13210783898830414
+		acc: 0.959659090909091
+	Val rv:
+		loss: 1.3724615573883057
+		acc: 0.7240210843373494
+Epochs without improvement: 3
+Epoch 23 complete in 72.10400581359863 seconds
+	Train rv:
+		loss: 0.07853073626756668
+		acc: 0.9770833333333333
+	Val rv:
+		loss: 1.2778133153915405
+		acc: 0.7609186746987951
+Epochs without improvement: 4
+Epoch 24 complete in 74.16227841377258 seconds
+	Train rv:
+		loss: 0.07130547612905502
+		acc: 0.9772727272727273
+	Val rv:
+		loss: 1.3435198068618774
+		acc: 0.7319277108433735
+Epochs without improvement: 5
+Epoch 25 complete in 72.25359559059143 seconds
+	Train rv:
+		loss: 0.08090760558843613
+		acc: 0.9725378787878788
+	Val rv:
+		loss: 1.4255024194717407
+		acc: 0.7466114457831325
+Epochs without improvement: 6
+Epoch 26 complete in 71.78779983520508 seconds
+	Train rv:
+		loss: 0.11581827700138092
+		acc: 0.965814393939394
+	Val rv:
+		loss: 1.2286442518234253
+		acc: 0.7526355421686747
+Epochs without improvement: 7
+Epoch 27 complete in 72.31898784637451 seconds
+	Train rv:
+		loss: 0.0937158539891243
+		acc: 0.9719696969696969
+	Val rv:
+		loss: 1.2352147102355957
+		acc: 0.7458584337349398
+Epochs without improvement: 8
+Epoch 28 complete in 72.389479637146 seconds
+	Train rv:
+		loss: 0.10958464443683624
+		acc: 0.9671401515151515
+	Val rv:
+		loss: 1.2491883039474487
+		acc: 0.7680722891566265
+Epochs without improvement: 9
+Epoch 29 complete in 72.709468126297 seconds
+	Train rv:
+		loss: 0.07940080016851425
+		acc: 0.9748106060606061
+	Val rv:
+		loss: 1.2897542715072632
+		acc: 0.7594126506024096
+Epochs without improvement: 10
+Epoch 30 complete in 72.67144894599915 seconds
+	Train rv:
+		loss: 0.07499492168426514
+		acc: 0.9772727272727273
+	Val rv:
+		loss: 1.179275393486023
+		acc: 0.7725903614457831
+New best model found.
+Epoch 31 complete in 72.33717346191406 seconds
+	Train rv:
+		loss: 0.05824499577283859
+		acc: 0.9818181818181818
+	Val rv:
+		loss: 1.6006263494491577
+		acc: 0.7319277108433735
+Epochs without improvement: 1
+Epoch 32 complete in 72.64998173713684 seconds
+	Train rv:
+		loss: 0.0900595486164093
+		acc: 0.9737689393939394
+	Val rv:
+		loss: 1.397577166557312
+		acc: 0.7432228915662651
+Epochs without improvement: 2
+Epoch 33 complete in 73.95434260368347 seconds
+	Train rv:
+		loss: 0.05924525484442711
+		acc: 0.9825757575757575
+	Val rv:
+		loss: 1.3443139791488647
+		acc: 0.7594126506024096
+Epochs without improvement: 3
+Epoch 34 complete in 72.87770318984985 seconds
+	Train rv:
+		loss: 0.08028911799192429
+		acc: 0.9748106060606061
+	Val rv:
+		loss: 1.5164644718170166
+		acc: 0.7134789156626506
+Epochs without improvement: 4
+Epoch 35 complete in 72.2507255077362 seconds
+	Train rv:
+		loss: 0.09841141849756241
+		acc: 0.96875
+	Val rv:
+		loss: 1.3852649927139282
+		acc: 0.7387048192771084
+Epochs without improvement: 5
+Epoch 36 complete in 72.22915768623352 seconds
+	Train rv:
+		loss: 0.10110880434513092
+		acc: 0.9696022727272727
+	Val rv:
+		loss: 1.4001270532608032
+		acc: 0.7296686746987951
+Epochs without improvement: 6
+Epoch 37 complete in 72.93365502357483 seconds
+	Train rv:
+		loss: 0.04320673644542694
+		acc: 0.9849431818181819
+	Val rv:
+		loss: 1.3910070657730103
+		acc: 0.7729668674698795
+New best model found.
+Epoch 38 complete in 72.3949191570282 seconds
+	Train rv:
+		loss: 0.060076747089624405
+		acc: 0.9807765151515152
+	Val rv:
+		loss: 1.4325014352798462
+		acc: 0.7330572289156626
+Epochs without improvement: 1
+Epoch 39 complete in 72.486248254776 seconds
+	Train rv:
+		loss: 0.07669690251350403
+		acc: 0.975
+	Val rv:
+		loss: 1.3054145574569702
+		acc: 0.7462349397590361
+Epochs without improvement: 2
+Epoch 40 complete in 72.92605495452881 seconds
+	Train rv:
+		loss: 0.07952769845724106
+		acc: 0.9744318181818182
+	Val rv:
+		loss: 1.3033782243728638
+		acc: 0.7428463855421686
+Epochs without improvement: 3
+Epoch 41 complete in 75.68547105789185 seconds
+	Train rv:
+		loss: 0.06644861400127411
+		acc: 0.9769886363636363
+	Val rv:
+		loss: 1.3355326652526855
+		acc: 0.7560240963855421
+Epochs without improvement: 4
+Epoch 42 complete in 75.23444676399231 seconds
+	Train rv:
+		loss: 0.04818769916892052
+		acc: 0.9839962121212121
+	Val rv:
+		loss: 1.354398488998413
+		acc: 0.7639307228915663
+Epochs without improvement: 5
+Epoch 43 complete in 75.1025493144989 seconds
+	Train rv:
+		loss: 0.030881086364388466
+		acc: 0.9893939393939394
+	Val rv:
+		loss: 1.3132719993591309
+		acc: 0.7582831325301205
+Epochs without improvement: 6
+Epoch 44 complete in 75.55293560028076 seconds
+	Train rv:
+		loss: 0.09887506067752838
+		acc: 0.9678977272727273
+	Val rv:
+		loss: 1.4573237895965576
+		acc: 0.7115963855421686
+Epochs without improvement: 7
+Epoch 45 complete in 75.20709228515625 seconds
+	Train rv:
+		loss: 0.07428912818431854
+		acc: 0.977935606060606
+	Val rv:
+		loss: 1.50795578956604
+		acc: 0.7511295180722891
+Epochs without improvement: 8
+Epoch 46 complete in 75.48930931091309 seconds
+	Train rv:
+		loss: 0.07240496575832367
+		acc: 0.9762310606060606
+	Val rv:
+		loss: 1.4437804222106934
+		acc: 0.7251506024096386
+Epochs without improvement: 9
+Epoch 47 complete in 75.65204954147339 seconds
+	Train rv:
+		loss: 0.08419431000947952
+		acc: 0.9725378787878788
+	Val rv:
+		loss: 1.5886088609695435
+		acc: 0.7330572289156626
+Epochs without improvement: 10
+Epoch 48 complete in 76.34632229804993 seconds
+	Train rv:
+		loss: 0.057505641132593155
+		acc: 0.9810606060606061
+	Val rv:
+		loss: 1.5452643632888794
+		acc: 0.7296686746987951
+Epochs without improvement: 11
+Epoch 49 complete in 76.99553060531616 seconds
+	Train rv:
+		loss: 0.02873917855322361
+		acc: 0.9895833333333334
+	Val rv:
+		loss: 1.3129010200500488
+		acc: 0.7857680722891566
+New best model found.
+Epoch 50 complete in 77.26401805877686 seconds
+	Train rv:
+		loss: 0.052293166518211365
+		acc: 0.9836174242424243
+	Val rv:
+		loss: 1.456534743309021
+		acc: 0.7179969879518072
+Epochs without improvement: 1
+Epoch 51 complete in 77.30289244651794 seconds
+	Train rv:
+		loss: 0.11919839680194855
+		acc: 0.962310606060606
+	Val rv:
+		loss: 1.342581868171692
+		acc: 0.7281626506024096
+Epochs without improvement: 2
+Epoch 52 complete in 76.89074325561523 seconds
+	Train rv:
+		loss: 0.039386194199323654
+		acc: 0.9850378787878787
+	Val rv:
+		loss: 1.4134615659713745
+		acc: 0.735316265060241
+Epochs without improvement: 3
+Epoch 53 complete in 76.422199010849 seconds
+	Train rv:
+		loss: 0.050640106201171875
+		acc: 0.9820075757575758
+	Val rv:
+		loss: 1.231032371520996
+		acc: 0.7661897590361446
+Epochs without improvement: 4
+Epoch 54 complete in 77.31436848640442 seconds
+	Train rv:
+		loss: 0.040123265236616135
+		acc: 0.9861742424242425
+	Val rv:
+		loss: 1.499644160270691
+		acc: 0.7104668674698795
+Epochs without improvement: 5
+Epoch 55 complete in 76.74897885322571 seconds
+	Train rv:
+		loss: 0.09406626224517822
+		acc: 0.968655303030303
+	Val rv:
+		loss: 1.463543176651001
+		acc: 0.7221385542168675
+Epochs without improvement: 6
+Epoch 56 complete in 77.48297762870789 seconds
+	Train rv:
+		loss: 0.04826085641980171
+		acc: 0.9825757575757575
+	Val rv:
+		loss: 1.3746802806854248
+		acc: 0.7567771084337349
+Epochs without improvement: 7
+Epoch 57 complete in 77.60973024368286 seconds
+	Train rv:
+		loss: 0.056387145072221756
+		acc: 0.9833333333333333
+	Val rv:
+		loss: 1.3615714311599731
+		acc: 0.7628012048192772
+Epochs without improvement: 8
+Epoch 58 complete in 77.37991213798523 seconds
+	Train rv:
+		loss: 0.062433984130620956
+		acc: 0.9796401515151515
+	Val rv:
+		loss: 1.441645860671997
+		acc: 0.7225150602409639
+Epochs without improvement: 9
+Epoch 59 complete in 77.51614451408386 seconds
+	Train rv:
+		loss: 0.06956081092357635
+		acc: 0.9764204545454546
+	Val rv:
+		loss: 1.401092290878296
+		acc: 0.7243975903614458
+Epochs without improvement: 10
+Epoch 60 complete in 77.28415822982788 seconds
+	Train rv:
+		loss: 0.03691728785634041
+		acc: 0.9870265151515152
+	Val rv:
+		loss: 1.554660439491272
+		acc: 0.7383283132530121
+Epochs without improvement: 11
+Epoch 61 complete in 76.77508497238159 seconds
+	Train rv:
+		loss: 0.05127580091357231
+		acc: 0.9818181818181818
+	Val rv:
+		loss: 1.5613945722579956
+		acc: 0.7228915662650602
+Epochs without improvement: 12
+Epoch 62 complete in 76.85116744041443 seconds
+	Train rv:
+		loss: 0.06585085391998291
+		acc: 0.9785037878787879
+	Val rv:
+		loss: 1.6689804792404175
+		acc: 0.7164909638554217
+Epochs without improvement: 13
+Epoch 63 complete in 77.16490602493286 seconds
+	Train rv:
+		loss: 0.06254959106445312
+		acc: 0.9801136363636364
+	Val rv:
+		loss: 1.420493721961975
+		acc: 0.740210843373494
+Epochs without improvement: 14
+Epoch 64 complete in 77.6729826927185 seconds
+	Train rv:
+		loss: 0.0614294670522213
+		acc: 0.9786931818181818
+	Val rv:
+		loss: 1.5311479568481445
+		acc: 0.7172439759036144
+Epochs without improvement: 15
+Epoch 65 complete in 77.21712517738342 seconds
+	Train rv:
+		loss: 0.04312094300985336
+		acc: 0.9850378787878787
+	Val rv:
+		loss: 1.6417627334594727
+		acc: 0.6995481927710844
+Epochs without improvement: 16
+Epoch 66 complete in 76.98991060256958 seconds
+	Train rv:
+		loss: 0.06719542294740677
+		acc: 0.9776515151515152
+	Val rv:
+		loss: 1.6816303730010986
+		acc: 0.7104668674698795
+Epochs without improvement: 17
+Epoch 67 complete in 77.52423572540283 seconds
+	Train rv:
+		loss: 0.060927022248506546
+		acc: 0.9785037878787879
+	Val rv:
+		loss: 1.573358416557312
+		acc: 0.7281626506024096
+Epochs without improvement: 18
+Epoch 68 complete in 77.75654411315918 seconds
+	Train rv:
+		loss: 0.04868222028017044
+		acc: 0.9828598484848485
+	Val rv:
+		loss: 1.4575165510177612
+		acc: 0.7564006024096386
+Epochs without improvement: 19
+Epoch 69 complete in 77.36301136016846 seconds
+	Train rv:
+		loss: 0.0213177390396595
+		acc: 0.9910037878787878
+	Val rv:
+		loss: 1.554082989692688
+		acc: 0.7552710843373494
+Epochs without improvement: 20
+Epoch 70 complete in 77.90392088890076 seconds
+	Train rv:
+		loss: 0.01740894839167595
+		acc: 0.9918560606060606
+	Val rv:
+		loss: 1.3497400283813477
+		acc: 0.7680722891566265
+Epochs without improvement: 21
+Epoch 71 complete in 77.75022053718567 seconds
+	Train rv:
+		loss: 0.07578540593385696
+		acc: 0.9737689393939394
+	Val rv:
+		loss: 1.6471869945526123
+		acc: 0.7003012048192772
+Epochs without improvement: 22
+Epoch 72 complete in 76.68249607086182 seconds
+	Train rv:
+		loss: 0.0997307077050209
+		acc: 0.9676136363636364
+	Val rv:
+		loss: 1.5608848333358765
+		acc: 0.7360692771084337
+Epochs without improvement: 23
+Epoch 73 complete in 76.3325023651123 seconds
+	Train rv:
+		loss: 0.04416591301560402
+		acc: 0.9862689393939394
+	Val rv:
+		loss: 1.352535605430603
+		acc: 0.754894578313253
+Epochs without improvement: 24
+Epoch 74 complete in 76.56402516365051 seconds
+	Train rv:
+		loss: 0.020992372184991837
+		acc: 0.990719696969697
+	Val rv:
+		loss: 1.4152815341949463
+		acc: 0.7628012048192772
+Epochs without improvement: 25
+Epoch 75 complete in 76.69042658805847 seconds
+	Train rv:
+		loss: 0.027891352772712708
+		acc: 0.9885416666666667
+	Val rv:
+		loss: 1.5274827480316162
+		acc: 0.7228915662650602
+Epochs without improvement: 26
+Epoch 76 complete in 76.41114544868469 seconds
+	Train rv:
+		loss: 0.10076042264699936
+		acc: 0.9672348484848485
+	Val rv:
+		loss: 1.4828819036483765
+		acc: 0.7247740963855421
+Epochs without improvement: 27
+Epoch 77 complete in 76.2519302368164 seconds
+	Train rv:
+		loss: 0.048806093633174896
+		acc: 0.9825757575757575
+	Val rv:
+		loss: 1.599137783050537
+		acc: 0.740210843373494
+Epochs without improvement: 28
+Epoch 78 complete in 76.986159324646 seconds
+	Train rv:
+		loss: 0.05567874386906624
+		acc: 0.981439393939394
+	Val rv:
+		loss: 1.4829055070877075
+		acc: 0.7371987951807228
+Epochs without improvement: 29
+Epoch 79 complete in 76.37898087501526 seconds
+	Train rv:
+		loss: 0.02618616819381714
+		acc: 0.9893939393939394
+	Val rv:
+		loss: 1.3119380474090576
+		acc: 0.7688253012048193
+Epochs without improvement: 30
+Epoch 80 complete in 76.33164048194885 seconds
+	Train rv:
+		loss: 0.014986821450293064
+		acc: 0.9915719696969697
+	Val rv:
+		loss: 1.3170422315597534
+		acc: 0.771460843373494
+Epochs without improvement: 31
+Epoch 81 complete in 76.62570238113403 seconds
+	Train rv:
+		loss: 0.013504804112017155
+		acc: 0.9914772727272727
+	Val rv:
+		loss: 1.231811285018921
+		acc: 0.7759789156626506
+Epochs without improvement: 32
+Epoch 82 complete in 77.35170412063599 seconds
+	Train rv:
+		loss: 0.012919291853904724
+		acc: 0.9915719696969697
+	Val rv:
+		loss: 1.321028232574463
+		acc: 0.7756024096385542
+Epochs without improvement: 33
+Epoch 83 complete in 77.26113200187683 seconds
+	Train rv:
+		loss: 0.012542376294732094
+		acc: 0.9920454545454546
+	Val rv:
+		loss: 1.2821944952011108
+		acc: 0.7853915662650602
+Epochs without improvement: 34
+Epoch 84 complete in 76.6705048084259 seconds
+	Train rv:
+		loss: 0.01273093931376934
+		acc: 0.9912878787878788
+	Val rv:
+		loss: 1.2145655155181885
+		acc: 0.7820030120481928
+Epochs without improvement: 35
+Epoch 85 complete in 77.0572817325592 seconds
+	Train rv:
+		loss: 0.012760702520608902
+		acc: 0.9920454545454546
+	Val rv:
+		loss: 1.3222739696502686
+		acc: 0.7729668674698795
+Epochs without improvement: 36
+Epoch 86 complete in 77.0899965763092 seconds
+	Train rv:
+		loss: 0.2512776553630829
+		acc: 0.924905303030303
+	Val rv:
+		loss: 1.4071294069290161
+		acc: 0.7142319277108434
+Epochs without improvement: 37
+Epoch 87 complete in 77.08068823814392 seconds
+	Train rv:
+		loss: 0.08279185742139816
+		acc: 0.9723484848484848
+	Val rv:
+		loss: 1.38815438747406
+		acc: 0.7417168674698795
+Epochs without improvement: 38
+Epoch 88 complete in 76.88144445419312 seconds
+	Train rv:
+		loss: 0.043753549456596375
+		acc: 0.984280303030303
+	Val rv:
+		loss: 1.3866084814071655
+		acc: 0.7409638554216867
+Epochs without improvement: 39
+Epoch 89 complete in 77.22278547286987 seconds
+	Train rv:
+		loss: 0.05357348173856735
+		acc: 0.9802083333333333
+	Val rv:
+		loss: 1.553513526916504
+		acc: 0.7315512048192772
+Epochs without improvement: 40
+Epoch 90 complete in 77.0757429599762 seconds
+	Train rv:
+		loss: 0.05687722936272621
+		acc: 0.9819128787878788
+	Val rv:
+		loss: 1.5740808248519897
+		acc: 0.7552710843373494
+Epochs without improvement: 41
+Epoch 91 complete in 76.94748282432556 seconds
+	Train rv:
+		loss: 0.03674390912055969
+		acc: 0.9855113636363636
+	Val rv:
+		loss: 1.5312042236328125
+		acc: 0.7289156626506024
+Epochs without improvement: 42
+Epoch 92 complete in 77.14155721664429 seconds
+	Train rv:
+		loss: 0.05469902604818344
+		acc: 0.9805871212121212
+	Val rv:
+		loss: 1.4627363681793213
+		acc: 0.7368222891566265
+Epochs without improvement: 43
+Epoch 93 complete in 76.6074652671814 seconds
+	Train rv:
+		loss: 0.044686995446681976
+		acc: 0.9846590909090909
+	Val rv:
+		loss: 1.6412347555160522
+		acc: 0.7262801204819277
+Epochs without improvement: 44
+Epoch 94 complete in 76.59964871406555 seconds
+	Train rv:
+		loss: 0.024829942733049393
+		acc: 0.9898674242424242
+	Val rv:
+		loss: 1.4972316026687622
+		acc: 0.7515060240963856
+Epochs without improvement: 45
+Epoch 95 complete in 76.72128319740295 seconds
+	Train rv:
+		loss: 0.060631122440099716
+		acc: 0.9797348484848485
+	Val rv:
+		loss: 1.6984738111495972
+		acc: 0.7221385542168675
+Epochs without improvement: 46
+Epoch 96 complete in 76.1075668334961 seconds
+	Train rv:
+		loss: 0.04633794352412224
+		acc: 0.9825757575757575
+	Val rv:
+		loss: 1.5281567573547363
+		acc: 0.7492469879518072
+Epochs without improvement: 47
+Epoch 97 complete in 77.20626020431519 seconds
+	Train rv:
+		loss: 0.041280098259449005
+		acc: 0.9849431818181819
+	Val rv:
+		loss: 1.5317003726959229
+		acc: 0.7413403614457831
+Epochs without improvement: 48
+Epoch 98 complete in 77.01450324058533 seconds
+	Train rv:
+		loss: 0.02448941208422184
+		acc: 0.9900568181818182
+	Val rv:
+		loss: 1.4054666757583618
+		acc: 0.75
+Epochs without improvement: 49
+Epoch 99 complete in 77.47175168991089 seconds
+	Train rv:
+		loss: 0.016500243917107582
+		acc: 0.9916666666666667
+	Val rv:
+		loss: 1.3160135746002197
+		acc: 0.7639307228915663
+Epochs without improvement: 50
+Epoch 100 complete in 76.39255261421204 seconds
+	Train rv:
+		loss: 0.07326104491949081
+		acc: 0.975284090909091
+	Val rv:
+		loss: 1.464133620262146
+		acc: 0.6939006024096386
+Epochs without improvement: 51
+Done.
+
+
+
+
+Training a feature extractor using erm on <class 'datasets.domainbed.OfficeHome'> with domain Clipart held out.
+Training a feature extractor.
+Save dir: ./results/OfficeHome/omit_Clipart/erm_pretrained/trial_0
+Constructor kwargs: {'dataset_constructor': <class 'datasets.domainbed.OfficeHome'>, 'device': 'cuda:2', 'dataset_kwargs': {'domains_to_use': ['Art', 'Product', 'Real World'], 'data_transform': Compose(
+    Resize(size=(224, 224), interpolation=bilinear)
+    ToTensor()
+    Lambda()
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+)}, 'dataloader_kwargs': {'batch_size': 32, 'num_workers': 10}, 'model_constructor': <class 'models.resnet.PretrainedRN50'>, 'model_kwargs': {'pretrained': True}, 'optimizer_constructor': <class 'torch.optim.adam.Adam'>, 'optimizer_kwargs': {'lr': 0.0002, 'weight_decay': 0.0001}, 'loss_fn_constructor': <class 'torch.nn.modules.loss.CrossEntropyLoss'>, 'loss_fn_kwargs': {}}
+Epoch 1 complete in 68.42361545562744 seconds
+	Train rv:
+		loss: 3.1641812324523926
+		acc: 0.20834894174939125
+	Val rv:
+		loss: 1.998286247253418
+		acc: 0.477112676056338
+New best model found.
+Epoch 2 complete in 67.93515276908875 seconds
+	Train rv:
+		loss: 1.6872047185897827
+		acc: 0.5462867578198164
+	Val rv:
+		loss: 1.5609934329986572
+		acc: 0.6025528169014085
+New best model found.
+Epoch 3 complete in 69.24043464660645 seconds
+	Train rv:
+		loss: 1.1039241552352905
+		acc: 0.6893788630829744
+	Val rv:
+		loss: 1.3579825162887573
+		acc: 0.6373239436619719
+New best model found.
+Epoch 4 complete in 68.48016214370728 seconds
+	Train rv:
+		loss: 0.8048393726348877
+		acc: 0.7670092713991384
+	Val rv:
+		loss: 1.5925869941711426
+		acc: 0.6109154929577465
+Epochs without improvement: 1
+Epoch 5 complete in 68.71389269828796 seconds
+	Train rv:
+		loss: 0.5880920886993408
+		acc: 0.8274314010114253
+	Val rv:
+		loss: 1.0892021656036377
+		acc: 0.7266725352112676
+New best model found.
+Epoch 6 complete in 68.78733921051025 seconds
+	Train rv:
+		loss: 0.42083027958869934
+		acc: 0.8724304645064619
+	Val rv:
+		loss: 1.1530821323394775
+		acc: 0.6967429577464789
+Epochs without improvement: 1
+Epoch 7 complete in 68.30365681648254 seconds
+	Train rv:
+		loss: 0.3635549247264862
+		acc: 0.8897148342386214
+	Val rv:
+		loss: 1.1348577737808228
+		acc: 0.730193661971831
+New best model found.
+Epoch 8 complete in 69.54586696624756 seconds
+	Train rv:
+		loss: 0.26603105664253235
+		acc: 0.9176636542423675
+	Val rv:
+		loss: 1.1831356287002563
+		acc: 0.7191901408450704
+Epochs without improvement: 1
+Epoch 9 complete in 68.74080061912537 seconds
+	Train rv:
+		loss: 0.23053836822509766
+		acc: 0.931266388836861
+	Val rv:
+		loss: 1.202255129814148
+		acc: 0.7372359154929577
+New best model found.
+Epoch 10 complete in 70.06668257713318 seconds
+	Train rv:
+		loss: 0.17598940432071686
+		acc: 0.9434292470500093
+	Val rv:
+		loss: 1.2010213136672974
+		acc: 0.727112676056338
+Epochs without improvement: 1
+Epoch 11 complete in 69.5886013507843 seconds
+	Train rv:
+		loss: 0.16732490062713623
+		acc: 0.9482463944558907
+	Val rv:
+		loss: 1.1789298057556152
+		acc: 0.7279929577464789
+Epochs without improvement: 2
+Epoch 12 complete in 67.9353404045105 seconds
+	Train rv:
+		loss: 0.18785113096237183
+		acc: 0.9453549353811576
+	Val rv:
+		loss: 1.2114399671554565
+		acc: 0.7328345070422535
+Epochs without improvement: 3
+Epoch 13 complete in 68.79417181015015 seconds
+	Train rv:
+		loss: 0.1351586878299713
+		acc: 0.9587762221389773
+	Val rv:
+		loss: 1.1753337383270264
+		acc: 0.7240316901408451
+Epochs without improvement: 4
+Epoch 14 complete in 68.84944343566895 seconds
+	Train rv:
+		loss: 0.12431851029396057
+		acc: 0.9664848286195916
+	Val rv:
+		loss: 1.4317587614059448
+		acc: 0.6835387323943662
+Epochs without improvement: 5
+Epoch 15 complete in 68.42662000656128 seconds
+	Train rv:
+		loss: 0.186272993683815
+		acc: 0.9465431260535679
+	Val rv:
+		loss: 1.2445765733718872
+		acc: 0.7147887323943662
+Epochs without improvement: 6
+Epoch 16 complete in 68.66429090499878 seconds
+	Train rv:
+		loss: 0.12883199751377106
+		acc: 0.9616676812137104
+	Val rv:
+		loss: 1.372452735900879
+		acc: 0.7235915492957746
+Epochs without improvement: 7
+Epoch 17 complete in 68.6313214302063 seconds
+	Train rv:
+		loss: 0.0984279066324234
+		acc: 0.9725311387900356
+	Val rv:
+		loss: 1.352771282196045
+		acc: 0.7310739436619719
+Epochs without improvement: 8
+Epoch 18 complete in 69.33384108543396 seconds
+	Train rv:
+		loss: 0.10891952365636826
+		acc: 0.9683051601423488
+	Val rv:
+		loss: 1.3362929821014404
+		acc: 0.7310739436619719
+Epochs without improvement: 9
+Epoch 19 complete in 68.26996493339539 seconds
+	Train rv:
+		loss: 0.08608333021402359
+		acc: 0.9734208185053381
+	Val rv:
+		loss: 1.1651440858840942
+		acc: 0.746919014084507
+New best model found.
+Epoch 20 complete in 68.50773096084595 seconds
+	Train rv:
+		loss: 0.11517333984375
+		acc: 0.9684163701067615
+	Val rv:
+		loss: 1.2975153923034668
+		acc: 0.7090669014084507
+Epochs without improvement: 1
+Epoch 21 complete in 67.91263580322266 seconds
+	Train rv:
+		loss: 0.139257550239563
+		acc: 0.9587762221389773
+	Val rv:
+		loss: 1.4517126083374023
+		acc: 0.7121478873239436
+Epochs without improvement: 2
+Epoch 22 complete in 68.85566473007202 seconds
+	Train rv:
+		loss: 0.08283534646034241
+		acc: 0.9764234875444839
+	Val rv:
+		loss: 1.2822500467300415
+		acc: 0.7407570422535211
+Epochs without improvement: 3
+Epoch 23 complete in 68.29929280281067 seconds
+	Train rv:
+		loss: 0.07815809547901154
+		acc: 0.9757854935381157
+	Val rv:
+		loss: 1.400604486465454
+		acc: 0.7033450704225352
+Epochs without improvement: 4
+Epoch 24 complete in 68.38032746315002 seconds
+	Train rv:
+		loss: 0.09909159690141678
+		acc: 0.9708981082599737
+	Val rv:
+		loss: 1.2349193096160889
+		acc: 0.7222711267605634
+Epochs without improvement: 5
+Epoch 25 complete in 68.43849539756775 seconds
+	Train rv:
+		loss: 0.09558673948049545
+		acc: 0.97230871886121
+	Val rv:
+		loss: 1.2990237474441528
+		acc: 0.7200704225352113
+Epochs without improvement: 6
+Epoch 26 complete in 69.19828844070435 seconds
+	Train rv:
+		loss: 0.10155865550041199
+		acc: 0.9678603202846975
+	Val rv:
+		loss: 1.309664249420166
+		acc: 0.7315140845070423
+Epochs without improvement: 7
+Epoch 27 complete in 67.43848013877869 seconds
+	Train rv:
+		loss: 0.03348587453365326
+		acc: 0.9907695729537367
+	Val rv:
+		loss: 1.3234318494796753
+		acc: 0.758362676056338
+New best model found.
+Epoch 28 complete in 68.49316453933716 seconds
+	Train rv:
+		loss: 0.07532964646816254
+		acc: 0.979314946619217
+	Val rv:
+		loss: 1.3932150602340698
+		acc: 0.6976232394366197
+Epochs without improvement: 1
+Epoch 29 complete in 68.21168398857117 seconds
+	Train rv:
+		loss: 0.13365797698497772
+		acc: 0.9606258194418431
+	Val rv:
+		loss: 1.597416639328003
+		acc: 0.7024647887323944
+Epochs without improvement: 2
+Epoch 30 complete in 68.65818572044373 seconds
+	Train rv:
+		loss: 0.10348447412252426
+		acc: 0.968193950177936
+	Val rv:
+		loss: 1.4471219778060913
+		acc: 0.721830985915493
+Epochs without improvement: 3
+Epoch 31 complete in 68.59542441368103 seconds
+	Train rv:
+		loss: 0.07182417064905167
+		acc: 0.9795373665480427
+	Val rv:
+		loss: 1.3345516920089722
+		acc: 0.7345950704225352
+Epochs without improvement: 4
+Epoch 32 complete in 68.83295893669128 seconds
+	Train rv:
+		loss: 0.07706289738416672
+		acc: 0.976569816445027
+	Val rv:
+		loss: 1.5343196392059326
+		acc: 0.7064260563380281
+Epochs without improvement: 5
+Epoch 33 complete in 68.75491976737976 seconds
+	Train rv:
+		loss: 0.09333277493715286
+		acc: 0.974088078291815
+	Val rv:
+		loss: 1.2886508703231812
+		acc: 0.7244718309859155
+Epochs without improvement: 6
+Epoch 34 complete in 68.36584448814392 seconds
+	Train rv:
+		loss: 0.0878581702709198
+		acc: 0.9718638790035588
+	Val rv:
+		loss: 1.4612714052200317
+		acc: 0.7319542253521126
+Epochs without improvement: 7
+Epoch 35 complete in 68.56452512741089 seconds
+	Train rv:
+		loss: 0.06388239562511444
+		acc: 0.9810943060498221
+	Val rv:
+		loss: 1.4010838270187378
+		acc: 0.7130281690140845
+Epochs without improvement: 8
+Epoch 36 complete in 68.24035048484802 seconds
+	Train rv:
+		loss: 0.0381869301199913
+		acc: 0.9884692826371979
+	Val rv:
+		loss: 1.5345083475112915
+		acc: 0.7372359154929577
+Epochs without improvement: 9
+Epoch 37 complete in 68.54755306243896 seconds
+	Train rv:
+		loss: 0.08303379267454147
+		acc: 0.9776467971530249
+	Val rv:
+		loss: 1.5465155839920044
+		acc: 0.7029049295774648
+Epochs without improvement: 10
+Epoch 38 complete in 68.51013159751892 seconds
+	Train rv:
+		loss: 0.09214876592159271
+		acc: 0.9729759786476868
+	Val rv:
+		loss: 1.3111693859100342
+		acc: 0.7557218309859155
+Epochs without improvement: 11
+Epoch 39 complete in 68.1912624835968 seconds
+	Train rv:
+		loss: 0.06121091917157173
+		acc: 0.9819839857651246
+	Val rv:
+		loss: 1.5102341175079346
+		acc: 0.7310739436619719
+Epochs without improvement: 12
+Epoch 40 complete in 69.06800961494446 seconds
+	Train rv:
+		loss: 0.09155753999948502
+		acc: 0.9739768683274022
+	Val rv:
+		loss: 1.545577049255371
+		acc: 0.715669014084507
+Epochs without improvement: 13
+Epoch 41 complete in 69.62912917137146 seconds
+	Train rv:
+		loss: 0.08748731017112732
+		acc: 0.9733096085409253
+	Val rv:
+		loss: 1.4896796941757202
+		acc: 0.7403169014084507
+Epochs without improvement: 14
+Epoch 42 complete in 67.95521140098572 seconds
+	Train rv:
+		loss: 0.031905416399240494
+		acc: 0.9903247330960854
+	Val rv:
+		loss: 1.4381089210510254
+		acc: 0.733274647887324
+Epochs without improvement: 15
+Epoch 43 complete in 68.00364756584167 seconds
+	Train rv:
+		loss: 0.04135751351714134
+		acc: 0.9873571829930697
+	Val rv:
+		loss: 1.4734843969345093
+		acc: 0.7394366197183099
+Epochs without improvement: 16
+Epoch 44 complete in 68.41363167762756 seconds
+	Train rv:
+		loss: 0.082109734416008
+		acc: 0.9760488855590934
+	Val rv:
+		loss: 1.6814111471176147
+		acc: 0.6870598591549296
+Epochs without improvement: 17
+Epoch 45 complete in 68.98288750648499 seconds
+	Train rv:
+		loss: 0.07602212578058243
+		acc: 0.9763122775800712
+	Val rv:
+		loss: 1.4694441556930542
+		acc: 0.7288732394366197
+Epochs without improvement: 18
+Epoch 46 complete in 67.74032139778137 seconds
+	Train rv:
+		loss: 0.04933168366551399
+		acc: 0.9854314946619217
+	Val rv:
+		loss: 1.4703172445297241
+		acc: 0.7257922535211268
+Epochs without improvement: 19
+Epoch 47 complete in 68.40378761291504 seconds
+	Train rv:
+		loss: 0.06891926378011703
+		acc: 0.9794261565836299
+	Val rv:
+		loss: 1.6814873218536377
+		acc: 0.6897007042253521
+Epochs without improvement: 20
+Epoch 48 complete in 69.2229368686676 seconds
+	Train rv:
+		loss: 0.059580303728580475
+		acc: 0.9828736654804271
+	Val rv:
+		loss: 1.4590498208999634
+		acc: 0.702024647887324
+Epochs without improvement: 21
+Epoch 49 complete in 67.76309704780579 seconds
+	Train rv:
+		loss: 0.0787866935133934
+		acc: 0.9749777580071174
+	Val rv:
+		loss: 1.571541428565979
+		acc: 0.7029049295774648
+Epochs without improvement: 22
+Epoch 50 complete in 68.29296278953552 seconds
+	Train rv:
+		loss: 0.06715643405914307
+		acc: 0.9799061153774113
+	Val rv:
+		loss: 1.3380248546600342
+		acc: 0.7442781690140845
+Epochs without improvement: 23
+Epoch 51 complete in 68.28165483474731 seconds
+	Train rv:
+		loss: 0.04587385058403015
+		acc: 0.9866548042704626
+	Val rv:
+		loss: 1.4474174976348877
+		acc: 0.7279929577464789
+Epochs without improvement: 24
+Epoch 52 complete in 68.17880868911743 seconds
+	Train rv:
+		loss: 0.05148182809352875
+		acc: 0.9839096740962726
+	Val rv:
+		loss: 1.6768826246261597
+		acc: 0.7209507042253521
+Epochs without improvement: 25
+Epoch 53 complete in 68.69128060340881 seconds
+	Train rv:
+		loss: 0.07131778448820114
+		acc: 0.9785364768683275
+	Val rv:
+		loss: 1.5076266527175903
+		acc: 0.7310739436619719
+Epochs without improvement: 26
+Epoch 54 complete in 68.2898018360138 seconds
+	Train rv:
+		loss: 0.05938202142715454
+		acc: 0.9824288256227758
+	Val rv:
+		loss: 1.6890161037445068
+		acc: 0.7165492957746479
+Epochs without improvement: 27
+Epoch 55 complete in 68.5588903427124 seconds
+	Train rv:
+		loss: 0.0645647644996643
+		acc: 0.9815742648436036
+	Val rv:
+		loss: 1.5063629150390625
+		acc: 0.7139084507042254
+Epochs without improvement: 28
+Epoch 56 complete in 68.96498036384583 seconds
+	Train rv:
+		loss: 0.04540260136127472
+		acc: 0.9859875444839857
+	Val rv:
+		loss: 1.6356264352798462
+		acc: 0.721830985915493
+Epochs without improvement: 29
+Epoch 57 complete in 67.95505404472351 seconds
+	Train rv:
+		loss: 0.05560937523841858
+		acc: 0.9834297153024911
+	Val rv:
+		loss: 1.5951921939849854
+		acc: 0.7323943661971831
+Epochs without improvement: 30
+Epoch 58 complete in 68.85378909111023 seconds
+	Train rv:
+		loss: 0.0801609605550766
+		acc: 0.9767571174377224
+	Val rv:
+		loss: 1.6146231889724731
+		acc: 0.7394366197183099
+Epochs without improvement: 31
+Epoch 59 complete in 68.05594301223755 seconds
+	Train rv:
+		loss: 0.04331217333674431
+		acc: 0.9865026222138977
+	Val rv:
+		loss: 1.566489577293396
+		acc: 0.7099471830985915
+Epochs without improvement: 32
+Epoch 60 complete in 68.99174809455872 seconds
+	Train rv:
+		loss: 0.05412575602531433
+		acc: 0.9858763345195729
+	Val rv:
+		loss: 1.5226553678512573
+		acc: 0.6985035211267606
+Epochs without improvement: 33
+Epoch 61 complete in 69.20913505554199 seconds
+	Train rv:
+		loss: 0.052724745124578476
+		acc: 0.982317615658363
+	Val rv:
+		loss: 1.713209867477417
+		acc: 0.7125880281690141
+Epochs without improvement: 34
+Epoch 62 complete in 68.95278120040894 seconds
+	Train rv:
+		loss: 0.05026307329535484
+		acc: 0.9839857651245552
+	Val rv:
+		loss: 1.5216233730316162
+		acc: 0.7015845070422535
+Epochs without improvement: 35
+Epoch 63 complete in 69.70341396331787 seconds
+	Train rv:
+		loss: 0.05434482917189598
+		acc: 0.9817557126802773
+	Val rv:
+		loss: 1.9497867822647095
+		acc: 0.6720950704225352
+Epochs without improvement: 36
+Epoch 64 complete in 68.90626168251038 seconds
+	Train rv:
+		loss: 0.08643882721662521
+		acc: 0.9736432384341637
+	Val rv:
+		loss: 1.5911566019058228
+		acc: 0.6998239436619719
+Epochs without improvement: 37
+Epoch 65 complete in 69.48120522499084 seconds
+	Train rv:
+		loss: 0.04165813699364662
+		acc: 0.9873220640569395
+	Val rv:
+		loss: 1.532161831855774
+		acc: 0.7381161971830986
+Epochs without improvement: 38
+Epoch 66 complete in 69.523442029953 seconds
+	Train rv:
+		loss: 0.0206217672675848
+		acc: 0.9925489323843416
+	Val rv:
+		loss: 1.4747916460037231
+		acc: 0.7227112676056338
+Epochs without improvement: 39
+Epoch 67 complete in 69.3240110874176 seconds
+	Train rv:
+		loss: 0.043061237782239914
+		acc: 0.9867660142348754
+	Val rv:
+		loss: 1.557553768157959
+		acc: 0.6954225352112676
+Epochs without improvement: 40
+Epoch 68 complete in 69.23465752601624 seconds
+	Train rv:
+		loss: 0.06937244534492493
+		acc: 0.9788701067615658
+	Val rv:
+		loss: 1.681496262550354
+		acc: 0.7108274647887324
+Epochs without improvement: 41
+Epoch 69 complete in 68.57781648635864 seconds
+	Train rv:
+		loss: 0.05501637980341911
+		acc: 0.9832072953736655
+	Val rv:
+		loss: 1.5111937522888184
+		acc: 0.741637323943662
+Epochs without improvement: 42
+Epoch 70 complete in 68.36633825302124 seconds
+	Train rv:
+		loss: 0.0167697686702013
+		acc: 0.9937722419928826
+	Val rv:
+		loss: 1.440993309020996
+		acc: 0.7491197183098591
+Epochs without improvement: 43
+Epoch 71 complete in 68.41866159439087 seconds
+	Train rv:
+		loss: 0.016438821330666542
+		acc: 0.9943282918149466
+	Val rv:
+		loss: 1.5588370561599731
+		acc: 0.7293133802816901
+Epochs without improvement: 44
+Epoch 72 complete in 67.21064496040344 seconds
+	Train rv:
+		loss: 0.07607858628034592
+		acc: 0.975715255665855
+	Val rv:
+		loss: 1.6878798007965088
+		acc: 0.6949823943661971
+Epochs without improvement: 45
+Epoch 73 complete in 68.11176300048828 seconds
+	Train rv:
+		loss: 0.0660671591758728
+		acc: 0.9780916370106761
+	Val rv:
+		loss: 2.1888558864593506
+		acc: 0.667693661971831
+Epochs without improvement: 46
+Epoch 74 complete in 68.47358894348145 seconds
+	Train rv:
+		loss: 0.05934171751141548
+		acc: 0.9828736654804271
+	Val rv:
+		loss: 1.623761534690857
+		acc: 0.6976232394366197
+Epochs without improvement: 47
+Epoch 75 complete in 68.5690815448761 seconds
+	Train rv:
+		loss: 0.040361545979976654
+		acc: 0.986432384341637
+	Val rv:
+		loss: 1.8670014142990112
+		acc: 0.6901408450704225
+Epochs without improvement: 48
+Epoch 76 complete in 67.52157139778137 seconds
+	Train rv:
+		loss: 0.03626479208469391
+		acc: 0.9893238434163701
+	Val rv:
+		loss: 1.6856180429458618
+		acc: 0.7183098591549296
+Epochs without improvement: 49
+Epoch 77 complete in 67.82939314842224 seconds
+	Train rv:
+		loss: 0.06300821155309677
+		acc: 0.9797597864768683
+	Val rv:
+		loss: 1.8892173767089844
+		acc: 0.6883802816901409
+Epochs without improvement: 50
+Epoch 78 complete in 67.58742332458496 seconds
+	Train rv:
+		loss: 0.049495961517095566
+		acc: 0.9828736654804271
+	Val rv:
+		loss: 1.6335755586624146
+		acc: 0.6976232394366197
+Epochs without improvement: 51
+Epoch 79 complete in 68.64240097999573 seconds
+	Train rv:
+		loss: 0.039385709911584854
+		acc: 0.9873220640569395
+	Val rv:
+		loss: 1.6186457872390747
+		acc: 0.727112676056338
+Epochs without improvement: 52
+Epoch 80 complete in 68.20752263069153 seconds
+	Train rv:
+		loss: 0.06899280846118927
+		acc: 0.9792037366548043
+	Val rv:
+		loss: 1.6058166027069092
+		acc: 0.7033450704225352
+Epochs without improvement: 53
+Epoch 81 complete in 68.4468092918396 seconds
+	Train rv:
+		loss: 0.03292682394385338
+		acc: 0.9898798932384342
+	Val rv:
+		loss: 1.4364922046661377
+		acc: 0.7235915492957746
+Epochs without improvement: 54
+Epoch 82 complete in 68.62965202331543 seconds
+	Train rv:
+		loss: 0.012465825304389
+		acc: 0.9952179715302492
+	Val rv:
+		loss: 1.3591581583023071
+		acc: 0.7429577464788732
+Epochs without improvement: 55
+Epoch 83 complete in 67.55691075325012 seconds
+	Train rv:
+		loss: 0.007712396327406168
+		acc: 0.9953291814946619
+	Val rv:
+		loss: 1.399729609489441
+		acc: 0.7526408450704225
+Epochs without improvement: 56
+Epoch 84 complete in 68.43024206161499 seconds
+	Train rv:
+		loss: 0.006684164050966501
+		acc: 0.9955867203596178
+	Val rv:
+		loss: 1.3164371252059937
+		acc: 0.7566021126760564
+Epochs without improvement: 57
+Epoch 85 complete in 68.77230501174927 seconds
+	Train rv:
+		loss: 0.0061713336035609245
+		acc: 0.995885231316726
+	Val rv:
+		loss: 1.421702265739441
+		acc: 0.7517605633802817
+Epochs without improvement: 58
+Epoch 86 complete in 69.04475355148315 seconds
+	Train rv:
+		loss: 0.006138993892818689
+		acc: 0.9954403914590747
+	Val rv:
+		loss: 1.3741066455841064
+		acc: 0.7526408450704225
+Epochs without improvement: 59
+Epoch 87 complete in 68.97457814216614 seconds
+	Train rv:
+		loss: 0.0058966148644685745
+		acc: 0.9962188612099644
+	Val rv:
+		loss: 1.3565070629119873
+		acc: 0.7566021126760564
+Epochs without improvement: 60
+Epoch 88 complete in 68.49917030334473 seconds
+	Train rv:
+		loss: 0.005812294315546751
+		acc: 0.995885231316726
+	Val rv:
+		loss: 1.4120503664016724
+		acc: 0.7570422535211268
+Epochs without improvement: 61
+Epoch 89 complete in 69.46277499198914 seconds
+	Train rv:
+		loss: 0.005567445419728756
+		acc: 0.995885231316726
+	Val rv:
+		loss: 1.4033491611480713
+		acc: 0.7539612676056338
+Epochs without improvement: 62
+Epoch 90 complete in 68.57743215560913 seconds
+	Train rv:
+		loss: 0.2626740634441376
+		acc: 0.9261156115377411
+	Val rv:
+		loss: 1.6172181367874146
+		acc: 0.6368838028169014
+Epochs without improvement: 63
+Epoch 91 complete in 68.33941674232483 seconds
+	Train rv:
+		loss: 0.14194008708000183
+		acc: 0.9582201723169131
+	Val rv:
+		loss: 1.6311473846435547
+		acc: 0.684419014084507
+Epochs without improvement: 64
+Epoch 92 complete in 68.95362043380737 seconds
+	Train rv:
+		loss: 0.03583423048257828
+		acc: 0.9878781138790036
+	Val rv:
+		loss: 1.5079734325408936
+		acc: 0.7315140845070423
+Epochs without improvement: 65
+Epoch 93 complete in 69.1096363067627 seconds
+	Train rv:
+		loss: 0.03569091111421585
+		acc: 0.9879893238434164
+	Val rv:
+		loss: 1.6080094575881958
+		acc: 0.7125880281690141
+Epochs without improvement: 66
+Epoch 94 complete in 69.26329350471497 seconds
+	Train rv:
+		loss: 0.0682772547006607
+		acc: 0.9788701067615658
+	Val rv:
+		loss: 1.619747281074524
+		acc: 0.6813380281690141
+Epochs without improvement: 67
+Epoch 95 complete in 68.4492859840393 seconds
+	Train rv:
+		loss: 0.047976054251194
+		acc: 0.9847993538115751
+	Val rv:
+		loss: 1.7568093538284302
+		acc: 0.7077464788732394
+Epochs without improvement: 68
+Epoch 96 complete in 67.34707260131836 seconds
+	Train rv:
+		loss: 0.026983898133039474
+		acc: 0.9911032028469751
+	Val rv:
+		loss: 1.8246558904647827
+		acc: 0.6963028169014085
+Epochs without improvement: 69
+Epoch 97 complete in 68.3045175075531 seconds
+	Train rv:
+		loss: 0.045989345759153366
+		acc: 0.9842081850533808
+	Val rv:
+		loss: 1.671785831451416
+		acc: 0.7068661971830986
+Epochs without improvement: 70
+Epoch 98 complete in 68.4272997379303 seconds
+	Train rv:
+		loss: 0.043698132038116455
+		acc: 0.9854314946619217
+	Val rv:
+		loss: 1.7115260362625122
+		acc: 0.7099471830985915
+Epochs without improvement: 71
+Epoch 99 complete in 68.68486714363098 seconds
+	Train rv:
+		loss: 0.04011482000350952
+		acc: 0.9864675032777672
+	Val rv:
+		loss: 1.7102882862091064
+		acc: 0.6764964788732394
+Epochs without improvement: 72
+Epoch 100 complete in 67.7025535106659 seconds
+	Train rv:
+		loss: 0.050909239798784256
+		acc: 0.9840208840606854
+	Val rv:
+		loss: 1.887262225151062
+		acc: 0.6879401408450704
+Epochs without improvement: 73
+Done.
+
+
+
+
+Training a feature extractor using erm on <class 'datasets.domainbed.OfficeHome'> with domain Product held out.
+Training a feature extractor.
+Save dir: ./results/OfficeHome/omit_Product/erm_pretrained/trial_0
+Constructor kwargs: {'dataset_constructor': <class 'datasets.domainbed.OfficeHome'>, 'device': 'cuda:2', 'dataset_kwargs': {'domains_to_use': ['Art', 'Clipart', 'Real World'], 'data_transform': Compose(
+    Resize(size=(224, 224), interpolation=bilinear)
+    ToTensor()
+    Lambda()
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+)}, 'dataloader_kwargs': {'batch_size': 32, 'num_workers': 10}, 'model_constructor': <class 'models.resnet.PretrainedRN50'>, 'model_kwargs': {'pretrained': True}, 'optimizer_constructor': <class 'torch.optim.adam.Adam'>, 'optimizer_kwargs': {'lr': 0.0002, 'weight_decay': 0.0001}, 'loss_fn_constructor': <class 'torch.nn.modules.loss.CrossEntropyLoss'>, 'loss_fn_kwargs': {}}
+Epoch 1 complete in 68.13330411911011 seconds
+	Train rv:
+		loss: 3.8391380310058594
+		acc: 0.07747162485065712
+	Val rv:
+		loss: 3.198263168334961
+		acc: 0.1935799319727891
+New best model found.
+Epoch 2 complete in 67.9004111289978 seconds
+	Train rv:
+		loss: 2.7404723167419434
+		acc: 0.29058393070489846
+	Val rv:
+		loss: 2.3916475772857666
+		acc: 0.38156887755102037
+New best model found.
+Epoch 3 complete in 68.66693997383118 seconds
+	Train rv:
+		loss: 1.8821282386779785
+		acc: 0.49540770609318996
+	Val rv:
+		loss: 1.778077483177185
+		acc: 0.5313350340136054
+New best model found.
+Epoch 4 complete in 68.08542108535767 seconds
+	Train rv:
+		loss: 1.3309296369552612
+		acc: 0.6312350657108722
+	Val rv:
+		loss: 1.5666218996047974
+		acc: 0.5833758503401361
+New best model found.
+Epoch 5 complete in 68.63250470161438 seconds
+	Train rv:
+		loss: 0.9310759902000427
+		acc: 0.7345430107526881
+	Val rv:
+		loss: 1.5484435558319092
+		acc: 0.605718537414966
+New best model found.
+Epoch 6 complete in 68.94732689857483 seconds
+	Train rv:
+		loss: 0.6694757342338562
+		acc: 0.8039874551971327
+	Val rv:
+		loss: 1.4057598114013672
+		acc: 0.6612882653061224
+New best model found.
+Epoch 7 complete in 68.37221693992615 seconds
+	Train rv:
+		loss: 0.4713655412197113
+		acc: 0.8604764038231781
+	Val rv:
+		loss: 1.5664851665496826
+		acc: 0.6255739795918367
+Epochs without improvement: 1
+Epoch 8 complete in 68.33738088607788 seconds
+	Train rv:
+		loss: 0.359078586101532
+		acc: 0.8890008960573477
+	Val rv:
+		loss: 1.6084879636764526
+		acc: 0.6545918367346939
+Epochs without improvement: 2
+Epoch 9 complete in 68.66515707969666 seconds
+	Train rv:
+		loss: 0.2533322274684906
+		acc: 0.9239844683393071
+	Val rv:
+		loss: 1.5909472703933716
+		acc: 0.6572704081632653
+Epochs without improvement: 3
+Epoch 10 complete in 68.79348015785217 seconds
+	Train rv:
+		loss: 0.21723385155200958
+		acc: 0.9340277777777778
+	Val rv:
+		loss: 1.8110586404800415
+		acc: 0.6487882653061224
+Epochs without improvement: 4
+Epoch 11 complete in 68.14497113227844 seconds
+	Train rv:
+		loss: 0.1960337907075882
+		acc: 0.9407482078853047
+	Val rv:
+		loss: 1.886285662651062
+		acc: 0.6606292517006803
+Epochs without improvement: 5
+Epoch 12 complete in 68.28634262084961 seconds
+	Train rv:
+		loss: 0.15882189571857452
+		acc: 0.9546370967741935
+	Val rv:
+		loss: 1.8735229969024658
+		acc: 0.6550595238095238
+Epochs without improvement: 6
+Epoch 13 complete in 67.42358112335205 seconds
+	Train rv:
+		loss: 0.1705758273601532
+		acc: 0.9476553166069295
+	Val rv:
+		loss: 1.9677008390426636
+		acc: 0.6550595238095238
+Epochs without improvement: 7
+Epoch 14 complete in 67.84584355354309 seconds
+	Train rv:
+		loss: 0.16364216804504395
+		acc: 0.9519115890083631
+	Val rv:
+		loss: 1.8062012195587158
+		acc: 0.6649022108843538
+New best model found.
+Epoch 15 complete in 67.63864541053772 seconds
+	Train rv:
+		loss: 0.11707077920436859
+		acc: 0.9669578853046595
+	Val rv:
+		loss: 2.036127805709839
+		acc: 0.6633078231292517
+Epochs without improvement: 1
+Epoch 16 complete in 68.07114052772522 seconds
+	Train rv:
+		loss: 0.1698327362537384
+		acc: 0.9476553166069295
+	Val rv:
+		loss: 1.6015708446502686
+		acc: 0.6704506802721089
+New best model found.
+Epoch 17 complete in 68.83617901802063 seconds
+	Train rv:
+		loss: 0.1401943564414978
+		acc: 0.9566158900836319
+	Val rv:
+		loss: 1.9554868936538696
+		acc: 0.6309523809523809
+Epochs without improvement: 1
+Epoch 18 complete in 68.7196536064148 seconds
+	Train rv:
+		loss: 0.14377541840076447
+		acc: 0.9568025686977301
+	Val rv:
+		loss: 1.876808762550354
+		acc: 0.6633078231292517
+Epochs without improvement: 2
+Epoch 19 complete in 68.09896731376648 seconds
+	Train rv:
+		loss: 0.1124635636806488
+		acc: 0.9699820788530465
+	Val rv:
+		loss: 1.824560284614563
+		acc: 0.6425382653061225
+Epochs without improvement: 3
+Epoch 20 complete in 68.82207822799683 seconds
+	Train rv:
+		loss: 0.09879167377948761
+		acc: 0.9691980286738351
+	Val rv:
+		loss: 1.9427690505981445
+		acc: 0.664859693877551
+Epochs without improvement: 4
+Epoch 21 complete in 68.06859588623047 seconds
+	Train rv:
+		loss: 0.12297924607992172
+		acc: 0.9600507765830347
+	Val rv:
+		loss: 1.811738133430481
+		acc: 0.6483418367346938
+Epochs without improvement: 5
+Epoch 22 complete in 67.83290004730225 seconds
+	Train rv:
+		loss: 0.1292608678340912
+		acc: 0.9607601553166069
+	Val rv:
+		loss: 1.9424175024032593
+		acc: 0.6572704081632653
+Epochs without improvement: 6
+Epoch 23 complete in 68.55987119674683 seconds
+	Train rv:
+		loss: 0.09658731520175934
+		acc: 0.9722222222222222
+	Val rv:
+		loss: 1.9988176822662354
+		acc: 0.6767219387755102
+New best model found.
+Epoch 24 complete in 69.12449884414673 seconds
+	Train rv:
+		loss: 0.07467588782310486
+		acc: 0.9773372162485066
+	Val rv:
+		loss: 2.0876553058624268
+		acc: 0.6454506802721088
+Epochs without improvement: 1
+Epoch 25 complete in 68.11316061019897 seconds
+	Train rv:
+		loss: 0.1043446809053421
+		acc: 0.9678166069295101
+	Val rv:
+		loss: 1.869990587234497
+		acc: 0.666687925170068
+Epochs without improvement: 2
+Epoch 26 complete in 69.11238312721252 seconds
+	Train rv:
+		loss: 0.15510644018650055
+		acc: 0.9522849462365591
+	Val rv:
+		loss: 1.9965765476226807
+		acc: 0.6213647959183674
+Epochs without improvement: 3
+Epoch 27 complete in 69.21732878684998 seconds
+	Train rv:
+		loss: 0.10764136165380478
+		acc: 0.9664725209080047
+	Val rv:
+		loss: 1.7106218338012695
+		acc: 0.680718537414966
+New best model found.
+Epoch 28 complete in 68.9420485496521 seconds
+	Train rv:
+		loss: 0.057668209075927734
+		acc: 0.9818548387096774
+	Val rv:
+		loss: 1.7589677572250366
+		acc: 0.6831632653061224
+New best model found.
+Epoch 29 complete in 67.74720907211304 seconds
+	Train rv:
+		loss: 0.06720466911792755
+		acc: 0.9785692951015531
+	Val rv:
+		loss: 1.9463263750076294
+		acc: 0.6753613945578232
+Epochs without improvement: 1
+Epoch 30 complete in 67.67543745040894 seconds
+	Train rv:
+		loss: 0.1412757933139801
+		acc: 0.9550104540023896
+	Val rv:
+		loss: 1.8336445093154907
+		acc: 0.655484693877551
+Epochs without improvement: 2
+Epoch 31 complete in 68.672110080719 seconds
+	Train rv:
+		loss: 0.061163488775491714
+		acc: 0.9807347670250897
+	Val rv:
+		loss: 2.056255578994751
+		acc: 0.6528061224489795
+Epochs without improvement: 3
+Epoch 32 complete in 67.58603549003601 seconds
+	Train rv:
+		loss: 0.06893837451934814
+		acc: 0.9774118876941458
+	Val rv:
+		loss: 1.9857906103134155
+		acc: 0.6555059523809523
+Epochs without improvement: 4
+Epoch 33 complete in 68.92174434661865 seconds
+	Train rv:
+		loss: 0.1085081622004509
+		acc: 0.9668085424133811
+	Val rv:
+		loss: 1.9778778553009033
+		acc: 0.6697704081632653
+Epochs without improvement: 5
+Epoch 34 complete in 68.1803548336029 seconds
+	Train rv:
+		loss: 0.10144105553627014
+		acc: 0.9672939068100358
+	Val rv:
+		loss: 2.034538745880127
+		acc: 0.6512542517006803
+Epochs without improvement: 6
+Epoch 35 complete in 68.10054969787598 seconds
+	Train rv:
+		loss: 0.09626537561416626
+		acc: 0.9689366786140979
+	Val rv:
+		loss: 1.7693870067596436
+		acc: 0.6700042517006803
+Epochs without improvement: 7
+Epoch 36 complete in 68.58763718605042 seconds
+	Train rv:
+		loss: 0.0737093985080719
+		acc: 0.9787186379928315
+	Val rv:
+		loss: 1.772623062133789
+		acc: 0.6809523809523809
+Epochs without improvement: 8
+Epoch 37 complete in 68.60239815711975 seconds
+	Train rv:
+		loss: 0.08832453936338425
+		acc: 0.9715501792114696
+	Val rv:
+		loss: 2.0633907318115234
+		acc: 0.6510204081632652
+Epochs without improvement: 9
+Epoch 38 complete in 68.18588209152222 seconds
+	Train rv:
+		loss: 0.06332475692033768
+		acc: 0.9784199522102749
+	Val rv:
+		loss: 1.7884416580200195
+		acc: 0.684970238095238
+New best model found.
+Epoch 39 complete in 68.50259327888489 seconds
+	Train rv:
+		loss: 0.03549930453300476
+		acc: 0.9876792114695341
+	Val rv:
+		loss: 1.9302444458007812
+		acc: 0.6615221088435375
+Epochs without improvement: 1
+Epoch 40 complete in 68.05440020561218 seconds
+	Train rv:
+		loss: 0.10712137818336487
+		acc: 0.9674059139784946
+	Val rv:
+		loss: 2.2405519485473633
+		acc: 0.6260204081632653
+Epochs without improvement: 2
+Epoch 41 complete in 68.28136444091797 seconds
+	Train rv:
+		loss: 0.11719466745853424
+		acc: 0.9619175627240143
+	Val rv:
+		loss: 1.9657963514328003
+		acc: 0.6597576530612245
+Epochs without improvement: 3
+Epoch 42 complete in 68.2848892211914 seconds
+	Train rv:
+		loss: 0.05963047221302986
+		acc: 0.9809587813620072
+	Val rv:
+		loss: 1.9176119565963745
+		acc: 0.6677721088435374
+Epochs without improvement: 4
+Epoch 43 complete in 67.6289541721344 seconds
+	Train rv:
+		loss: 0.04880842939019203
+		acc: 0.9821908602150538
+	Val rv:
+		loss: 2.165361166000366
+		acc: 0.6702168367346939
+Epochs without improvement: 5
+Epoch 44 complete in 68.66231369972229 seconds
+	Train rv:
+		loss: 0.10894693434238434
+		acc: 0.9662485065710872
+	Val rv:
+		loss: 1.968197226524353
+		acc: 0.6490008503401361
+Epochs without improvement: 6
+Epoch 45 complete in 68.43698453903198 seconds
+	Train rv:
+		loss: 0.058407917618751526
+		acc: 0.9806600955794504
+	Val rv:
+		loss: 2.142936944961548
+		acc: 0.6481292517006803
+Epochs without improvement: 7
+Epoch 46 complete in 68.34856176376343 seconds
+	Train rv:
+		loss: 0.0939684584736824
+		acc: 0.9705421146953405
+	Val rv:
+		loss: 2.001234769821167
+		acc: 0.6617559523809523
+Epochs without improvement: 8
+Epoch 47 complete in 67.7363932132721 seconds
+	Train rv:
+		loss: 0.06758803874254227
+		acc: 0.9767025089605734
+	Val rv:
+		loss: 2.064210891723633
+		acc: 0.6686649659863946
+Epochs without improvement: 9
+Epoch 48 complete in 68.32959961891174 seconds
+	Train rv:
+		loss: 0.04734901338815689
+		acc: 0.9838709677419355
+	Val rv:
+		loss: 2.1959388256073
+		acc: 0.6708971088435375
+Epochs without improvement: 10
+Epoch 49 complete in 68.23147654533386 seconds
+	Train rv:
+		loss: 0.051176607608795166
+		acc: 0.980510752688172
+	Val rv:
+		loss: 2.0211026668548584
+		acc: 0.6735756802721089
+Epochs without improvement: 11
+Epoch 50 complete in 68.44473648071289 seconds
+	Train rv:
+		loss: 0.0971669927239418
+		acc: 0.9681526284348865
+	Val rv:
+		loss: 2.228822946548462
+		acc: 0.6316113945578231
+Epochs without improvement: 12
+Epoch 51 complete in 68.1877498626709 seconds
+	Train rv:
+		loss: 0.0787641853094101
+		acc: 0.9737529868578255
+	Val rv:
+		loss: 1.9636644124984741
+		acc: 0.6450042517006803
+Epochs without improvement: 13
+Epoch 52 complete in 67.24744367599487 seconds
+	Train rv:
+		loss: 0.07064730674028397
+		acc: 0.9754330943847073
+	Val rv:
+		loss: 2.250490665435791
+		acc: 0.6365221088435374
+Epochs without improvement: 14
+Epoch 53 complete in 67.66078400611877 seconds
+	Train rv:
+		loss: 0.059542346745729446
+		acc: 0.9802494026284349
+	Val rv:
+		loss: 1.9758919477462769
+		acc: 0.657482993197279
+Epochs without improvement: 15
+Epoch 54 complete in 67.64600253105164 seconds
+	Train rv:
+		loss: 0.05143270269036293
+		acc: 0.9819295101553165
+	Val rv:
+		loss: 2.3238413333892822
+		acc: 0.6523809523809524
+Epochs without improvement: 16
+Epoch 55 complete in 69.08079934120178 seconds
+	Train rv:
+		loss: 0.0725150778889656
+		acc: 0.9762171445639187
+	Val rv:
+		loss: 2.576511859893799
+		acc: 0.6213222789115647
+Epochs without improvement: 17
+Epoch 56 complete in 68.96386671066284 seconds
+	Train rv:
+		loss: 0.06916439533233643
+		acc: 0.9763664874551972
+	Val rv:
+		loss: 2.08353853225708
+		acc: 0.6566113945578231
+Epochs without improvement: 18
+Epoch 57 complete in 68.1721625328064 seconds
+	Train rv:
+		loss: 0.05657646059989929
+		acc: 0.9805480884109917
+	Val rv:
+		loss: 2.322383403778076
+		acc: 0.6657525510204081
+Epochs without improvement: 19
+Epoch 58 complete in 69.3782434463501 seconds
+	Train rv:
+		loss: 0.07334893196821213
+		acc: 0.9746863799283154
+	Val rv:
+		loss: 2.1859195232391357
+		acc: 0.649234693877551
+Epochs without improvement: 20
+Epoch 59 complete in 68.35267686843872 seconds
+	Train rv:
+		loss: 0.04639706015586853
+		acc: 0.9824895459976104
+	Val rv:
+		loss: 2.3141045570373535
+		acc: 0.6427508503401361
+Epochs without improvement: 21
+Epoch 60 complete in 69.06156373023987 seconds
+	Train rv:
+		loss: 0.0486769862473011
+		acc: 0.9824148745519713
+	Val rv:
+		loss: 2.0414397716522217
+		acc: 0.6452168367346939
+Epochs without improvement: 22
+Epoch 61 complete in 69.84318351745605 seconds
+	Train rv:
+		loss: 0.06947620958089828
+		acc: 0.9760678016726404
+	Val rv:
+		loss: 2.3952226638793945
+		acc: 0.6251700680272109
+Epochs without improvement: 23
+Epoch 62 complete in 69.03057289123535 seconds
+	Train rv:
+		loss: 0.0725511759519577
+		acc: 0.9747983870967742
+	Val rv:
+		loss: 2.173083782196045
+		acc: 0.6177508503401361
+Epochs without improvement: 24
+Epoch 63 complete in 68.65420985221863 seconds
+	Train rv:
+		loss: 0.05760778859257698
+		acc: 0.9807347670250897
+	Val rv:
+		loss: 2.1630337238311768
+		acc: 0.6536989795918368
+Epochs without improvement: 25
+Epoch 64 complete in 69.1813428401947 seconds
+	Train rv:
+		loss: 0.059326171875
+		acc: 0.9798387096774194
+	Val rv:
+		loss: 2.0916080474853516
+		acc: 0.6675382653061224
+Epochs without improvement: 26
+Epoch 65 complete in 68.5781683921814 seconds
+	Train rv:
+		loss: 0.024184545502066612
+		acc: 0.9896953405017921
+	Val rv:
+		loss: 1.923303246498108
+		acc: 0.6826955782312925
+Epochs without improvement: 27
+Epoch 66 complete in 69.73293828964233 seconds
+	Train rv:
+		loss: 0.019135141745209694
+		acc: 0.9894713261648745
+	Val rv:
+		loss: 1.7792669534683228
+		acc: 0.6869472789115646
+New best model found.
+Epoch 67 complete in 69.92443704605103 seconds
+	Train rv:
+		loss: 0.01618138700723648
+		acc: 0.9898446833930705
+	Val rv:
+		loss: 1.8687312602996826
+		acc: 0.6936437074829932
+New best model found.
+Epoch 68 complete in 71.4808554649353 seconds
+	Train rv:
+		loss: 0.01583251543343067
+		acc: 0.990255376344086
+	Val rv:
+		loss: 1.8631142377853394
+		acc: 0.6976615646258504
+New best model found.
+Epoch 69 complete in 70.2797200679779 seconds
+	Train rv:
+		loss: 0.015048878267407417
+		acc: 0.9904793906810035
+	Val rv:
+		loss: 1.71712064743042
+		acc: 0.6847151360544218
+Epochs without improvement: 1
+Epoch 70 complete in 70.65004563331604 seconds
+	Train rv:
+		loss: 0.01457745861262083
+		acc: 0.9908154121863799
+	Val rv:
+		loss: 1.8254314661026
+		acc: 0.6954294217687075
+Epochs without improvement: 2
+Epoch 71 complete in 69.98209547996521 seconds
+	Train rv:
+		loss: 0.014992523938417435
+		acc: 0.9909274193548387
+	Val rv:
+		loss: 1.789064884185791
+		acc: 0.6907525510204081
+Epochs without improvement: 3
+Epoch 72 complete in 68.64764189720154 seconds
+	Train rv:
+		loss: 0.016758810728788376
+		acc: 0.9906660692951015
+	Val rv:
+		loss: 2.2503411769866943
+		acc: 0.6728954081632653
+Epochs without improvement: 4
+Epoch 73 complete in 68.05661678314209 seconds
+	Train rv:
+		loss: 0.40838170051574707
+		acc: 0.8814590800477896
+	Val rv:
+		loss: 1.9671872854232788
+		acc: 0.6150722789115647
+Epochs without improvement: 5
+Epoch 74 complete in 68.41264772415161 seconds
+	Train rv:
+		loss: 0.09149991720914841
+		acc: 0.9706167861409796
+	Val rv:
+		loss: 2.1143574714660645
+		acc: 0.6402848639455782
+Epochs without improvement: 6
+Epoch 75 complete in 68.13446402549744 seconds
+	Train rv:
+		loss: 0.038383640348911285
+		acc: 0.9845430107526881
+	Val rv:
+		loss: 2.0999529361724854
+		acc: 0.6711309523809523
+Epochs without improvement: 7
+Epoch 76 complete in 68.03548693656921 seconds
+	Train rv:
+		loss: 0.02242671512067318
+		acc: 0.9895833333333334
+	Val rv:
+		loss: 1.8604869842529297
+		acc: 0.6842899659863946
+Epochs without improvement: 8
+Epoch 77 complete in 69.11874222755432 seconds
+	Train rv:
+		loss: 0.01705198362469673
+		acc: 0.9899193548387096
+	Val rv:
+		loss: 1.8785241842269897
+		acc: 0.6936649659863946
+Epochs without improvement: 9
+Epoch 78 complete in 68.6619439125061 seconds
+	Train rv:
+		loss: 0.0147981783375144
+		acc: 0.990255376344086
+	Val rv:
+		loss: 1.8719438314437866
+		acc: 0.696109693877551
+Epochs without improvement: 10
+Epoch 79 complete in 68.33990716934204 seconds
+	Train rv:
+		loss: 0.014409965835511684
+		acc: 0.98988201911589
+	Val rv:
+		loss: 1.9031513929367065
+		acc: 0.6950042517006803
+Epochs without improvement: 11
+Epoch 80 complete in 67.95067977905273 seconds
+	Train rv:
+		loss: 0.014019368216395378
+		acc: 0.9909274193548387
+	Val rv:
+		loss: 1.821842074394226
+		acc: 0.6842899659863946
+Epochs without improvement: 12
+Epoch 81 complete in 68.367271900177 seconds
+	Train rv:
+		loss: 0.01557834167033434
+		acc: 0.9911514336917563
+	Val rv:
+		loss: 2.0178744792938232
+		acc: 0.6847363945578232
+Epochs without improvement: 13
+Epoch 82 complete in 68.24184989929199 seconds
+	Train rv:
+		loss: 0.01647672988474369
+		acc: 0.9908154121863799
+	Val rv:
+		loss: 1.8344016075134277
+		acc: 0.6755739795918367
+Epochs without improvement: 14
+Epoch 83 complete in 67.59703421592712 seconds
+	Train rv:
+		loss: 0.3089442551136017
+		acc: 0.9102449223416965
+	Val rv:
+		loss: 2.042015790939331
+		acc: 0.596109693877551
+Epochs without improvement: 15
+Epoch 84 complete in 68.1199095249176 seconds
+	Train rv:
+		loss: 0.13677942752838135
+		acc: 0.9550851254480287
+	Val rv:
+		loss: 1.871130108833313
+		acc: 0.6490221088435374
+Epochs without improvement: 16
+Epoch 85 complete in 68.08736801147461 seconds
+	Train rv:
+		loss: 0.055237580090761185
+		acc: 0.979502688172043
+	Val rv:
+		loss: 2.018923759460449
+		acc: 0.6488095238095237
+Epochs without improvement: 17
+Epoch 86 complete in 68.82522678375244 seconds
+	Train rv:
+		loss: 0.040165338665246964
+		acc: 0.9852150537634409
+	Val rv:
+		loss: 2.0263559818267822
+		acc: 0.652359693877551
+Epochs without improvement: 18
+Epoch 87 complete in 68.68836736679077 seconds
+	Train rv:
+		loss: 0.08294393122196198
+		acc: 0.97334229390681
+	Val rv:
+		loss: 2.354482650756836
+		acc: 0.6391794217687075
+Epochs without improvement: 19
+Epoch 88 complete in 69.14338040351868 seconds
+	Train rv:
+		loss: 0.03614097833633423
+		acc: 0.9845430107526881
+	Val rv:
+		loss: 2.3401834964752197
+		acc: 0.6273384353741497
+Epochs without improvement: 20
+Epoch 89 complete in 68.93434691429138 seconds
+	Train rv:
+		loss: 0.0619736947119236
+		acc: 0.976553166069295
+	Val rv:
+		loss: 2.196837902069092
+		acc: 0.6454506802721088
+Epochs without improvement: 21
+Epoch 90 complete in 68.59987449645996 seconds
+	Train rv:
+		loss: 0.048303887248039246
+		acc: 0.9809587813620072
+	Val rv:
+		loss: 2.204190731048584
+		acc: 0.6467899659863946
+Epochs without improvement: 22
+Epoch 91 complete in 68.21536207199097 seconds
+	Train rv:
+		loss: 0.044122934341430664
+		acc: 0.9828629032258065
+	Val rv:
+		loss: 2.131939649581909
+		acc: 0.6483418367346938
+Epochs without improvement: 23
+Epoch 92 complete in 68.08622527122498 seconds
+	Train rv:
+		loss: 0.07931571453809738
+		acc: 0.9724835722819595
+	Val rv:
+		loss: 2.248443126678467
+		acc: 0.6409863945578231
+Epochs without improvement: 24
+Epoch 93 complete in 68.84300422668457 seconds
+	Train rv:
+		loss: 0.06174866855144501
+		acc: 0.9772625448028673
+	Val rv:
+		loss: 2.0764236450195312
+		acc: 0.6603954081632653
+Epochs without improvement: 25
+Epoch 94 complete in 68.25221157073975 seconds
+	Train rv:
+		loss: 0.03028104640543461
+		acc: 0.9869698327359617
+	Val rv:
+		loss: 2.0185184478759766
+		acc: 0.6860756802721089
+Epochs without improvement: 26
+Epoch 95 complete in 68.13269925117493 seconds
+	Train rv:
+		loss: 0.01816427893936634
+		acc: 0.9893593189964157
+	Val rv:
+		loss: 1.8943202495574951
+		acc: 0.6820578231292517
+Epochs without improvement: 27
+Epoch 96 complete in 69.15674614906311 seconds
+	Train rv:
+		loss: 0.014924188144505024
+		acc: 0.9914874551971327
+	Val rv:
+		loss: 1.8909600973129272
+		acc: 0.6858630952380952
+Epochs without improvement: 28
+Epoch 97 complete in 69.0478949546814 seconds
+	Train rv:
+		loss: 0.014009489677846432
+		acc: 0.9904420549581839
+	Val rv:
+		loss: 1.9008439779281616
+		acc: 0.6943452380952381
+Epochs without improvement: 29
+Epoch 98 complete in 68.19994020462036 seconds
+	Train rv:
+		loss: 0.013415114022791386
+		acc: 0.9910394265232975
+	Val rv:
+		loss: 1.9920072555541992
+		acc: 0.6885416666666666
+Epochs without improvement: 30
+Epoch 99 complete in 69.40349221229553 seconds
+	Train rv:
+		loss: 0.015089278109371662
+		acc: 0.9904420549581839
+	Val rv:
+		loss: 1.8033229112625122
+		acc: 0.6925382653061224
+Epochs without improvement: 31
+Epoch 100 complete in 69.17972350120544 seconds
+	Train rv:
+		loss: 0.014371718280017376
+		acc: 0.9905913978494624
+	Val rv:
+		loss: 1.9476124048233032
+		acc: 0.6972363945578232
+Epochs without improvement: 32
+Done.
+
+
+
+
+Training a feature extractor using erm on <class 'datasets.domainbed.OfficeHome'> with domain Real World held out.
+Training a feature extractor.
+Save dir: ./results/OfficeHome/omit_Real World/erm_pretrained/trial_0
+Constructor kwargs: {'dataset_constructor': <class 'datasets.domainbed.OfficeHome'>, 'device': 'cuda:2', 'dataset_kwargs': {'domains_to_use': ['Art', 'Clipart', 'Product'], 'data_transform': Compose(
+    Resize(size=(224, 224), interpolation=bilinear)
+    ToTensor()
+    Lambda()
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+)}, 'dataloader_kwargs': {'batch_size': 32, 'num_workers': 10}, 'model_constructor': <class 'models.resnet.PretrainedRN50'>, 'model_kwargs': {'pretrained': True}, 'optimizer_constructor': <class 'torch.optim.adam.Adam'>, 'optimizer_kwargs': {'lr': 0.0002, 'weight_decay': 0.0001}, 'loss_fn_constructor': <class 'torch.nn.modules.loss.CrossEntropyLoss'>, 'loss_fn_kwargs': {}}
+Epoch 1 complete in 65.53338027000427 seconds
+	Train rv:
+		loss: 3.4906091690063477
+		acc: 0.1406761565836299
+	Val rv:
+		loss: 2.7402772903442383
+		acc: 0.286825117370892
+New best model found.
+Epoch 2 complete in 64.74028444290161 seconds
+	Train rv:
+		loss: 2.117661952972412
+		acc: 0.4400489323843416
+	Val rv:
+		loss: 1.787118673324585
+		acc: 0.5349178403755869
+New best model found.
+Epoch 3 complete in 65.78791308403015 seconds
+	Train rv:
+		loss: 1.3877055644989014
+		acc: 0.6238300711743772
+	Val rv:
+		loss: 1.4429996013641357
+		acc: 0.6295481220657276
+New best model found.
+Epoch 4 complete in 64.74735593795776 seconds
+	Train rv:
+		loss: 0.9489592909812927
+		acc: 0.7321441281138791
+	Val rv:
+		loss: 1.3742387294769287
+		acc: 0.6663732394366197
+New best model found.
+Epoch 5 complete in 64.82956409454346 seconds
+	Train rv:
+		loss: 0.6662893891334534
+		acc: 0.8082606761565836
+	Val rv:
+		loss: 1.358481526374817
+		acc: 0.698943661971831
+New best model found.
+Epoch 6 complete in 65.00060510635376 seconds
+	Train rv:
+		loss: 0.5113658905029297
+		acc: 0.8486788256227757
+	Val rv:
+		loss: 1.431312918663025
+		acc: 0.6741490610328639
+Epochs without improvement: 1
+Epoch 7 complete in 64.83729863166809 seconds
+	Train rv:
+		loss: 0.36981400847435
+		acc: 0.8880782918149467
+	Val rv:
+		loss: 1.2024847269058228
+		acc: 0.7199237089201879
+New best model found.
+Epoch 8 complete in 65.15119624137878 seconds
+	Train rv:
+		loss: 0.3280271887779236
+		acc: 0.9044083629893239
+	Val rv:
+		loss: 1.2952603101730347
+		acc: 0.6873532863849766
+Epochs without improvement: 1
+Epoch 9 complete in 64.90159726142883 seconds
+	Train rv:
+		loss: 0.24367840588092804
+		acc: 0.9261254448398576
+	Val rv:
+		loss: 1.3724011182785034
+		acc: 0.7077464788732394
+Epochs without improvement: 2
+Epoch 10 complete in 65.34357762336731 seconds
+	Train rv:
+		loss: 0.18694734573364258
+		acc: 0.9447153024911034
+	Val rv:
+		loss: 1.2987302541732788
+		acc: 0.7340082159624414
+New best model found.
+Epoch 11 complete in 65.13477945327759 seconds
+	Train rv:
+		loss: 0.170481339097023
+		acc: 0.9508140569395017
+	Val rv:
+		loss: 1.5398459434509277
+		acc: 0.6750293427230047
+Epochs without improvement: 1
+Epoch 12 complete in 65.6560001373291 seconds
+	Train rv:
+		loss: 0.18390506505966187
+		acc: 0.9450622775800712
+	Val rv:
+		loss: 1.5029773712158203
+		acc: 0.7136150234741784
+Epochs without improvement: 2
+Epoch 13 complete in 65.5826940536499 seconds
+	Train rv:
+		loss: 0.16125865280628204
+		acc: 0.952846975088968
+	Val rv:
+		loss: 1.4880834817886353
+		acc: 0.704518779342723
+Epochs without improvement: 3
+Epoch 14 complete in 65.69689512252808 seconds
+	Train rv:
+		loss: 0.16943489015102386
+		acc: 0.9476690391459075
+	Val rv:
+		loss: 1.6524943113327026
+		acc: 0.6911678403755869
+Epochs without improvement: 4
+Epoch 15 complete in 65.49864459037781 seconds
+	Train rv:
+		loss: 0.12433082610368729
+		acc: 0.9626334519572953
+	Val rv:
+		loss: 1.429625391960144
+		acc: 0.715962441314554
+Epochs without improvement: 5
+Epoch 16 complete in 65.68533754348755 seconds
+	Train rv:
+		loss: 0.12748944759368896
+		acc: 0.9599021352313167
+	Val rv:
+		loss: 1.533841609954834
+		acc: 0.7056924882629108
+Epochs without improvement: 6
+Epoch 17 complete in 65.33590912818909 seconds
+	Train rv:
+		loss: 0.09460840374231339
+		acc: 0.9738656583629893
+	Val rv:
+		loss: 1.430922031402588
+		acc: 0.7285798122065728
+Epochs without improvement: 7
+Epoch 18 complete in 65.37258863449097 seconds
+	Train rv:
+		loss: 0.1332753747701645
+		acc: 0.9604092526690391
+	Val rv:
+		loss: 1.5875139236450195
+		acc: 0.7205105633802817
+Epochs without improvement: 8
+Epoch 19 complete in 65.23573732376099 seconds
+	Train rv:
+		loss: 0.11884250491857529
+		acc: 0.9651290035587189
+	Val rv:
+		loss: 1.6580835580825806
+		acc: 0.71537558685446
+Epochs without improvement: 9
+Epoch 20 complete in 65.202871799469 seconds
+	Train rv:
+		loss: 0.09682322293519974
+		acc: 0.9696574733096085
+	Val rv:
+		loss: 1.5628658533096313
+		acc: 0.6920481220657276
+Epochs without improvement: 10
+Epoch 21 complete in 65.87951970100403 seconds
+	Train rv:
+		loss: 0.138639435172081
+		acc: 0.9575667259786478
+	Val rv:
+		loss: 1.4900386333465576
+		acc: 0.7026115023474178
+Epochs without improvement: 11
+Epoch 22 complete in 65.41583490371704 seconds
+	Train rv:
+		loss: 0.15201331675052643
+		acc: 0.9525133451957295
+	Val rv:
+		loss: 1.5918601751327515
+		acc: 0.7056924882629108
+Epochs without improvement: 12
+Epoch 23 complete in 64.99986505508423 seconds
+	Train rv:
+		loss: 0.08762902766466141
+		acc: 0.9741992882562278
+	Val rv:
+		loss: 1.3421941995620728
+		acc: 0.7442781690140845
+New best model found.
+Epoch 24 complete in 65.25458598136902 seconds
+	Train rv:
+		loss: 0.03603408485651016
+		acc: 0.989435053380783
+	Val rv:
+		loss: 1.3992561101913452
+		acc: 0.7505868544600939
+New best model found.
+Epoch 25 complete in 64.79900813102722 seconds
+	Train rv:
+		loss: 0.028434688225388527
+		acc: 0.9908807829181495
+	Val rv:
+		loss: 1.2998533248901367
+		acc: 0.7664319248826291
+New best model found.
+Epoch 26 complete in 64.89035820960999 seconds
+	Train rv:
+		loss: 0.022838806733489037
+		acc: 0.990547153024911
+	Val rv:
+		loss: 1.1576870679855347
+		acc: 0.7643779342723005
+Epochs without improvement: 1
+Epoch 27 complete in 65.07627820968628 seconds
+	Train rv:
+		loss: 0.021907104179263115
+		acc: 0.9909919928825622
+	Val rv:
+		loss: 1.3044209480285645
+		acc: 0.7668720657276995
+New best model found.
+Epoch 28 complete in 64.71577405929565 seconds
+	Train rv:
+		loss: 0.25465741753578186
+		acc: 0.9263656583629895
+	Val rv:
+		loss: 1.9202096462249756
+		acc: 0.6625586854460094
+Epochs without improvement: 1
+Epoch 29 complete in 64.3965117931366 seconds
+	Train rv:
+		loss: 0.20954078435897827
+		acc: 0.9376112099644128
+	Val rv:
+		loss: 1.4896876811981201
+		acc: 0.710387323943662
+Epochs without improvement: 2
+Epoch 30 complete in 64.8943190574646 seconds
+	Train rv:
+		loss: 0.10151565819978714
+		acc: 0.9699733096085409
+	Val rv:
+		loss: 1.6230579614639282
+		acc: 0.6875
+Epochs without improvement: 3
+Epoch 31 complete in 65.31590962409973 seconds
+	Train rv:
+		loss: 0.06939761340618134
+		acc: 0.9787277580071173
+	Val rv:
+		loss: 1.5760678052902222
+		acc: 0.7262323943661971
+Epochs without improvement: 4
+Epoch 32 complete in 65.29531288146973 seconds
+	Train rv:
+		loss: 0.10043750703334808
+		acc: 0.9699733096085409
+	Val rv:
+		loss: 1.7281666994094849
+		acc: 0.6935152582159625
+Epochs without improvement: 5
+Epoch 33 complete in 65.64423251152039 seconds
+	Train rv:
+		loss: 0.08414080739021301
+		acc: 0.9741681494661921
+	Val rv:
+		loss: 1.6711891889572144
+		acc: 0.7031983568075117
+Epochs without improvement: 6
+Epoch 34 complete in 65.01292848587036 seconds
+	Train rv:
+		loss: 0.08701089769601822
+		acc: 0.970720640569395
+	Val rv:
+		loss: 1.4897122383117676
+		acc: 0.7109741784037559
+Epochs without improvement: 7
+Epoch 35 complete in 64.5894365310669 seconds
+	Train rv:
+		loss: 0.11844488233327866
+		acc: 0.963047153024911
+	Val rv:
+		loss: 1.5069987773895264
+		acc: 0.704518779342723
+Epochs without improvement: 8
+Epoch 36 complete in 64.43665099143982 seconds
+	Train rv:
+		loss: 0.06904532760381699
+		acc: 0.9780293594306051
+	Val rv:
+		loss: 1.7106924057006836
+		acc: 0.7077464788732394
+Epochs without improvement: 9
+Epoch 37 complete in 64.70230627059937 seconds
+	Train rv:
+		loss: 0.043045464903116226
+		acc: 0.9846218861209963
+	Val rv:
+		loss: 1.531238317489624
+		acc: 0.7227112676056338
+Epochs without improvement: 10
+Epoch 38 complete in 65.39844608306885 seconds
+	Train rv:
+		loss: 0.055163972079753876
+		acc: 0.9818416370106761
+	Val rv:
+		loss: 1.8451968431472778
+		acc: 0.7078931924882629
+Epochs without improvement: 11
+Epoch 39 complete in 65.32349967956543 seconds
+	Train rv:
+		loss: 0.08761274814605713
+		acc: 0.9725311387900356
+	Val rv:
+		loss: 2.0588040351867676
+		acc: 0.6662265258215962
+Epochs without improvement: 12
+Epoch 40 complete in 65.33065843582153 seconds
+	Train rv:
+		loss: 0.11022201180458069
+		acc: 0.9655249110320284
+	Val rv:
+		loss: 1.525962233543396
+		acc: 0.732981220657277
+Epochs without improvement: 13
+Epoch 41 complete in 64.86939215660095 seconds
+	Train rv:
+		loss: 0.07893020659685135
+		acc: 0.9765346975088968
+	Val rv:
+		loss: 1.5915228128433228
+		acc: 0.7196302816901409
+Epochs without improvement: 14
+Epoch 42 complete in 65.51173043251038 seconds
+	Train rv:
+		loss: 0.08865784108638763
+		acc: 0.9726423487544484
+	Val rv:
+		loss: 1.7494827508926392
+		acc: 0.6985035211267606
+Epochs without improvement: 15
+Epoch 43 complete in 65.58693361282349 seconds
+	Train rv:
+		loss: 0.07463716715574265
+		acc: 0.975885231316726
+	Val rv:
+		loss: 1.7065024375915527
+		acc: 0.7200704225352113
+Epochs without improvement: 16
+Epoch 44 complete in 65.40691542625427 seconds
+	Train rv:
+		loss: 0.06531200557947159
+		acc: 0.9774243772241993
+	Val rv:
+		loss: 1.7471503019332886
+		acc: 0.6971830985915493
+Epochs without improvement: 17
+Epoch 45 complete in 65.56975102424622 seconds
+	Train rv:
+		loss: 0.07301151007413864
+		acc: 0.9781717081850533
+	Val rv:
+		loss: 1.7779808044433594
+		acc: 0.6773767605633803
+Epochs without improvement: 18
+Epoch 46 complete in 65.49225997924805 seconds
+	Train rv:
+		loss: 0.07301326096057892
+		acc: 0.9769795373665481
+	Val rv:
+		loss: 2.1978988647460938
+		acc: 0.670774647887324
+Epochs without improvement: 19
+Epoch 47 complete in 64.8791389465332 seconds
+	Train rv:
+		loss: 0.08279026299715042
+		acc: 0.9747553380782918
+	Val rv:
+		loss: 1.7332043647766113
+		acc: 0.7074530516431925
+Epochs without improvement: 20
+Epoch 48 complete in 65.53272795677185 seconds
+	Train rv:
+		loss: 0.03745357692241669
+		acc: 0.9863211743772242
+	Val rv:
+		loss: 1.6996029615402222
+		acc: 0.7237382629107981
+Epochs without improvement: 21
+Epoch 49 complete in 64.6911849975586 seconds
+	Train rv:
+		loss: 0.023312579840421677
+		acc: 0.9902135231316725
+	Val rv:
+		loss: 1.5169227123260498
+		acc: 0.7400234741784038
+Epochs without improvement: 22
+Epoch 50 complete in 65.61772465705872 seconds
+	Train rv:
+		loss: 0.018710052594542503
+		acc: 0.9910720640569395
+	Val rv:
+		loss: 1.3593738079071045
+		acc: 0.7545481220657276
+Epochs without improvement: 23
+Epoch 51 complete in 65.10561800003052 seconds
+	Train rv:
+		loss: 0.015906015411019325
+		acc: 0.9913256227758007
+	Val rv:
+		loss: 1.3508143424987793
+		acc: 0.7435446009389671
+Epochs without improvement: 24
+Epoch 52 complete in 65.17078804969788 seconds
+	Train rv:
+		loss: 0.015021119266748428
+		acc: 0.9908807829181495
+	Val rv:
+		loss: 1.3895474672317505
+		acc: 0.7491197183098591
+Epochs without improvement: 25
+Epoch 53 complete in 65.10735845565796 seconds
+	Train rv:
+		loss: 0.014437803998589516
+		acc: 0.9908807829181495
+	Val rv:
+		loss: 1.4830055236816406
+		acc: 0.7505868544600939
+Epochs without improvement: 26
+Epoch 54 complete in 65.8158643245697 seconds
+	Train rv:
+		loss: 0.014560358598828316
+		acc: 0.9917704626334519
+	Val rv:
+		loss: 1.417907476425171
+		acc: 0.7526408450704225
+Epochs without improvement: 27
+Epoch 55 complete in 65.45867323875427 seconds
+	Train rv:
+		loss: 0.014909791760146618
+		acc: 0.9911032028469751
+	Val rv:
+		loss: 1.5783511400222778
+		acc: 0.753080985915493
+Epochs without improvement: 28
+Epoch 56 complete in 65.61942434310913 seconds
+	Train rv:
+		loss: 0.3100658059120178
+		acc: 0.91135231316726
+	Val rv:
+		loss: 1.641562819480896
+		acc: 0.6453931924882629
+Epochs without improvement: 29
+Epoch 57 complete in 65.23201966285706 seconds
+	Train rv:
+		loss: 0.18914270401000977
+		acc: 0.9407250889679716
+	Val rv:
+		loss: 1.95309579372406
+		acc: 0.6808978873239436
+Epochs without improvement: 30
+Epoch 58 complete in 65.1216869354248 seconds
+	Train rv:
+		loss: 0.08473370969295502
+		acc: 0.9739457295373665
+	Val rv:
+		loss: 1.7288498878479004
+		acc: 0.7064260563380281
+Epochs without improvement: 31
+Epoch 59 complete in 64.90554189682007 seconds
+	Train rv:
+		loss: 0.05991590395569801
+		acc: 0.9806494661921709
+	Val rv:
+		loss: 1.6250616312026978
+		acc: 0.7108274647887324
+Epochs without improvement: 32
+Epoch 60 complete in 64.94998669624329 seconds
+	Train rv:
+		loss: 0.033808961510658264
+		acc: 0.9881005338078291
+	Val rv:
+		loss: 1.6039680242538452
+		acc: 0.7363556338028169
+Epochs without improvement: 33
+Epoch 61 complete in 65.07926774024963 seconds
+	Train rv:
+		loss: 0.01861879974603653
+		acc: 0.9912144128113879
+	Val rv:
+		loss: 1.5994014739990234
+		acc: 0.7394366197183099
+Epochs without improvement: 34
+Epoch 62 complete in 65.25236511230469 seconds
+	Train rv:
+		loss: 0.018340615555644035
+		acc: 0.9902935943060498
+	Val rv:
+		loss: 1.4577293395996094
+		acc: 0.744424882629108
+Epochs without improvement: 35
+Epoch 63 complete in 65.44739532470703 seconds
+	Train rv:
+		loss: 0.014758364297449589
+		acc: 0.9908807829181495
+	Val rv:
+		loss: 1.5204451084136963
+		acc: 0.7457453051643192
+Epochs without improvement: 36
+Epoch 64 complete in 65.31329250335693 seconds
+	Train rv:
+		loss: 0.013818149454891682
+		acc: 0.9909608540925267
+	Val rv:
+		loss: 1.5605818033218384
+		acc: 0.7475058685446009
+Epochs without improvement: 37
+Epoch 65 complete in 64.77729678153992 seconds
+	Train rv:
+		loss: 0.014054186642169952
+		acc: 0.9911032028469751
+	Val rv:
+		loss: 1.433891773223877
+		acc: 0.7545481220657276
+Epochs without improvement: 38
+Epoch 66 complete in 65.04882383346558 seconds
+	Train rv:
+		loss: 0.013728814199566841
+		acc: 0.9913256227758007
+	Val rv:
+		loss: 1.6167880296707153
+		acc: 0.7479460093896714
+Epochs without improvement: 39
+Epoch 67 complete in 65.32523536682129 seconds
+	Train rv:
+		loss: 0.013971352949738503
+		acc: 0.9913256227758007
+	Val rv:
+		loss: 1.541591763496399
+		acc: 0.7505868544600939
+Epochs without improvement: 40
+Epoch 68 complete in 64.49877953529358 seconds
+	Train rv:
+		loss: 0.25522324442863464
+		acc: 0.9252046263345196
+	Val rv:
+		loss: 1.8411153554916382
+		acc: 0.6418720657276995
+Epochs without improvement: 41
+Epoch 69 complete in 64.3530023097992 seconds
+	Train rv:
+		loss: 0.23902305960655212
+		acc: 0.9283807829181495
+	Val rv:
+		loss: 1.7349607944488525
+		acc: 0.6910211267605634
+Epochs without improvement: 42
+Epoch 70 complete in 65.44591736793518 seconds
+	Train rv:
+		loss: 0.06625494360923767
+		acc: 0.9786476868327402
+	Val rv:
+		loss: 1.6371948719024658
+		acc: 0.7188967136150234
+Epochs without improvement: 43
+Epoch 71 complete in 65.3702163696289 seconds
+	Train rv:
+		loss: 0.04438868537545204
+		acc: 0.984653024911032
+	Val rv:
+		loss: 1.6111441850662231
+		acc: 0.710680751173709
+Epochs without improvement: 44
+Epoch 72 complete in 65.56396412849426 seconds
+	Train rv:
+		loss: 0.055200062692165375
+		acc: 0.979982206405694
+	Val rv:
+		loss: 1.9900422096252441
+		acc: 0.6817781690140845
+Epochs without improvement: 45
+Epoch 73 complete in 64.43816184997559 seconds
+	Train rv:
+		loss: 0.08323585987091064
+		acc: 0.9743905693950177
+	Val rv:
+		loss: 1.9150171279907227
+		acc: 0.6852992957746479
+Epochs without improvement: 46
+Epoch 74 complete in 65.21438932418823 seconds
+	Train rv:
+		loss: 0.06042342633008957
+		acc: 0.9796485765124555
+	Val rv:
+		loss: 1.7368472814559937
+		acc: 0.7087734741784038
+Epochs without improvement: 47
+Epoch 75 complete in 65.12790822982788 seconds
+	Train rv:
+		loss: 0.035524748265743256
+		acc: 0.9872108540925267
+	Val rv:
+		loss: 1.6536699533462524
+		acc: 0.730193661971831
+Epochs without improvement: 48
+Epoch 76 complete in 65.42085099220276 seconds
+	Train rv:
+		loss: 0.03604539856314659
+		acc: 0.986432384341637
+	Val rv:
+		loss: 1.9416136741638184
+		acc: 0.6861795774647887
+Epochs without improvement: 49
+Epoch 77 complete in 65.17867231369019 seconds
+	Train rv:
+		loss: 0.09506816416978836
+		acc: 0.970720640569395
+	Val rv:
+		loss: 1.9261664152145386
+		acc: 0.7065727699530516
+Epochs without improvement: 50
+Epoch 78 complete in 64.85990858078003 seconds
+	Train rv:
+		loss: 0.04867652803659439
+		acc: 0.9827001779359431
+	Val rv:
+		loss: 2.0962891578674316
+		acc: 0.653169014084507
+Epochs without improvement: 51
+Epoch 79 complete in 64.69438242912292 seconds
+	Train rv:
+		loss: 0.04112362116575241
+		acc: 0.9853202846975089
+	Val rv:
+		loss: 1.783210277557373
+		acc: 0.721830985915493
+Epochs without improvement: 52
+Epoch 80 complete in 64.95600533485413 seconds
+	Train rv:
+		loss: 0.0393216609954834
+		acc: 0.9859564056939502
+	Val rv:
+		loss: 2.0154473781585693
+		acc: 0.7026115023474178
+Epochs without improvement: 53
+Epoch 81 complete in 66.01400780677795 seconds
+	Train rv:
+		loss: 0.08908530324697495
+		acc: 0.9706895017793595
+	Val rv:
+		loss: 1.91400146484375
+		acc: 0.6854460093896714
+Epochs without improvement: 54
+Epoch 82 complete in 65.23282289505005 seconds
+	Train rv:
+		loss: 0.058092597872018814
+		acc: 0.9784252669039146
+	Val rv:
+		loss: 1.696696400642395
+		acc: 0.7121478873239436
+Epochs without improvement: 55
+Epoch 83 complete in 64.59517669677734 seconds
+	Train rv:
+		loss: 0.045723456889390945
+		acc: 0.9826512455516014
+	Val rv:
+		loss: 2.0364999771118164
+		acc: 0.6778169014084507
+Epochs without improvement: 56
+Epoch 84 complete in 64.9332549571991 seconds
+	Train rv:
+		loss: 0.038955286145210266
+		acc: 0.9859564056939502
+	Val rv:
+		loss: 1.9629958868026733
+		acc: 0.698650234741784
+Epochs without improvement: 57
+Epoch 85 complete in 64.75544929504395 seconds
+	Train rv:
+		loss: 0.07114624232053757
+		acc: 0.9755338078291815
+	Val rv:
+		loss: 1.9748692512512207
+		acc: 0.6869131455399061
+Epochs without improvement: 58
+Epoch 86 complete in 65.64017963409424 seconds
+	Train rv:
+		loss: 0.05703219398856163
+		acc: 0.9791725978647686
+	Val rv:
+		loss: 1.7707267999649048
+		acc: 0.7193368544600939
+Epochs without improvement: 59
+Epoch 87 complete in 64.6747395992279 seconds
+	Train rv:
+		loss: 0.01919568143785
+		acc: 0.9909608540925267
+	Val rv:
+		loss: 1.6126604080200195
+		acc: 0.718456572769953
+Epochs without improvement: 60
+Epoch 88 complete in 64.86616492271423 seconds
+	Train rv:
+		loss: 0.014485375955700874
+		acc: 0.9907695729537367
+	Val rv:
+		loss: 1.680983304977417
+		acc: 0.7265258215962441
+Epochs without improvement: 61
+Epoch 89 complete in 65.37831091880798 seconds
+	Train rv:
+		loss: 0.013182717375457287
+		acc: 0.9910720640569395
+	Val rv:
+		loss: 1.65476655960083
+		acc: 0.7362089201877935
+Epochs without improvement: 62
+Epoch 90 complete in 65.23373651504517 seconds
+	Train rv:
+		loss: 0.012422628700733185
+		acc: 0.9916592526690391
+	Val rv:
+		loss: 1.579181432723999
+		acc: 0.738849765258216
+Epochs without improvement: 63
+Epoch 91 complete in 64.62788677215576 seconds
+	Train rv:
+		loss: 0.012169045396149158
+		acc: 0.9914368327402135
+	Val rv:
+		loss: 1.6510483026504517
+		acc: 0.7321009389671361
+Epochs without improvement: 64
+Epoch 92 complete in 65.2067334651947 seconds
+	Train rv:
+		loss: 0.012875104323029518
+		acc: 0.9909919928825622
+	Val rv:
+		loss: 1.6739277839660645
+		acc: 0.7362089201877935
+Epochs without improvement: 65
+Epoch 93 complete in 65.35507202148438 seconds
+	Train rv:
+		loss: 0.1776752918958664
+		acc: 0.9462544483985764
+	Val rv:
+		loss: 2.0133674144744873
+		acc: 0.6616784037558685
+Epochs without improvement: 66
+Epoch 94 complete in 64.56333518028259 seconds
+	Train rv:
+		loss: 0.12512674927711487
+		acc: 0.9593772241992882
+	Val rv:
+		loss: 1.9442384243011475
+		acc: 0.6828051643192488
+Epochs without improvement: 67
+Epoch 95 complete in 64.53341555595398 seconds
+	Train rv:
+		loss: 0.046390600502491
+		acc: 0.9843193950177936
+	Val rv:
+		loss: 1.737817645072937
+		acc: 0.7055457746478874
+Epochs without improvement: 68
+Epoch 96 complete in 64.38780093193054 seconds
+	Train rv:
+		loss: 0.01993013359606266
+		acc: 0.989991103202847
+	Val rv:
+		loss: 1.7465505599975586
+		acc: 0.7193368544600939
+Epochs without improvement: 69
+Epoch 97 complete in 64.44680547714233 seconds
+	Train rv:
+		loss: 0.07797208428382874
+		acc: 0.9742482206405695
+	Val rv:
+		loss: 1.9819132089614868
+		acc: 0.6782570422535211
+Epochs without improvement: 70
+Epoch 98 complete in 65.29505252838135 seconds
+	Train rv:
+		loss: 0.06430362164974213
+		acc: 0.9779492882562277
+	Val rv:
+		loss: 1.841187596321106
+		acc: 0.6964495305164319
+Epochs without improvement: 71
+Epoch 99 complete in 64.34276556968689 seconds
+	Train rv:
+		loss: 0.05288958176970482
+		acc: 0.9809830960854092
+	Val rv:
+		loss: 2.001605749130249
+		acc: 0.7064260563380281
+Epochs without improvement: 72
+Epoch 100 complete in 65.10119414329529 seconds
+	Train rv:
+		loss: 0.02753598242998123
+		acc: 0.9872909252669039
+	Val rv:
+		loss: 1.863275408744812
+		acc: 0.7108274647887324
+Epochs without improvement: 73
+Done.
+
+
+
+
+Training a feature extractor using erm on <class 'datasets.domainbed.PACS'> with domain art_painting held out.
+Training a feature extractor.
+Save dir: ./results/PACS/omit_art_painting/erm_pretrained/trial_0
+Constructor kwargs: {'dataset_constructor': <class 'datasets.domainbed.PACS'>, 'device': 'cuda:2', 'dataset_kwargs': {'domains_to_use': ['cartoon', 'photo', 'sketch'], 'data_transform': Compose(
+    Resize(size=(224, 224), interpolation=bilinear)
+    ToTensor()
+    Lambda()
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+)}, 'dataloader_kwargs': {'batch_size': 32, 'num_workers': 10}, 'model_constructor': <class 'models.resnet.PretrainedRN50'>, 'model_kwargs': {'pretrained': True}, 'optimizer_constructor': <class 'torch.optim.adam.Adam'>, 'optimizer_kwargs': {'lr': 0.0002, 'weight_decay': 0.0001}, 'loss_fn_constructor': <class 'torch.nn.modules.loss.CrossEntropyLoss'>, 'loss_fn_kwargs': {}}
+Epoch 1 complete in 45.68425011634827 seconds
+	Train rv:
+		loss: 1.225822925567627
+		acc: 0.5358453451467865
+	Val rv:
+		loss: 0.9245929718017578
+		acc: 0.65425
+New best model found.
+Epoch 2 complete in 45.9748113155365 seconds
+	Train rv:
+		loss: 0.6271466612815857
+		acc: 0.7764149695847661
+	Val rv:
+		loss: 0.7562047839164734
+		acc: 0.743625
+New best model found.
+Epoch 3 complete in 45.606115102767944 seconds
+	Train rv:
+		loss: 0.4264011085033417
+		acc: 0.844535175879397
+	Val rv:
+		loss: 0.3823791742324829
+		acc: 0.8691249999999999
+New best model found.
+Epoch 4 complete in 45.50734853744507 seconds
+	Train rv:
+		loss: 0.2655891180038452
+		acc: 0.9066136604072996
+	Val rv:
+		loss: 0.2755526602268219
+		acc: 0.9066249999999999
+New best model found.
+Epoch 5 complete in 46.02364635467529 seconds
+	Train rv:
+		loss: 0.17192260921001434
+		acc: 0.9417895398042846
+	Val rv:
+		loss: 0.2697884142398834
+		acc: 0.9201250000000001
+New best model found.
+Epoch 6 complete in 45.48860788345337 seconds
+	Train rv:
+		loss: 0.13172917068004608
+		acc: 0.9546168341708543
+	Val rv:
+		loss: 0.3975662291049957
+		acc: 0.86575
+Epochs without improvement: 1
+Epoch 7 complete in 45.903027057647705 seconds
+	Train rv:
+		loss: 0.1225258931517601
+		acc: 0.9615263819095478
+	Val rv:
+		loss: 0.2286737859249115
+		acc: 0.9216249999999999
+New best model found.
+Epoch 8 complete in 45.733052253723145 seconds
+	Train rv:
+		loss: 0.09150733053684235
+		acc: 0.970055871462576
+	Val rv:
+		loss: 0.3038845360279083
+		acc: 0.91175
+Epochs without improvement: 1
+Epoch 9 complete in 45.87040185928345 seconds
+	Train rv:
+		loss: 0.0854346752166748
+		acc: 0.9752380322665961
+	Val rv:
+		loss: 0.6179494261741638
+		acc: 0.8847499999999999
+Epochs without improvement: 2
+Epoch 10 complete in 45.913902282714844 seconds
+	Train rv:
+		loss: 0.11270275712013245
+		acc: 0.9623611478444856
+	Val rv:
+		loss: 0.6169793605804443
+		acc: 0.843125
+Epochs without improvement: 3
+Epoch 11 complete in 45.60514044761658 seconds
+	Train rv:
+		loss: 0.07388875633478165
+		acc: 0.9773869346733668
+	Val rv:
+		loss: 0.3056904077529907
+		acc: 0.91175
+Epochs without improvement: 4
+Epoch 12 complete in 45.5109498500824 seconds
+	Train rv:
+		loss: 0.056812871247529984
+		acc: 0.9816764744776514
+	Val rv:
+		loss: 0.25870203971862793
+		acc: 0.9185
+Epochs without improvement: 5
+Epoch 13 complete in 45.75042533874512 seconds
+	Train rv:
+		loss: 0.05074755847454071
+		acc: 0.9840320021158424
+	Val rv:
+		loss: 0.3966117203235626
+		acc: 0.901125
+Epochs without improvement: 6
+Epoch 14 complete in 45.69308948516846 seconds
+	Train rv:
+		loss: 0.03700650855898857
+		acc: 0.989321608040201
+	Val rv:
+		loss: 0.2635272145271301
+		acc: 0.912625
+Epochs without improvement: 7
+Epoch 15 complete in 45.47657799720764 seconds
+	Train rv:
+		loss: 0.06445691734552383
+		acc: 0.9802631578947368
+	Val rv:
+		loss: 0.3899763226509094
+		acc: 0.8995000000000001
+Epochs without improvement: 8
+Epoch 16 complete in 45.50842332839966 seconds
+	Train rv:
+		loss: 0.08994585275650024
+		acc: 0.9756595477386935
+	Val rv:
+		loss: 0.430548757314682
+		acc: 0.88575
+Epochs without improvement: 9
+Epoch 17 complete in 45.620197772979736 seconds
+	Train rv:
+		loss: 0.04511765018105507
+		acc: 0.9857593890505157
+	Val rv:
+		loss: 0.24587133526802063
+		acc: 0.92825
+New best model found.
+Epoch 18 complete in 45.5838782787323 seconds
+	Train rv:
+		loss: 0.03847856447100639
+		acc: 0.9879082914572864
+	Val rv:
+		loss: 0.24347327649593353
+		acc: 0.9259999999999999
+Epochs without improvement: 1
+Epoch 19 complete in 45.59615755081177 seconds
+	Train rv:
+		loss: 0.024488266557455063
+		acc: 0.9919912060301508
+	Val rv:
+		loss: 0.3106840252876282
+		acc: 0.922375
+Epochs without improvement: 2
+Epoch 20 complete in 45.84830951690674 seconds
+	Train rv:
+		loss: 0.05157635733485222
+		acc: 0.9842964824120602
+	Val rv:
+		loss: 0.43615517020225525
+		acc: 0.90575
+Epochs without improvement: 3
+Epoch 21 complete in 45.8808057308197 seconds
+	Train rv:
+		loss: 0.06397980451583862
+		acc: 0.9792713567839196
+	Val rv:
+		loss: 0.44631680846214294
+		acc: 0.86925
+Epochs without improvement: 4
+Epoch 22 complete in 45.900893688201904 seconds
+	Train rv:
+		loss: 0.048422425985336304
+		acc: 0.9859164242263951
+	Val rv:
+		loss: 0.53316330909729
+		acc: 0.8803749999999999
+Epochs without improvement: 5
+Epoch 23 complete in 45.74275469779968 seconds
+	Train rv:
+		loss: 0.03358200192451477
+		acc: 0.9882223618090452
+	Val rv:
+		loss: 0.40378475189208984
+		acc: 0.896375
+Epochs without improvement: 6
+Epoch 24 complete in 45.45860576629639 seconds
+	Train rv:
+		loss: 0.029388805851340294
+		acc: 0.9904208542713567
+	Val rv:
+		loss: 0.409089058637619
+		acc: 0.8775
+Epochs without improvement: 7
+Epoch 25 complete in 45.96704292297363 seconds
+	Train rv:
+		loss: 0.0522528700530529
+		acc: 0.9849246231155779
+	Val rv:
+		loss: 0.3589790463447571
+		acc: 0.912
+Epochs without improvement: 8
+Epoch 26 complete in 45.99106311798096 seconds
+	Train rv:
+		loss: 0.02663557231426239
+		acc: 0.9919912060301508
+	Val rv:
+		loss: 0.4036256670951843
+		acc: 0.901375
+Epochs without improvement: 9
+Epoch 27 complete in 46.07819223403931 seconds
+	Train rv:
+		loss: 0.05107849836349487
+		acc: 0.9841394472361809
+	Val rv:
+		loss: 0.3877231478691101
+		acc: 0.897625
+Epochs without improvement: 10
+Epoch 28 complete in 45.73019862174988 seconds
+	Train rv:
+		loss: 0.017504556104540825
+		acc: 0.9938756281407035
+	Val rv:
+		loss: 0.30718255043029785
+		acc: 0.92325
+Epochs without improvement: 11
+Epoch 29 complete in 45.974897623062134 seconds
+	Train rv:
+		loss: 0.033396098762750626
+		acc: 0.9897927135678392
+	Val rv:
+		loss: 0.34752875566482544
+		acc: 0.912
+Epochs without improvement: 12
+Epoch 30 complete in 45.697946310043335 seconds
+	Train rv:
+		loss: 0.030781462788581848
+		acc: 0.9886934673366834
+	Val rv:
+		loss: 0.3392786681652069
+		acc: 0.918625
+Epochs without improvement: 13
+Epoch 31 complete in 45.59435844421387 seconds
+	Train rv:
+		loss: 0.036221057176589966
+		acc: 0.9890075376884422
+	Val rv:
+		loss: 0.6029312610626221
+		acc: 0.86125
+Epochs without improvement: 14
+Epoch 32 complete in 45.42445254325867 seconds
+	Train rv:
+		loss: 0.029801450669765472
+		acc: 0.9895282332716212
+	Val rv:
+		loss: 0.38550400733947754
+		acc: 0.903
+Epochs without improvement: 15
+Epoch 33 complete in 45.71419882774353 seconds
+	Train rv:
+		loss: 0.005716228391975164
+		acc: 0.9990577889447236
+	Val rv:
+		loss: 0.3238886892795563
+		acc: 0.9313750000000001
+New best model found.
+Epoch 34 complete in 46.021453857421875 seconds
+	Train rv:
+		loss: 0.01427897997200489
+		acc: 0.9954459798994975
+	Val rv:
+		loss: 0.44585755467414856
+		acc: 0.891375
+Epochs without improvement: 1
+Epoch 35 complete in 45.90229392051697 seconds
+	Train rv:
+		loss: 0.12825047969818115
+		acc: 0.9641959798994975
+	Val rv:
+		loss: 0.5346033573150635
+		acc: 0.85875
+Epochs without improvement: 2
+Epoch 36 complete in 45.89356756210327 seconds
+	Train rv:
+		loss: 0.048632070422172546
+		acc: 0.9852882835228776
+	Val rv:
+		loss: 0.5056097507476807
+		acc: 0.87725
+Epochs without improvement: 3
+Epoch 37 complete in 45.777785778045654 seconds
+	Train rv:
+		loss: 0.02925483137369156
+		acc: 0.9918341708542714
+	Val rv:
+		loss: 0.3712795674800873
+		acc: 0.919
+Epochs without improvement: 4
+Epoch 38 complete in 45.95859336853027 seconds
+	Train rv:
+		loss: 0.01285956148058176
+		acc: 0.9967022613065326
+	Val rv:
+		loss: 0.35810714960098267
+		acc: 0.9051250000000001
+Epochs without improvement: 5
+Epoch 39 complete in 46.203065633773804 seconds
+	Train rv:
+		loss: 0.0056864977814257145
+		acc: 0.9985866834170855
+	Val rv:
+		loss: 0.340266615152359
+		acc: 0.922375
+Epochs without improvement: 6
+Epoch 40 complete in 46.09335422515869 seconds
+	Train rv:
+		loss: 0.00016554619651287794
+		acc: 1.0
+	Val rv:
+		loss: 0.3519466519355774
+		acc: 0.926125
+Epochs without improvement: 7
+Epoch 41 complete in 46.11554574966431 seconds
+	Train rv:
+		loss: 4.717448973678984e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.357263445854187
+		acc: 0.9255
+Epochs without improvement: 8
+Epoch 42 complete in 46.04433465003967 seconds
+	Train rv:
+		loss: 3.639099668362178e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.3590978682041168
+		acc: 0.926125
+Epochs without improvement: 9
+Epoch 43 complete in 45.71227550506592 seconds
+	Train rv:
+		loss: 3.363191717653535e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.36019736528396606
+		acc: 0.9263750000000001
+Epochs without improvement: 10
+Epoch 44 complete in 45.69439911842346 seconds
+	Train rv:
+		loss: 2.9171047572162934e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.36123988032341003
+		acc: 0.925125
+Epochs without improvement: 11
+Epoch 45 complete in 45.65260601043701 seconds
+	Train rv:
+		loss: 2.9005348551436327e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.3603934049606323
+		acc: 0.9263750000000001
+Epochs without improvement: 12
+Epoch 46 complete in 46.07654285430908 seconds
+	Train rv:
+		loss: 2.6432522645336576e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.3611895740032196
+		acc: 0.9295
+Epochs without improvement: 13
+Epoch 47 complete in 45.58010983467102 seconds
+	Train rv:
+		loss: 2.6181167413596995e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.3627306818962097
+		acc: 0.927625
+Epochs without improvement: 14
+Epoch 48 complete in 45.7873477935791 seconds
+	Train rv:
+		loss: 2.400168523308821e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.3663962483406067
+		acc: 0.928875
+Epochs without improvement: 15
+Epoch 49 complete in 45.98179769515991 seconds
+	Train rv:
+		loss: 2.0926279830746353e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.3735600411891937
+		acc: 0.930125
+Epochs without improvement: 16
+Epoch 50 complete in 46.0825560092926 seconds
+	Train rv:
+		loss: 2.0182100342935883e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.3862041234970093
+		acc: 0.930125
+Epochs without improvement: 17
+Epoch 51 complete in 45.961970806121826 seconds
+	Train rv:
+		loss: 1.7353098883177154e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.39595192670822144
+		acc: 0.928875
+Epochs without improvement: 18
+Epoch 52 complete in 46.379305362701416 seconds
+	Train rv:
+		loss: 1.9563045498216525e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.39678317308425903
+		acc: 0.9307500000000001
+Epochs without improvement: 19
+Epoch 53 complete in 45.82611608505249 seconds
+	Train rv:
+		loss: 0.2333989292383194
+		acc: 0.9199037952922507
+	Val rv:
+		loss: 0.6218230128288269
+		acc: 0.78975
+Epochs without improvement: 20
+Epoch 54 complete in 45.53026103973389 seconds
+	Train rv:
+		loss: 0.265340656042099
+		acc: 0.9111180904522613
+	Val rv:
+		loss: 0.5266408324241638
+		acc: 0.8688750000000001
+Epochs without improvement: 21
+Epoch 55 complete in 45.78247666358948 seconds
+	Train rv:
+		loss: 0.06917688250541687
+		acc: 0.9791143216080402
+	Val rv:
+		loss: 0.3831653296947479
+		acc: 0.89075
+Epochs without improvement: 22
+Epoch 56 complete in 45.6664834022522 seconds
+	Train rv:
+		loss: 0.033096592873334885
+		acc: 0.9888505025125628
+	Val rv:
+		loss: 0.3561621904373169
+		acc: 0.906375
+Epochs without improvement: 23
+Epoch 57 complete in 45.89744305610657 seconds
+	Train rv:
+		loss: 0.053512342274188995
+		acc: 0.9839824120603015
+	Val rv:
+		loss: 0.39806896448135376
+		acc: 0.911125
+Epochs without improvement: 24
+Epoch 58 complete in 45.75244379043579 seconds
+	Train rv:
+		loss: 0.0356714203953743
+		acc: 0.989321608040201
+	Val rv:
+		loss: 0.4195746183395386
+		acc: 0.9073749999999999
+Epochs without improvement: 25
+Epoch 59 complete in 45.83997392654419 seconds
+	Train rv:
+		loss: 0.01589406654238701
+		acc: 0.9951319095477387
+	Val rv:
+		loss: 0.42706215381622314
+		acc: 0.906375
+Epochs without improvement: 26
+Epoch 60 complete in 45.714882373809814 seconds
+	Train rv:
+		loss: 0.0017012024763971567
+		acc: 0.9995288944723618
+	Val rv:
+		loss: 0.6176830530166626
+		acc: 0.8947499999999999
+Epochs without improvement: 27
+Epoch 61 complete in 45.286166191101074 seconds
+	Train rv:
+		loss: 0.0209339689463377
+		acc: 0.9956030150753769
+	Val rv:
+		loss: 0.4752991497516632
+		acc: 0.908625
+Epochs without improvement: 28
+Epoch 62 complete in 45.47994661331177 seconds
+	Train rv:
+		loss: 0.06048855185508728
+		acc: 0.9805276381909548
+	Val rv:
+		loss: 0.40389692783355713
+		acc: 0.880125
+Epochs without improvement: 29
+Epoch 63 complete in 45.78893303871155 seconds
+	Train rv:
+		loss: 0.026477200910449028
+		acc: 0.9915201005025126
+	Val rv:
+		loss: 0.41755881905555725
+		acc: 0.903875
+Epochs without improvement: 30
+Epoch 64 complete in 45.66829538345337 seconds
+	Train rv:
+		loss: 0.03158102184534073
+		acc: 0.9907845146786565
+	Val rv:
+		loss: 0.647205650806427
+		acc: 0.868
+Epochs without improvement: 31
+Epoch 65 complete in 45.45572519302368 seconds
+	Train rv:
+		loss: 0.02808530069887638
+		acc: 0.9915201005025126
+	Val rv:
+		loss: 0.5562692880630493
+		acc: 0.894125
+Epochs without improvement: 32
+Epoch 66 complete in 45.5656955242157 seconds
+	Train rv:
+		loss: 0.01733706146478653
+		acc: 0.9941896984924623
+	Val rv:
+		loss: 0.4101400375366211
+		acc: 0.8967499999999999
+Epochs without improvement: 33
+Epoch 67 complete in 45.85360097885132 seconds
+	Train rv:
+		loss: 0.02325090393424034
+		acc: 0.9921482412060302
+	Val rv:
+		loss: 0.519073486328125
+		acc: 0.88775
+Epochs without improvement: 34
+Epoch 68 complete in 45.75430345535278 seconds
+	Train rv:
+		loss: 0.02656662091612816
+		acc: 0.9919912060301508
+	Val rv:
+		loss: 0.5057306885719299
+		acc: 0.871375
+Epochs without improvement: 35
+Epoch 69 complete in 45.68146800994873 seconds
+	Train rv:
+		loss: 0.033094558864831924
+		acc: 0.9896356783919598
+	Val rv:
+		loss: 0.4441596567630768
+		acc: 0.9005
+Epochs without improvement: 36
+Epoch 70 complete in 45.835450172424316 seconds
+	Train rv:
+		loss: 0.012875933200120926
+		acc: 0.9951319095477387
+	Val rv:
+		loss: 0.43032485246658325
+		acc: 0.8947499999999999
+Epochs without improvement: 37
+Epoch 71 complete in 45.78845834732056 seconds
+	Train rv:
+		loss: 0.02463569864630699
+		acc: 0.9934045226130653
+	Val rv:
+		loss: 0.4115978479385376
+		acc: 0.901375
+Epochs without improvement: 38
+Epoch 72 complete in 45.816585063934326 seconds
+	Train rv:
+		loss: 0.009467613883316517
+		acc: 0.9976444723618091
+	Val rv:
+		loss: 0.6598707437515259
+		acc: 0.8684999999999999
+Epochs without improvement: 39
+Epoch 73 complete in 45.57904624938965 seconds
+	Train rv:
+		loss: 0.06486066430807114
+		acc: 0.9797424623115578
+	Val rv:
+		loss: 0.4238664209842682
+		acc: 0.8917499999999999
+Epochs without improvement: 40
+Epoch 74 complete in 45.64589166641235 seconds
+	Train rv:
+		loss: 0.0231062900274992
+		acc: 0.9934541126686062
+	Val rv:
+		loss: 0.48382553458213806
+		acc: 0.8853749999999999
+Epochs without improvement: 41
+Epoch 75 complete in 45.27875328063965 seconds
+	Train rv:
+		loss: 0.013837541453540325
+		acc: 0.9948178391959799
+	Val rv:
+		loss: 0.47621044516563416
+		acc: 0.912875
+Epochs without improvement: 42
+Epoch 76 complete in 45.68618679046631 seconds
+	Train rv:
+		loss: 0.020777147263288498
+		acc: 0.9935615577889447
+	Val rv:
+		loss: 0.459174245595932
+		acc: 0.89
+Epochs without improvement: 43
+Epoch 77 complete in 45.76900935173035 seconds
+	Train rv:
+		loss: 0.0368252694606781
+		acc: 0.9881149166887067
+	Val rv:
+		loss: 0.36185237765312195
+		acc: 0.9047499999999999
+Epochs without improvement: 44
+Epoch 78 complete in 45.68296241760254 seconds
+	Train rv:
+		loss: 0.01659298688173294
+		acc: 0.9951319095477387
+	Val rv:
+		loss: 0.36029309034347534
+		acc: 0.92025
+Epochs without improvement: 45
+Epoch 79 complete in 45.639819622039795 seconds
+	Train rv:
+		loss: 0.02024102583527565
+		acc: 0.9935615577889447
+	Val rv:
+		loss: 0.521345317363739
+		acc: 0.8885
+Epochs without improvement: 46
+Epoch 80 complete in 45.931915044784546 seconds
+	Train rv:
+		loss: 0.026659715920686722
+		acc: 0.9918341708542714
+	Val rv:
+		loss: 0.3935680091381073
+		acc: 0.897625
+Epochs without improvement: 47
+Epoch 81 complete in 45.57893681526184 seconds
+	Train rv:
+		loss: 0.002769774291664362
+		acc: 0.9993718592964824
+	Val rv:
+		loss: 0.47531554102897644
+		acc: 0.9009999999999999
+Epochs without improvement: 48
+Epoch 82 complete in 45.65053868293762 seconds
+	Train rv:
+		loss: 0.040252335369586945
+		acc: 0.9901067839195979
+	Val rv:
+		loss: 0.5472787618637085
+		acc: 0.88575
+Epochs without improvement: 49
+Epoch 83 complete in 45.55213665962219 seconds
+	Train rv:
+		loss: 0.030934900045394897
+		acc: 0.990891959798995
+	Val rv:
+		loss: 0.43945226073265076
+		acc: 0.89725
+Epochs without improvement: 50
+Epoch 84 complete in 45.46195673942566 seconds
+	Train rv:
+		loss: 0.008632824756205082
+		acc: 0.9974874371859297
+	Val rv:
+		loss: 0.5369967818260193
+		acc: 0.877375
+Epochs without improvement: 51
+Epoch 85 complete in 45.554134130477905 seconds
+	Train rv:
+		loss: 0.023898884654045105
+		acc: 0.9932474874371859
+	Val rv:
+		loss: 0.5721997618675232
+		acc: 0.899875
+Epochs without improvement: 52
+Epoch 86 complete in 45.55192232131958 seconds
+	Train rv:
+		loss: 0.006024822127074003
+		acc: 0.9979585427135679
+	Val rv:
+		loss: 0.549159824848175
+		acc: 0.8951250000000001
+Epochs without improvement: 53
+Epoch 87 complete in 45.351367473602295 seconds
+	Train rv:
+		loss: 0.03966927528381348
+		acc: 0.9897927135678392
+	Val rv:
+		loss: 0.486354798078537
+		acc: 0.8909999999999999
+Epochs without improvement: 54
+Epoch 88 complete in 45.207287073135376 seconds
+	Train rv:
+		loss: 0.024964485317468643
+		acc: 0.9920903861412325
+	Val rv:
+		loss: 0.4353664517402649
+		acc: 0.89725
+Epochs without improvement: 55
+Epoch 89 complete in 45.72174096107483 seconds
+	Train rv:
+		loss: 0.04569513350725174
+		acc: 0.9871231155778895
+	Val rv:
+		loss: 0.4892948865890503
+		acc: 0.882375
+Epochs without improvement: 56
+Epoch 90 complete in 45.577898263931274 seconds
+	Train rv:
+		loss: 0.027917679399251938
+		acc: 0.991677135678392
+	Val rv:
+		loss: 0.40498340129852295
+		acc: 0.903625
+Epochs without improvement: 57
+Epoch 91 complete in 45.70628380775452 seconds
+	Train rv:
+		loss: 0.01544377114623785
+		acc: 0.9954459798994975
+	Val rv:
+		loss: 0.4357708990573883
+		acc: 0.896125
+Epochs without improvement: 58
+Epoch 92 complete in 45.426687240600586 seconds
+	Train rv:
+		loss: 0.0007604339625686407
+		acc: 1.0
+	Val rv:
+		loss: 0.38814452290534973
+		acc: 0.918625
+Epochs without improvement: 59
+Epoch 93 complete in 45.51345610618591 seconds
+	Train rv:
+		loss: 9.062703611562029e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.3888695538043976
+		acc: 0.9205
+Epochs without improvement: 60
+Epoch 94 complete in 45.63259816169739 seconds
+	Train rv:
+		loss: 4.545109186437912e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.39346373081207275
+		acc: 0.92175
+Epochs without improvement: 61
+Epoch 95 complete in 45.56876754760742 seconds
+	Train rv:
+		loss: 3.8263238820945844e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.40145328640937805
+		acc: 0.924875
+Epochs without improvement: 62
+Epoch 96 complete in 45.74326705932617 seconds
+	Train rv:
+		loss: 2.9530971005442552e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4225698709487915
+		acc: 0.92675
+Epochs without improvement: 63
+Epoch 97 complete in 45.64559602737427 seconds
+	Train rv:
+		loss: 2.0233459508745e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.44109249114990234
+		acc: 0.919875
+Epochs without improvement: 64
+Epoch 98 complete in 45.760411739349365 seconds
+	Train rv:
+		loss: 1.4734922842762899e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.44121506810188293
+		acc: 0.927375
+Epochs without improvement: 65
+Epoch 99 complete in 45.55024313926697 seconds
+	Train rv:
+		loss: 1.3801795830659103e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.45055997371673584
+		acc: 0.924875
+Epochs without improvement: 66
+Epoch 100 complete in 45.88218140602112 seconds
+	Train rv:
+		loss: 1.3357779607758857e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4434509575366974
+		acc: 0.927375
+Epochs without improvement: 67
+Done.
+
+
+
+
+Training a feature extractor using erm on <class 'datasets.domainbed.PACS'> with domain cartoon held out.
+Training a feature extractor.
+Save dir: ./results/PACS/omit_cartoon/erm_pretrained/trial_0
+Constructor kwargs: {'dataset_constructor': <class 'datasets.domainbed.PACS'>, 'device': 'cuda:2', 'dataset_kwargs': {'domains_to_use': ['art_painting', 'photo', 'sketch'], 'data_transform': Compose(
+    Resize(size=(224, 224), interpolation=bilinear)
+    ToTensor()
+    Lambda()
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+)}, 'dataloader_kwargs': {'batch_size': 32, 'num_workers': 10}, 'model_constructor': <class 'models.resnet.PretrainedRN50'>, 'model_kwargs': {'pretrained': True}, 'optimizer_constructor': <class 'torch.optim.adam.Adam'>, 'optimizer_kwargs': {'lr': 0.0002, 'weight_decay': 0.0001}, 'loss_fn_constructor': <class 'torch.nn.modules.loss.CrossEntropyLoss'>, 'loss_fn_kwargs': {}}
+Epoch 1 complete in 43.95886969566345 seconds
+	Train rv:
+		loss: 1.5805631875991821
+		acc: 0.3644205729166667
+	Val rv:
+		loss: 1.2537927627563477
+		acc: 0.4810677083333334
+New best model found.
+Epoch 2 complete in 43.84277105331421 seconds
+	Train rv:
+		loss: 1.0467947721481323
+		acc: 0.6026475694444444
+	Val rv:
+		loss: 1.0289703607559204
+		acc: 0.5992708333333333
+New best model found.
+Epoch 3 complete in 43.8616669178009 seconds
+	Train rv:
+		loss: 0.7038251757621765
+		acc: 0.7375217013888888
+	Val rv:
+		loss: 0.6430691480636597
+		acc: 0.7516927083333332
+New best model found.
+Epoch 4 complete in 44.01820516586304 seconds
+	Train rv:
+		loss: 0.4606659710407257
+		acc: 0.8368598090277778
+	Val rv:
+		loss: 0.40288805961608887
+		acc: 0.86171875
+New best model found.
+Epoch 5 complete in 43.871954679489136 seconds
+	Train rv:
+		loss: 0.32256072759628296
+		acc: 0.8837348090277778
+	Val rv:
+		loss: 0.5253748297691345
+		acc: 0.8298177083333332
+Epochs without improvement: 1
+Epoch 6 complete in 43.674028158187866 seconds
+	Train rv:
+		loss: 0.23291794955730438
+		acc: 0.9222005208333334
+	Val rv:
+		loss: 0.588348925113678
+		acc: 0.8346614583333333
+Epochs without improvement: 2
+Epoch 7 complete in 43.8734917640686 seconds
+	Train rv:
+		loss: 0.19592583179473877
+		acc: 0.9348958333333334
+	Val rv:
+		loss: 0.4843014180660248
+		acc: 0.8327083333333333
+Epochs without improvement: 3
+Epoch 8 complete in 43.87424278259277 seconds
+	Train rv:
+		loss: 0.13727618753910065
+		acc: 0.9529079861111112
+	Val rv:
+		loss: 0.3246207535266876
+		acc: 0.8972395833333332
+New best model found.
+Epoch 9 complete in 43.86268067359924 seconds
+	Train rv:
+		loss: 0.09912339597940445
+		acc: 0.9651692708333334
+	Val rv:
+		loss: 0.43844494223594666
+		acc: 0.8794791666666667
+Epochs without improvement: 1
+Epoch 10 complete in 44.07045865058899 seconds
+	Train rv:
+		loss: 0.0768241286277771
+		acc: 0.9765625
+	Val rv:
+		loss: 0.4977943003177643
+		acc: 0.8975260416666666
+New best model found.
+Epoch 11 complete in 43.808820962905884 seconds
+	Train rv:
+		loss: 0.10217928886413574
+		acc: 0.9664171006944445
+	Val rv:
+		loss: 0.32640770077705383
+		acc: 0.8936197916666666
+Epochs without improvement: 1
+Epoch 12 complete in 44.343785762786865 seconds
+	Train rv:
+		loss: 0.09231037646532059
+		acc: 0.970703125
+	Val rv:
+		loss: 0.5299842953681946
+		acc: 0.8630208333333332
+Epochs without improvement: 2
+Epoch 13 complete in 44.35684633255005 seconds
+	Train rv:
+		loss: 0.060425180941820145
+		acc: 0.9778645833333334
+	Val rv:
+		loss: 0.6262320876121521
+		acc: 0.8749218750000001
+Epochs without improvement: 3
+Epoch 14 complete in 44.46370506286621 seconds
+	Train rv:
+		loss: 0.08267092704772949
+		acc: 0.9742838541666666
+	Val rv:
+		loss: 0.4284287989139557
+		acc: 0.8768750000000001
+Epochs without improvement: 4
+Epoch 15 complete in 43.87768769264221 seconds
+	Train rv:
+		loss: 0.042668793350458145
+		acc: 0.9861653645833334
+	Val rv:
+		loss: 0.5084971785545349
+		acc: 0.8605989583333334
+Epochs without improvement: 5
+Epoch 16 complete in 44.367608308792114 seconds
+	Train rv:
+		loss: 0.05249558016657829
+		acc: 0.9807942708333334
+	Val rv:
+		loss: 0.5076811909675598
+		acc: 0.867578125
+Epochs without improvement: 6
+Epoch 17 complete in 44.40103578567505 seconds
+	Train rv:
+		loss: 0.05751119181513786
+		acc: 0.9816080729166666
+	Val rv:
+		loss: 0.45031848549842834
+		acc: 0.8970572916666667
+Epochs without improvement: 7
+Epoch 18 complete in 44.353041648864746 seconds
+	Train rv:
+		loss: 0.06009207293391228
+		acc: 0.9803059895833334
+	Val rv:
+		loss: 0.3826870024204254
+		acc: 0.8894270833333332
+Epochs without improvement: 8
+Epoch 19 complete in 43.81956434249878 seconds
+	Train rv:
+		loss: 0.044299591332674026
+		acc: 0.9850260416666666
+	Val rv:
+		loss: 0.530285656452179
+		acc: 0.889609375
+Epochs without improvement: 9
+Epoch 20 complete in 44.27991724014282 seconds
+	Train rv:
+		loss: 0.07256751507520676
+		acc: 0.9758572048611112
+	Val rv:
+		loss: 0.4680718183517456
+		acc: 0.8749218750000001
+Epochs without improvement: 10
+Epoch 21 complete in 44.382511615753174 seconds
+	Train rv:
+		loss: 0.055724456906318665
+		acc: 0.9847005208333334
+	Val rv:
+		loss: 0.5526520609855652
+		acc: 0.8701822916666666
+Epochs without improvement: 11
+Epoch 22 complete in 44.04711699485779 seconds
+	Train rv:
+		loss: 0.042888909578323364
+		acc: 0.9866536458333334
+	Val rv:
+		loss: 0.5042333602905273
+		acc: 0.8755729166666667
+Epochs without improvement: 12
+Epoch 23 complete in 44.42128801345825 seconds
+	Train rv:
+		loss: 0.051564693450927734
+		acc: 0.984375
+	Val rv:
+		loss: 0.47388124465942383
+		acc: 0.876796875
+Epochs without improvement: 13
+Epoch 24 complete in 44.12061023712158 seconds
+	Train rv:
+		loss: 0.04395444318652153
+		acc: 0.9855143229166666
+	Val rv:
+		loss: 0.505305290222168
+		acc: 0.8814322916666667
+Epochs without improvement: 14
+Epoch 25 complete in 44.33964538574219 seconds
+	Train rv:
+		loss: 0.011028223671019077
+		acc: 0.9977213541666666
+	Val rv:
+		loss: 0.5361073613166809
+		acc: 0.8970572916666667
+Epochs without improvement: 15
+Epoch 26 complete in 43.84697985649109 seconds
+	Train rv:
+		loss: 0.0784609243273735
+		acc: 0.97509765625
+	Val rv:
+		loss: 0.43888139724731445
+		acc: 0.8814322916666667
+Epochs without improvement: 16
+Epoch 27 complete in 43.88397574424744 seconds
+	Train rv:
+		loss: 0.034415408968925476
+		acc: 0.9900716145833334
+	Val rv:
+		loss: 0.7375223636627197
+		acc: 0.8312239583333333
+Epochs without improvement: 17
+Epoch 28 complete in 43.75473690032959 seconds
+	Train rv:
+		loss: 0.07160956412553787
+		acc: 0.9775390625
+	Val rv:
+		loss: 0.4680171012878418
+		acc: 0.8820833333333334
+Epochs without improvement: 18
+Epoch 29 complete in 44.232081174850464 seconds
+	Train rv:
+		loss: 0.03242107108235359
+		acc: 0.9882269965277778
+	Val rv:
+		loss: 0.4308133125305176
+		acc: 0.8755729166666667
+Epochs without improvement: 19
+Epoch 30 complete in 43.68768668174744 seconds
+	Train rv:
+		loss: 0.07650677114725113
+		acc: 0.97314453125
+	Val rv:
+		loss: 0.5460649132728577
+		acc: 0.8732552083333333
+Epochs without improvement: 20
+Epoch 31 complete in 44.16894841194153 seconds
+	Train rv:
+		loss: 0.023742981255054474
+		acc: 0.9925130208333334
+	Val rv:
+		loss: 0.46249327063560486
+		acc: 0.8904427083333334
+Epochs without improvement: 21
+Epoch 32 complete in 43.97165632247925 seconds
+	Train rv:
+		loss: 0.03624939173460007
+		acc: 0.9889322916666666
+	Val rv:
+		loss: 0.8011379241943359
+		acc: 0.8492447916666667
+Epochs without improvement: 22
+Epoch 33 complete in 44.222768783569336 seconds
+	Train rv:
+		loss: 0.046799857169389725
+		acc: 0.98681640625
+	Val rv:
+		loss: 0.496484637260437
+		acc: 0.9042187500000001
+New best model found.
+Epoch 34 complete in 43.750755310058594 seconds
+	Train rv:
+		loss: 0.030049005523324013
+		acc: 0.9921875
+	Val rv:
+		loss: 0.4769979417324066
+		acc: 0.8781770833333334
+Epochs without improvement: 1
+Epoch 35 complete in 43.853840827941895 seconds
+	Train rv:
+		loss: 0.02023833803832531
+		acc: 0.9939778645833334
+	Val rv:
+		loss: 0.4339158833026886
+		acc: 0.8855208333333332
+Epochs without improvement: 2
+Epoch 36 complete in 43.97480249404907 seconds
+	Train rv:
+		loss: 0.0017874864861369133
+		acc: 0.9998372395833334
+	Val rv:
+		loss: 0.4287252426147461
+		acc: 0.9120312500000001
+New best model found.
+Epoch 37 complete in 43.76646971702576 seconds
+	Train rv:
+		loss: 6.790264160372317e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4236815869808197
+		acc: 0.9113802083333334
+Epochs without improvement: 1
+Epoch 38 complete in 43.893842935562134 seconds
+	Train rv:
+		loss: 3.6385474231792614e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.42348170280456543
+		acc: 0.9094270833333334
+Epochs without improvement: 2
+Epoch 39 complete in 44.116355895996094 seconds
+	Train rv:
+		loss: 3.29163704009261e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4236750602722168
+		acc: 0.9107291666666667
+Epochs without improvement: 3
+Epoch 40 complete in 43.89088010787964 seconds
+	Train rv:
+		loss: 2.969283377751708e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4218311607837677
+		acc: 0.9100781250000001
+Epochs without improvement: 4
+Epoch 41 complete in 43.84405493736267 seconds
+	Train rv:
+		loss: 2.8404800104908645e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4228803217411041
+		acc: 0.9120312500000001
+Epochs without improvement: 5
+Epoch 42 complete in 44.1142041683197 seconds
+	Train rv:
+		loss: 2.700068762351293e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4219101369380951
+		acc: 0.9113802083333334
+Epochs without improvement: 6
+Epoch 43 complete in 44.38846158981323 seconds
+	Train rv:
+		loss: 2.6890682420344092e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.42423486709594727
+		acc: 0.9107291666666667
+Epochs without improvement: 7
+Epoch 44 complete in 44.10215759277344 seconds
+	Train rv:
+		loss: 2.8566884793690406e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.42324161529541016
+		acc: 0.9113802083333334
+Epochs without improvement: 8
+Epoch 45 complete in 44.25131154060364 seconds
+	Train rv:
+		loss: 2.7375755962566473e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.42072805762290955
+		acc: 0.9154687499999999
+New best model found.
+Epoch 46 complete in 43.87457847595215 seconds
+	Train rv:
+		loss: 2.9156386517570354e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.42276832461357117
+		acc: 0.9135156249999999
+Epochs without improvement: 1
+Epoch 47 complete in 44.10485887527466 seconds
+	Train rv:
+		loss: 2.9699760489165783e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4524841606616974
+		acc: 0.9133333333333334
+Epochs without improvement: 2
+Epoch 48 complete in 44.025858879089355 seconds
+	Train rv:
+		loss: 3.1543899240205064e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.43688341975212097
+		acc: 0.9141666666666666
+Epochs without improvement: 3
+Epoch 49 complete in 44.35609245300293 seconds
+	Train rv:
+		loss: 2.4499966457369737e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.46479296684265137
+		acc: 0.9141666666666666
+Epochs without improvement: 4
+Epoch 50 complete in 44.24800229072571 seconds
+	Train rv:
+		loss: 2.7909853088203818e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.45738935470581055
+		acc: 0.9122135416666666
+Epochs without improvement: 5
+Epoch 51 complete in 44.39008688926697 seconds
+	Train rv:
+		loss: 2.701670200622175e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.46279945969581604
+		acc: 0.9141666666666666
+Epochs without improvement: 6
+Epoch 52 complete in 44.29965686798096 seconds
+	Train rv:
+		loss: 3.1782659789314494e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.5396533608436584
+		acc: 0.9037499999999999
+Epochs without improvement: 7
+Epoch 53 complete in 44.33692455291748 seconds
+	Train rv:
+		loss: 0.09869462251663208
+		acc: 0.9660915798611112
+	Val rv:
+		loss: 1.705121636390686
+		acc: 0.49734375000000003
+Epochs without improvement: 8
+Epoch 54 complete in 44.02883505821228 seconds
+	Train rv:
+		loss: 0.5804137587547302
+		acc: 0.80224609375
+	Val rv:
+		loss: 0.5371564626693726
+		acc: 0.8236718749999999
+Epochs without improvement: 9
+Epoch 55 complete in 44.12270498275757 seconds
+	Train rv:
+		loss: 0.15922823548316956
+		acc: 0.9474283854166666
+	Val rv:
+		loss: 0.6536049246788025
+		acc: 0.8319531250000001
+Epochs without improvement: 10
+Epoch 56 complete in 43.65307641029358 seconds
+	Train rv:
+		loss: 0.05893633887171745
+		acc: 0.9822591145833334
+	Val rv:
+		loss: 0.8010623455047607
+		acc: 0.8447916666666666
+Epochs without improvement: 11
+Epoch 57 complete in 43.87791728973389 seconds
+	Train rv:
+		loss: 0.07173354923725128
+		acc: 0.9786783854166666
+	Val rv:
+		loss: 0.6225874423980713
+		acc: 0.8540885416666667
+Epochs without improvement: 12
+Epoch 58 complete in 44.10191345214844 seconds
+	Train rv:
+		loss: 0.051538482308387756
+		acc: 0.9856770833333334
+	Val rv:
+		loss: 0.7138671875
+		acc: 0.8726822916666667
+Epochs without improvement: 13
+Epoch 59 complete in 43.70802116394043 seconds
+	Train rv:
+		loss: 0.023642266169190407
+		acc: 0.9921875
+	Val rv:
+		loss: 0.665677011013031
+		acc: 0.8684114583333334
+Epochs without improvement: 14
+Epoch 60 complete in 43.89915633201599 seconds
+	Train rv:
+		loss: 0.037252869457006454
+		acc: 0.9889322916666666
+	Val rv:
+		loss: 0.8715047836303711
+		acc: 0.8098177083333334
+Epochs without improvement: 15
+Epoch 61 complete in 43.9068717956543 seconds
+	Train rv:
+		loss: 0.03446971997618675
+		acc: 0.9900716145833334
+	Val rv:
+		loss: 0.5953014492988586
+		acc: 0.8751041666666666
+Epochs without improvement: 16
+Epoch 62 complete in 44.048643350601196 seconds
+	Train rv:
+		loss: 0.01787378080189228
+		acc: 0.9939778645833334
+	Val rv:
+		loss: 0.6115878224372864
+		acc: 0.8640364583333332
+Epochs without improvement: 17
+Epoch 63 complete in 43.81615209579468 seconds
+	Train rv:
+		loss: 0.01736082136631012
+		acc: 0.9954427083333334
+	Val rv:
+		loss: 0.7286503314971924
+		acc: 0.8596614583333334
+Epochs without improvement: 18
+Epoch 64 complete in 43.96928119659424 seconds
+	Train rv:
+		loss: 0.054538190364837646
+		acc: 0.9827473958333334
+	Val rv:
+		loss: 0.5524934530258179
+		acc: 0.8710156250000001
+Epochs without improvement: 19
+Epoch 65 complete in 43.88749957084656 seconds
+	Train rv:
+		loss: 0.026954835280776024
+		acc: 0.9915364583333334
+	Val rv:
+		loss: 0.5252618193626404
+		acc: 0.8853385416666667
+Epochs without improvement: 20
+Epoch 66 complete in 43.538668394088745 seconds
+	Train rv:
+		loss: 0.04747307300567627
+		acc: 0.9871419270833334
+	Val rv:
+		loss: 0.5966711640357971
+		acc: 0.8625520833333334
+Epochs without improvement: 21
+Epoch 67 complete in 43.80496573448181 seconds
+	Train rv:
+		loss: 0.031356330960989
+		acc: 0.9908854166666666
+	Val rv:
+		loss: 0.4893294870853424
+		acc: 0.8682291666666666
+Epochs without improvement: 22
+Epoch 68 complete in 43.90701389312744 seconds
+	Train rv:
+		loss: 0.002428589854389429
+		acc: 0.9996744791666666
+	Val rv:
+		loss: 0.5790808796882629
+		acc: 0.8888802083333333
+Epochs without improvement: 23
+Epoch 69 complete in 43.74009370803833 seconds
+	Train rv:
+		loss: 0.00010627618758007884
+		acc: 1.0
+	Val rv:
+		loss: 0.5743787288665771
+		acc: 0.8921354166666666
+Epochs without improvement: 24
+Epoch 70 complete in 43.86213302612305 seconds
+	Train rv:
+		loss: 5.5065862397896126e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.5758121609687805
+		acc: 0.8927864583333333
+Epochs without improvement: 25
+Epoch 71 complete in 43.87373757362366 seconds
+	Train rv:
+		loss: 4.383876148494892e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.5762036442756653
+		acc: 0.8940885416666666
+Epochs without improvement: 26
+Epoch 72 complete in 43.95820498466492 seconds
+	Train rv:
+		loss: 3.845833634841256e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.5763436555862427
+		acc: 0.8940885416666666
+Epochs without improvement: 27
+Epoch 73 complete in 43.99814224243164 seconds
+	Train rv:
+		loss: 3.508352529024705e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.5756195187568665
+		acc: 0.8940885416666666
+Epochs without improvement: 28
+Epoch 74 complete in 43.63118052482605 seconds
+	Train rv:
+		loss: 3.365079828654416e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.574185311794281
+		acc: 0.895390625
+Epochs without improvement: 29
+Epoch 75 complete in 43.863404512405396 seconds
+	Train rv:
+		loss: 3.234327959944494e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.5728030204772949
+		acc: 0.8975260416666666
+Epochs without improvement: 30
+Epoch 76 complete in 43.723748207092285 seconds
+	Train rv:
+		loss: 3.2188512705033645e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.570777952671051
+		acc: 0.8981770833333332
+Epochs without improvement: 31
+Epoch 77 complete in 43.61572194099426 seconds
+	Train rv:
+		loss: 3.1367908377433196e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.573617696762085
+		acc: 0.8981770833333332
+Epochs without improvement: 32
+Epoch 78 complete in 43.81541395187378 seconds
+	Train rv:
+		loss: 3.2127081794897094e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.5744644999504089
+		acc: 0.9014322916666666
+Epochs without improvement: 33
+Epoch 79 complete in 44.082236528396606 seconds
+	Train rv:
+		loss: 3.155205922666937e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.5765278935432434
+		acc: 0.9014322916666666
+Epochs without improvement: 34
+Epoch 80 complete in 43.81416392326355 seconds
+	Train rv:
+		loss: 3.204656604793854e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.5810391306877136
+		acc: 0.9014322916666666
+Epochs without improvement: 35
+Epoch 81 complete in 44.25466752052307 seconds
+	Train rv:
+		loss: 3.1091058190213516e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.5897636413574219
+		acc: 0.9014322916666666
+Epochs without improvement: 36
+Epoch 82 complete in 43.905253171920776 seconds
+	Train rv:
+		loss: 2.7992718969471753e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6146478056907654
+		acc: 0.9014322916666666
+Epochs without improvement: 37
+Epoch 83 complete in 43.920655488967896 seconds
+	Train rv:
+		loss: 3.069082958973013e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6013675332069397
+		acc: 0.9011458333333332
+Epochs without improvement: 38
+Epoch 84 complete in 44.088979721069336 seconds
+	Train rv:
+		loss: 2.7742802558350377e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6146854758262634
+		acc: 0.8998437499999999
+Epochs without improvement: 39
+Epoch 85 complete in 44.29278302192688 seconds
+	Train rv:
+		loss: 8.041554247029126e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6670677661895752
+		acc: 0.8878385416666666
+Epochs without improvement: 40
+Epoch 86 complete in 43.8895628452301 seconds
+	Train rv:
+		loss: 0.4422870874404907
+		acc: 0.8537868923611112
+	Val rv:
+		loss: 0.48523619771003723
+		acc: 0.8498177083333333
+Epochs without improvement: 41
+Epoch 87 complete in 43.536441802978516 seconds
+	Train rv:
+		loss: 0.11775436997413635
+		acc: 0.9646809895833334
+	Val rv:
+		loss: 0.5056500434875488
+		acc: 0.8549218749999999
+Epochs without improvement: 42
+Epoch 88 complete in 44.07394313812256 seconds
+	Train rv:
+		loss: 0.05684947967529297
+		acc: 0.9798177083333334
+	Val rv:
+		loss: 0.5680325031280518
+		acc: 0.8672916666666666
+Epochs without improvement: 43
+Epoch 89 complete in 43.64704513549805 seconds
+	Train rv:
+		loss: 0.038564469665288925
+		acc: 0.9881184895833334
+	Val rv:
+		loss: 0.5905258655548096
+		acc: 0.865625
+Epochs without improvement: 44
+Epoch 90 complete in 43.55272936820984 seconds
+	Train rv:
+		loss: 0.05671413615345955
+		acc: 0.9816080729166666
+	Val rv:
+		loss: 0.5432372093200684
+		acc: 0.8621875
+Epochs without improvement: 45
+Epoch 91 complete in 43.88303875923157 seconds
+	Train rv:
+		loss: 0.011253845877945423
+		acc: 0.9972330729166666
+	Val rv:
+		loss: 0.701686680316925
+		acc: 0.8604947916666666
+Epochs without improvement: 46
+Epoch 92 complete in 43.98185467720032 seconds
+	Train rv:
+		loss: 0.03543991222977638
+		acc: 0.9900716145833334
+	Val rv:
+		loss: 0.592593789100647
+		acc: 0.860234375
+Epochs without improvement: 47
+Epoch 93 complete in 43.528109073638916 seconds
+	Train rv:
+		loss: 0.010096162557601929
+		acc: 0.9964192708333334
+	Val rv:
+		loss: 0.5437850952148438
+		acc: 0.8864583333333332
+Epochs without improvement: 48
+Epoch 94 complete in 43.620599031448364 seconds
+	Train rv:
+		loss: 0.0340123288333416
+		acc: 0.9889322916666666
+	Val rv:
+		loss: 0.6560661792755127
+		acc: 0.8685937499999999
+Epochs without improvement: 49
+Epoch 95 complete in 43.602927446365356 seconds
+	Train rv:
+		loss: 0.0543389618396759
+		acc: 0.9845377604166666
+	Val rv:
+		loss: 0.5565938949584961
+		acc: 0.868125
+Epochs without improvement: 50
+Epoch 96 complete in 44.09936833381653 seconds
+	Train rv:
+		loss: 0.01021858211606741
+		acc: 0.99609375
+	Val rv:
+		loss: 0.6819637417793274
+		acc: 0.8553125
+Epochs without improvement: 51
+Epoch 97 complete in 43.640708923339844 seconds
+	Train rv:
+		loss: 0.015735376626253128
+		acc: 0.9943033854166666
+	Val rv:
+		loss: 0.693470299243927
+		acc: 0.8476822916666666
+Epochs without improvement: 52
+Epoch 98 complete in 43.61080265045166 seconds
+	Train rv:
+		loss: 0.03830154240131378
+		acc: 0.9890950520833334
+	Val rv:
+		loss: 0.5505990386009216
+		acc: 0.8630208333333332
+Epochs without improvement: 53
+Epoch 99 complete in 43.86673331260681 seconds
+	Train rv:
+		loss: 0.004519334994256496
+		acc: 0.9990234375
+	Val rv:
+		loss: 0.6444405913352966
+		acc: 0.8766927083333332
+Epochs without improvement: 54
+Epoch 100 complete in 44.000386238098145 seconds
+	Train rv:
+		loss: 0.00011261490726610646
+		acc: 1.0
+	Val rv:
+		loss: 0.6713576316833496
+		acc: 0.8801302083333334
+Epochs without improvement: 55
+Done.
+
+
+
+
+Training a feature extractor using erm on <class 'datasets.domainbed.PACS'> with domain photo held out.
+Training a feature extractor.
+Save dir: ./results/PACS/omit_photo/erm_pretrained/trial_0
+Constructor kwargs: {'dataset_constructor': <class 'datasets.domainbed.PACS'>, 'device': 'cuda:2', 'dataset_kwargs': {'domains_to_use': ['art_painting', 'cartoon', 'sketch'], 'data_transform': Compose(
+    Resize(size=(224, 224), interpolation=bilinear)
+    ToTensor()
+    Lambda()
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+)}, 'dataloader_kwargs': {'batch_size': 32, 'num_workers': 10}, 'model_constructor': <class 'models.resnet.PretrainedRN50'>, 'model_kwargs': {'pretrained': True}, 'optimizer_constructor': <class 'torch.optim.adam.Adam'>, 'optimizer_kwargs': {'lr': 0.0002, 'weight_decay': 0.0001}, 'loss_fn_constructor': <class 'torch.nn.modules.loss.CrossEntropyLoss'>, 'loss_fn_kwargs': {}}
+Epoch 1 complete in 47.453415393829346 seconds
+	Train rv:
+		loss: 1.498824119567871
+		acc: 0.3965311004784689
+	Val rv:
+		loss: 1.2393771409988403
+		acc: 0.49939903846153844
+New best model found.
+Epoch 2 complete in 47.979413986206055 seconds
+	Train rv:
+		loss: 0.8649306297302246
+		acc: 0.6819677033492823
+	Val rv:
+		loss: 1.079935908317566
+		acc: 0.5979567307692307
+New best model found.
+Epoch 3 complete in 47.59919476509094 seconds
+	Train rv:
+		loss: 0.6828386187553406
+		acc: 0.7580741626794258
+	Val rv:
+		loss: 0.5866522192955017
+		acc: 0.7794471153846154
+New best model found.
+Epoch 4 complete in 48.02443528175354 seconds
+	Train rv:
+		loss: 0.37886756658554077
+		acc: 0.8634868421052632
+	Val rv:
+		loss: 0.6643030643463135
+		acc: 0.7974759615384616
+New best model found.
+Epoch 5 complete in 47.38714098930359 seconds
+	Train rv:
+		loss: 0.25533604621887207
+		acc: 0.9090909090909091
+	Val rv:
+		loss: 0.6070228219032288
+		acc: 0.8034855769230769
+New best model found.
+Epoch 6 complete in 47.52371573448181 seconds
+	Train rv:
+		loss: 0.1884722113609314
+		acc: 0.933761961722488
+	Val rv:
+		loss: 0.645119309425354
+		acc: 0.7764423076923077
+Epochs without improvement: 1
+Epoch 7 complete in 47.60769319534302 seconds
+	Train rv:
+		loss: 0.1403125375509262
+		acc: 0.9530502392344498
+	Val rv:
+		loss: 0.6813908815383911
+		acc: 0.8004807692307693
+Epochs without improvement: 2
+Epoch 8 complete in 47.63213229179382 seconds
+	Train rv:
+		loss: 0.0971798300743103
+		acc: 0.9659090909090909
+	Val rv:
+		loss: 0.5151938796043396
+		acc: 0.8587740384615384
+New best model found.
+Epoch 9 complete in 48.01133680343628 seconds
+	Train rv:
+		loss: 0.10622414201498032
+		acc: 0.9630681818181818
+	Val rv:
+		loss: 0.5636184215545654
+		acc: 0.8305288461538461
+Epochs without improvement: 1
+Epoch 10 complete in 48.19792079925537 seconds
+	Train rv:
+		loss: 0.08155952394008636
+		acc: 0.9735346889952153
+	Val rv:
+		loss: 0.7153106331825256
+		acc: 0.8431490384615384
+Epochs without improvement: 2
+Epoch 11 complete in 47.66521883010864 seconds
+	Train rv:
+		loss: 0.06762044876813889
+		acc: 0.9793660287081339
+	Val rv:
+		loss: 0.6510899066925049
+		acc: 0.8455528846153846
+Epochs without improvement: 3
+Epoch 12 complete in 47.612430572509766 seconds
+	Train rv:
+		loss: 0.08938220888376236
+		acc: 0.9709928229665071
+	Val rv:
+		loss: 0.5250051021575928
+		acc: 0.8599759615384616
+New best model found.
+Epoch 13 complete in 47.937800884246826 seconds
+	Train rv:
+		loss: 0.05876699835062027
+		acc: 0.982505980861244
+	Val rv:
+		loss: 0.6026229858398438
+		acc: 0.8461538461538461
+Epochs without improvement: 1
+Epoch 14 complete in 47.36486029624939 seconds
+	Train rv:
+		loss: 0.07746854424476624
+		acc: 0.9754784688995215
+	Val rv:
+		loss: 0.5490170121192932
+		acc: 0.8527644230769231
+Epochs without improvement: 2
+Epoch 15 complete in 47.40290880203247 seconds
+	Train rv:
+		loss: 0.05850223824381828
+		acc: 0.9819078947368421
+	Val rv:
+		loss: 0.5712869167327881
+		acc: 0.8659855769230769
+New best model found.
+Epoch 16 complete in 47.44029998779297 seconds
+	Train rv:
+		loss: 0.03987657278776169
+		acc: 0.9869916267942583
+	Val rv:
+		loss: 0.5759729146957397
+		acc: 0.8786057692307693
+New best model found.
+Epoch 17 complete in 47.67489719390869 seconds
+	Train rv:
+		loss: 0.06752745062112808
+		acc: 0.9784688995215312
+	Val rv:
+		loss: 1.118338942527771
+		acc: 0.7770432692307693
+Epochs without improvement: 1
+Epoch 18 complete in 47.50008535385132 seconds
+	Train rv:
+		loss: 0.052232202142477036
+		acc: 0.9837021531100478
+	Val rv:
+		loss: 0.5508667230606079
+		acc: 0.8677884615384616
+Epochs without improvement: 2
+Epoch 19 complete in 47.65199542045593 seconds
+	Train rv:
+		loss: 0.04485206678509712
+		acc: 0.9872906698564593
+	Val rv:
+		loss: 0.5896750092506409
+		acc: 0.8545673076923077
+Epochs without improvement: 3
+Epoch 20 complete in 47.72518229484558 seconds
+	Train rv:
+		loss: 0.04771950840950012
+		acc: 0.9851973684210527
+	Val rv:
+		loss: 0.5500891208648682
+		acc: 0.8521634615384616
+Epochs without improvement: 4
+Epoch 21 complete in 48.14519715309143 seconds
+	Train rv:
+		loss: 0.04282781109213829
+		acc: 0.9857954545454546
+	Val rv:
+		loss: 0.8011950850486755
+		acc: 0.7902644230769231
+Epochs without improvement: 5
+Epoch 22 complete in 48.051724672317505 seconds
+	Train rv:
+		loss: 0.06206159293651581
+		acc: 0.9801136363636364
+	Val rv:
+		loss: 0.6384961605072021
+		acc: 0.8671875
+Epochs without improvement: 6
+Epoch 23 complete in 47.97199487686157 seconds
+	Train rv:
+		loss: 0.047006651759147644
+		acc: 0.9851973684210527
+	Val rv:
+		loss: 0.6164478659629822
+		acc: 0.8653846153846154
+Epochs without improvement: 7
+Epoch 24 complete in 48.212066888809204 seconds
+	Train rv:
+		loss: 0.03696301952004433
+		acc: 0.9877392344497608
+	Val rv:
+		loss: 0.726468026638031
+		acc: 0.859375
+Epochs without improvement: 8
+Epoch 25 complete in 47.95958495140076 seconds
+	Train rv:
+		loss: 0.02104192227125168
+		acc: 0.993421052631579
+	Val rv:
+		loss: 0.7197588682174683
+		acc: 0.8635817307692307
+Epochs without improvement: 9
+Epoch 26 complete in 48.564289569854736 seconds
+	Train rv:
+		loss: 0.05631469935178757
+		acc: 0.982505980861244
+	Val rv:
+		loss: 0.5233100652694702
+		acc: 0.859375
+Epochs without improvement: 10
+Epoch 27 complete in 47.54070782661438 seconds
+	Train rv:
+		loss: 0.03808382526040077
+		acc: 0.9883373205741627
+	Val rv:
+		loss: 0.7488054633140564
+		acc: 0.8485576923076923
+Epochs without improvement: 11
+Epoch 28 complete in 47.39371705055237 seconds
+	Train rv:
+		loss: 0.025168875232338905
+		acc: 0.992822966507177
+	Val rv:
+		loss: 0.7525625228881836
+		acc: 0.8185096153846154
+Epochs without improvement: 12
+Epoch 29 complete in 48.12325882911682 seconds
+	Train rv:
+		loss: 0.019180510193109512
+		acc: 0.9950657894736842
+	Val rv:
+		loss: 0.6171290874481201
+		acc: 0.8581730769230769
+Epochs without improvement: 13
+Epoch 30 complete in 47.86690640449524 seconds
+	Train rv:
+		loss: 0.03087696060538292
+		acc: 0.9904306220095693
+	Val rv:
+		loss: 0.6935602426528931
+		acc: 0.8425480769230769
+Epochs without improvement: 14
+Epoch 31 complete in 47.67753767967224 seconds
+	Train rv:
+		loss: 0.04376748204231262
+		acc: 0.9859449760765551
+	Val rv:
+		loss: 0.7930939793586731
+		acc: 0.8557692307692307
+Epochs without improvement: 15
+Epoch 32 complete in 47.45772457122803 seconds
+	Train rv:
+		loss: 0.059822384268045425
+		acc: 0.9823564593301436
+	Val rv:
+		loss: 0.9866997599601746
+		acc: 0.8010817307692307
+Epochs without improvement: 16
+Epoch 33 complete in 47.88720989227295 seconds
+	Train rv:
+		loss: 0.0669083297252655
+		acc: 0.9775717703349283
+	Val rv:
+		loss: 0.6762269735336304
+		acc: 0.8431490384615384
+Epochs without improvement: 17
+Epoch 34 complete in 47.75606727600098 seconds
+	Train rv:
+		loss: 0.036345161497592926
+		acc: 0.9890849282296651
+	Val rv:
+		loss: 0.6820093393325806
+		acc: 0.8263221153846154
+Epochs without improvement: 18
+Epoch 35 complete in 47.91961193084717 seconds
+	Train rv:
+		loss: 0.03220506012439728
+		acc: 0.9886363636363636
+	Val rv:
+		loss: 0.8767595887184143
+		acc: 0.8305288461538461
+Epochs without improvement: 19
+Epoch 36 complete in 47.83404731750488 seconds
+	Train rv:
+		loss: 0.024361692368984222
+		acc: 0.9917763157894737
+	Val rv:
+		loss: 0.895482063293457
+		acc: 0.84375
+Epochs without improvement: 20
+Epoch 37 complete in 47.76658344268799 seconds
+	Train rv:
+		loss: 0.051071714609861374
+		acc: 0.9863935406698564
+	Val rv:
+		loss: 0.7661976218223572
+		acc: 0.8263221153846154
+Epochs without improvement: 21
+Epoch 38 complete in 47.59844994544983 seconds
+	Train rv:
+		loss: 0.023970339447259903
+		acc: 0.9935705741626795
+	Val rv:
+		loss: 0.7427815198898315
+		acc: 0.8401442307692307
+Epochs without improvement: 22
+Epoch 39 complete in 47.473915338516235 seconds
+	Train rv:
+		loss: 0.03738749772310257
+		acc: 0.9871411483253588
+	Val rv:
+		loss: 0.7818235158920288
+		acc: 0.8203125
+Epochs without improvement: 23
+Epoch 40 complete in 47.498876333236694 seconds
+	Train rv:
+		loss: 0.04091987386345863
+		acc: 0.9884868421052632
+	Val rv:
+		loss: 0.5375198721885681
+		acc: 0.8635817307692307
+Epochs without improvement: 24
+Epoch 41 complete in 48.101871490478516 seconds
+	Train rv:
+		loss: 0.004074388183653355
+		acc: 0.9988038277511961
+	Val rv:
+		loss: 0.7207567691802979
+		acc: 0.8605769230769231
+Epochs without improvement: 25
+Epoch 42 complete in 47.96515417098999 seconds
+	Train rv:
+		loss: 0.0004956790944561362
+		acc: 0.9998504784688995
+	Val rv:
+		loss: 0.6839937567710876
+		acc: 0.8665865384615384
+Epochs without improvement: 26
+Epoch 43 complete in 47.803914070129395 seconds
+	Train rv:
+		loss: 3.808899055002257e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6789448857307434
+		acc: 0.8653846153846154
+Epochs without improvement: 27
+Epoch 44 complete in 47.54003429412842 seconds
+	Train rv:
+		loss: 2.9939365049358457e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6739358305931091
+		acc: 0.8647836538461539
+Epochs without improvement: 28
+Epoch 45 complete in 47.49601411819458 seconds
+	Train rv:
+		loss: 2.819866313075181e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6721905469894409
+		acc: 0.8677884615384616
+Epochs without improvement: 29
+Epoch 46 complete in 47.60391855239868 seconds
+	Train rv:
+		loss: 2.911264709837269e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6672131419181824
+		acc: 0.8653846153846154
+Epochs without improvement: 30
+Epoch 47 complete in 47.80366587638855 seconds
+	Train rv:
+		loss: 2.9288932637427934e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6641365885734558
+		acc: 0.8683894230769231
+Epochs without improvement: 31
+Epoch 48 complete in 47.5932776927948 seconds
+	Train rv:
+		loss: 2.8917775125592016e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6645243167877197
+		acc: 0.8671875
+Epochs without improvement: 32
+Epoch 49 complete in 47.76480746269226 seconds
+	Train rv:
+		loss: 3.0411816624109633e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6714261174201965
+		acc: 0.8653846153846154
+Epochs without improvement: 33
+Epoch 50 complete in 47.98223853111267 seconds
+	Train rv:
+		loss: 3.402050060685724e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6685208082199097
+		acc: 0.8689903846153846
+Epochs without improvement: 34
+Epoch 51 complete in 48.286662340164185 seconds
+	Train rv:
+		loss: 3.2394484151154757e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6728788614273071
+		acc: 0.8665865384615384
+Epochs without improvement: 35
+Epoch 52 complete in 47.777960538864136 seconds
+	Train rv:
+		loss: 3.536592339514755e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6763487458229065
+		acc: 0.8683894230769231
+Epochs without improvement: 36
+Epoch 53 complete in 47.71071648597717 seconds
+	Train rv:
+		loss: 3.924301563529298e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.6785746216773987
+		acc: 0.8689903846153846
+Epochs without improvement: 37
+Epoch 54 complete in 48.11147093772888 seconds
+	Train rv:
+		loss: 3.561728590284474e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7139797806739807
+		acc: 0.8689903846153846
+Epochs without improvement: 38
+Epoch 55 complete in 48.23565101623535 seconds
+	Train rv:
+		loss: 3.483948239590973e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7352204918861389
+		acc: 0.8689903846153846
+Epochs without improvement: 39
+Epoch 56 complete in 48.02689003944397 seconds
+	Train rv:
+		loss: 4.603241541190073e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7496036291122437
+		acc: 0.8719951923076923
+Epochs without improvement: 40
+Epoch 57 complete in 48.213507890701294 seconds
+	Train rv:
+		loss: 4.340461964602582e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.8378359079360962
+		acc: 0.8641826923076923
+Epochs without improvement: 41
+Epoch 58 complete in 47.54645919799805 seconds
+	Train rv:
+		loss: 0.4962409436702728
+		acc: 0.8177332535885168
+	Val rv:
+		loss: 1.0272198915481567
+		acc: 0.640625
+Epochs without improvement: 42
+Epoch 59 complete in 47.89926099777222 seconds
+	Train rv:
+		loss: 0.31487417221069336
+		acc: 0.892494019138756
+	Val rv:
+		loss: 0.5312249660491943
+		acc: 0.8449519230769231
+Epochs without improvement: 43
+Epoch 60 complete in 47.476662158966064 seconds
+	Train rv:
+		loss: 0.07235761731863022
+		acc: 0.975927033492823
+	Val rv:
+		loss: 0.6520475149154663
+		acc: 0.8503605769230769
+Epochs without improvement: 44
+Epoch 61 complete in 47.770854234695435 seconds
+	Train rv:
+		loss: 0.07602954655885696
+		acc: 0.9762260765550239
+	Val rv:
+		loss: 0.6379063725471497
+		acc: 0.8491586538461539
+Epochs without improvement: 45
+Epoch 62 complete in 47.81600856781006 seconds
+	Train rv:
+		loss: 0.03803795576095581
+		acc: 0.9886363636363636
+	Val rv:
+		loss: 0.7441123127937317
+		acc: 0.8323317307692307
+Epochs without improvement: 46
+Epoch 63 complete in 47.83037257194519 seconds
+	Train rv:
+		loss: 0.006226616445928812
+		acc: 0.9980562200956937
+	Val rv:
+		loss: 0.8518314957618713
+		acc: 0.8419471153846154
+Epochs without improvement: 47
+Epoch 64 complete in 47.486132860183716 seconds
+	Train rv:
+		loss: 0.03892824798822403
+		acc: 0.9883373205741627
+	Val rv:
+		loss: 0.7461677193641663
+		acc: 0.84375
+Epochs without improvement: 48
+Epoch 65 complete in 47.70678734779358 seconds
+	Train rv:
+		loss: 0.0487457700073719
+		acc: 0.9851973684210527
+	Val rv:
+		loss: 0.6778377890586853
+		acc: 0.8419471153846154
+Epochs without improvement: 49
+Epoch 66 complete in 47.93834829330444 seconds
+	Train rv:
+		loss: 0.04036811366677284
+		acc: 0.9892344497607656
+	Val rv:
+		loss: 0.8746681809425354
+		acc: 0.84375
+Epochs without improvement: 50
+Epoch 67 complete in 48.03923988342285 seconds
+	Train rv:
+		loss: 0.03129922226071358
+		acc: 0.9916267942583732
+	Val rv:
+		loss: 0.8585495352745056
+		acc: 0.8215144230769231
+Epochs without improvement: 51
+Epoch 68 complete in 47.49142146110535 seconds
+	Train rv:
+		loss: 0.04171624779701233
+		acc: 0.9866925837320574
+	Val rv:
+		loss: 0.6332479119300842
+		acc: 0.8479567307692307
+Epochs without improvement: 52
+Epoch 69 complete in 47.50721287727356 seconds
+	Train rv:
+		loss: 0.015711035579442978
+		acc: 0.9958133971291866
+	Val rv:
+		loss: 0.6609227061271667
+		acc: 0.8575721153846154
+Epochs without improvement: 53
+Epoch 70 complete in 47.353692054748535 seconds
+	Train rv:
+		loss: 0.0005486434674821794
+		acc: 0.9998504784688995
+	Val rv:
+		loss: 0.7145950794219971
+		acc: 0.8641826923076923
+Epochs without improvement: 54
+Epoch 71 complete in 47.96227526664734 seconds
+	Train rv:
+		loss: 7.388975791400298e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7559220194816589
+		acc: 0.8689903846153846
+Epochs without improvement: 55
+Epoch 72 complete in 47.539483070373535 seconds
+	Train rv:
+		loss: 3.20606523018796e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7805190682411194
+		acc: 0.8683894230769231
+Epochs without improvement: 56
+Epoch 73 complete in 47.47093629837036 seconds
+	Train rv:
+		loss: 2.679118188098073e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7767787575721741
+		acc: 0.8665865384615384
+Epochs without improvement: 57
+Epoch 74 complete in 47.430230140686035 seconds
+	Train rv:
+		loss: 2.4836046577547677e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7895144820213318
+		acc: 0.8689903846153846
+Epochs without improvement: 58
+Epoch 75 complete in 47.567163705825806 seconds
+	Train rv:
+		loss: 3.695745544973761e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7910477519035339
+		acc: 0.8677884615384616
+Epochs without improvement: 59
+Epoch 76 complete in 47.62788391113281 seconds
+	Train rv:
+		loss: 6.540578760905191e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7817070484161377
+		acc: 0.8647836538461539
+Epochs without improvement: 60
+Epoch 77 complete in 47.43938088417053 seconds
+	Train rv:
+		loss: 2.713538742682431e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.782089352607727
+		acc: 0.8677884615384616
+Epochs without improvement: 61
+Epoch 78 complete in 47.27550005912781 seconds
+	Train rv:
+		loss: 2.670820504135918e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7872944474220276
+		acc: 0.8671875
+Epochs without improvement: 62
+Epoch 79 complete in 47.308589935302734 seconds
+	Train rv:
+		loss: 2.6210973373963498e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7834640741348267
+		acc: 0.8671875
+Epochs without improvement: 63
+Epoch 80 complete in 47.6408588886261 seconds
+	Train rv:
+		loss: 2.8691007173620164e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7921896576881409
+		acc: 0.8689903846153846
+Epochs without improvement: 64
+Epoch 81 complete in 47.82843852043152 seconds
+	Train rv:
+		loss: 3.1092262361198664e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7856444716453552
+		acc: 0.8665865384615384
+Epochs without improvement: 65
+Epoch 82 complete in 48.268996715545654 seconds
+	Train rv:
+		loss: 3.208815905964002e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.8072728514671326
+		acc: 0.8713942307692307
+Epochs without improvement: 66
+Epoch 83 complete in 47.962199449539185 seconds
+	Train rv:
+		loss: 3.666654447442852e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.7987320423126221
+		acc: 0.8725961538461539
+Epochs without improvement: 67
+Epoch 84 complete in 47.86405968666077 seconds
+	Train rv:
+		loss: 3.6716999602504075e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.8368120193481445
+		acc: 0.8737980769230769
+Epochs without improvement: 68
+Epoch 85 complete in 48.115174770355225 seconds
+	Train rv:
+		loss: 5.1210423407610506e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.8476589918136597
+		acc: 0.8653846153846154
+Epochs without improvement: 69
+Epoch 86 complete in 47.645880460739136 seconds
+	Train rv:
+		loss: 0.07859445363283157
+		acc: 0.9705442583732058
+	Val rv:
+		loss: 0.9713839292526245
+		acc: 0.6610576923076923
+Epochs without improvement: 70
+Epoch 87 complete in 47.16947078704834 seconds
+	Train rv:
+		loss: 0.3745119273662567
+		acc: 0.8793361244019139
+	Val rv:
+		loss: 0.6569118499755859
+		acc: 0.8082932692307693
+Epochs without improvement: 71
+Epoch 88 complete in 47.641918420791626 seconds
+	Train rv:
+		loss: 0.07898321747779846
+		acc: 0.9739832535885168
+	Val rv:
+		loss: 0.6041836142539978
+		acc: 0.8425480769230769
+Epochs without improvement: 72
+Epoch 89 complete in 47.58040642738342 seconds
+	Train rv:
+		loss: 0.03072722628712654
+		acc: 0.9907296650717703
+	Val rv:
+		loss: 0.7296533584594727
+		acc: 0.8215144230769231
+Epochs without improvement: 73
+Epoch 90 complete in 47.77890729904175 seconds
+	Train rv:
+		loss: 0.04958031326532364
+		acc: 0.9853468899521531
+	Val rv:
+		loss: 0.544120728969574
+		acc: 0.8353365384615384
+Epochs without improvement: 74
+Epoch 91 complete in 47.65323996543884 seconds
+	Train rv:
+		loss: 0.03201038017868996
+		acc: 0.9902811004784688
+	Val rv:
+		loss: 0.7643893957138062
+		acc: 0.8425480769230769
+Epochs without improvement: 75
+Epoch 92 complete in 47.67662715911865 seconds
+	Train rv:
+		loss: 0.03815897926688194
+		acc: 0.9880382775119617
+	Val rv:
+		loss: 0.8033888339996338
+		acc: 0.8287259615384616
+Epochs without improvement: 76
+Epoch 93 complete in 47.42341446876526 seconds
+	Train rv:
+		loss: 0.017890064045786858
+		acc: 0.9946172248803827
+	Val rv:
+		loss: 0.7618734836578369
+		acc: 0.8395432692307693
+Epochs without improvement: 77
+Epoch 94 complete in 47.147205114364624 seconds
+	Train rv:
+		loss: 0.027556978166103363
+		acc: 0.9923744019138756
+	Val rv:
+		loss: 0.6906786561012268
+		acc: 0.8449519230769231
+Epochs without improvement: 78
+Epoch 95 complete in 47.24770545959473 seconds
+	Train rv:
+		loss: 0.026679782196879387
+		acc: 0.9922248803827751
+	Val rv:
+		loss: 0.971085786819458
+		acc: 0.8287259615384616
+Epochs without improvement: 79
+Epoch 96 complete in 47.21691298484802 seconds
+	Train rv:
+		loss: 0.026500780135393143
+		acc: 0.9908791866028708
+	Val rv:
+		loss: 0.8425681591033936
+		acc: 0.8275240384615384
+Epochs without improvement: 80
+Epoch 97 complete in 47.4500150680542 seconds
+	Train rv:
+		loss: 0.02218618430197239
+		acc: 0.993421052631579
+	Val rv:
+		loss: 0.8332458138465881
+		acc: 0.8161057692307693
+Epochs without improvement: 81
+Epoch 98 complete in 47.26643681526184 seconds
+	Train rv:
+		loss: 0.02524678036570549
+		acc: 0.992822966507177
+	Val rv:
+		loss: 0.8246059417724609
+		acc: 0.8389423076923077
+Epochs without improvement: 82
+Epoch 99 complete in 47.42299747467041 seconds
+	Train rv:
+		loss: 0.02353193424642086
+		acc: 0.992822966507177
+	Val rv:
+		loss: 0.6471309661865234
+		acc: 0.8341346153846154
+Epochs without improvement: 83
+Epoch 100 complete in 47.21698522567749 seconds
+	Train rv:
+		loss: 0.009529941715300083
+		acc: 0.99686004784689
+	Val rv:
+		loss: 0.8845245838165283
+		acc: 0.8401442307692307
+Epochs without improvement: 84
+Done.
+
+
+
+
+Training a feature extractor using erm on <class 'datasets.domainbed.PACS'> with domain sketch held out.
+Training a feature extractor.
+Save dir: ./results/PACS/omit_sketch/erm_pretrained/trial_0
+Constructor kwargs: {'dataset_constructor': <class 'datasets.domainbed.PACS'>, 'device': 'cuda:2', 'dataset_kwargs': {'domains_to_use': ['art_painting', 'cartoon', 'photo'], 'data_transform': Compose(
+    Resize(size=(224, 224), interpolation=bilinear)
+    ToTensor()
+    Lambda()
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+)}, 'dataloader_kwargs': {'batch_size': 32, 'num_workers': 10}, 'model_constructor': <class 'models.resnet.PretrainedRN50'>, 'model_kwargs': {'pretrained': True}, 'optimizer_constructor': <class 'torch.optim.adam.Adam'>, 'optimizer_kwargs': {'lr': 0.0002, 'weight_decay': 0.0001}, 'loss_fn_constructor': <class 'torch.nn.modules.loss.CrossEntropyLoss'>, 'loss_fn_kwargs': {}}
+Epoch 1 complete in 35.12395215034485 seconds
+	Train rv:
+		loss: 1.2941688299179077
+		acc: 0.5100511695906432
+	Val rv:
+		loss: 0.8628610372543335
+		acc: 0.6739896616541353
+New best model found.
+Epoch 2 complete in 35.053224086761475 seconds
+	Train rv:
+		loss: 0.5588237047195435
+		acc: 0.8077485380116959
+	Val rv:
+		loss: 0.5409629940986633
+		acc: 0.8177866541353384
+New best model found.
+Epoch 3 complete in 35.257076025009155 seconds
+	Train rv:
+		loss: 0.3854983150959015
+		acc: 0.8755025584795322
+	Val rv:
+		loss: 0.3774107098579407
+		acc: 0.8843984962406014
+New best model found.
+Epoch 4 complete in 34.847721099853516 seconds
+	Train rv:
+		loss: 0.2713905870914459
+		acc: 0.9110243055555557
+	Val rv:
+		loss: 0.285849004983902
+		acc: 0.9061325187969925
+New best model found.
+Epoch 5 complete in 35.23939633369446 seconds
+	Train rv:
+		loss: 0.19263702630996704
+		acc: 0.9358324195906432
+	Val rv:
+		loss: 0.38343319296836853
+		acc: 0.8793468045112781
+Epochs without improvement: 1
+Epoch 6 complete in 35.33170676231384 seconds
+	Train rv:
+		loss: 0.1975361853837967
+		acc: 0.9385736476608187
+	Val rv:
+		loss: 0.35636913776397705
+		acc: 0.8935620300751881
+Epochs without improvement: 2
+Epoch 7 complete in 35.102043867111206 seconds
+	Train rv:
+		loss: 0.1529666930437088
+		acc: 0.9526909722222222
+	Val rv:
+		loss: 0.36195141077041626
+		acc: 0.906484962406015
+New best model found.
+Epoch 8 complete in 34.956668853759766 seconds
+	Train rv:
+		loss: 0.24170970916748047
+		acc: 0.9271518640350878
+	Val rv:
+		loss: 0.32166680693626404
+		acc: 0.9042528195488723
+Epochs without improvement: 1
+Epoch 9 complete in 35.21975564956665 seconds
+	Train rv:
+		loss: 0.10743719339370728
+		acc: 0.9663285818713451
+	Val rv:
+		loss: 0.4362708032131195
+		acc: 0.8859257518796992
+Epochs without improvement: 2
+Epoch 10 complete in 35.346439838409424 seconds
+	Train rv:
+		loss: 0.06280093640089035
+		acc: 0.981702302631579
+	Val rv:
+		loss: 0.31624895334243774
+		acc: 0.9093045112781956
+New best model found.
+Epoch 11 complete in 35.013036012649536 seconds
+	Train rv:
+		loss: 0.0550377294421196
+		acc: 0.984375
+	Val rv:
+		loss: 0.5136664509773254
+		acc: 0.8582001879699249
+Epochs without improvement: 1
+Epoch 12 complete in 34.8782753944397 seconds
+	Train rv:
+		loss: 0.09602344036102295
+		acc: 0.9722450657894737
+	Val rv:
+		loss: 0.5013281106948853
+		acc: 0.8500939849624061
+Epochs without improvement: 2
+Epoch 13 complete in 35.15031337738037 seconds
+	Train rv:
+		loss: 0.09981828927993774
+		acc: 0.9693667763157895
+	Val rv:
+		loss: 0.3908931314945221
+		acc: 0.9009633458646618
+Epochs without improvement: 3
+Epoch 14 complete in 34.93606615066528 seconds
+	Train rv:
+		loss: 0.0840843915939331
+		acc: 0.9743466739766082
+	Val rv:
+		loss: 0.6502249836921692
+		acc: 0.8363486842105263
+Epochs without improvement: 4
+Epoch 15 complete in 34.83442401885986 seconds
+	Train rv:
+		loss: 0.08373934030532837
+		acc: 0.9757858187134504
+	Val rv:
+		loss: 0.48840752243995667
+		acc: 0.8619595864661654
+Epochs without improvement: 5
+Epoch 16 complete in 34.88651728630066 seconds
+	Train rv:
+		loss: 0.08954109996557236
+		acc: 0.9728618421052632
+	Val rv:
+		loss: 0.4070611000061035
+		acc: 0.9040178571428571
+Epochs without improvement: 6
+Epoch 17 complete in 34.96845078468323 seconds
+	Train rv:
+		loss: 0.0707658976316452
+		acc: 0.9784585160818714
+	Val rv:
+		loss: 0.47213032841682434
+		acc: 0.8530310150375939
+Epochs without improvement: 7
+Epoch 18 complete in 35.33309030532837 seconds
+	Train rv:
+		loss: 0.052335865795612335
+		acc: 0.9850374634502925
+	Val rv:
+		loss: 0.7071459889411926
+		acc: 0.8369360902255639
+Epochs without improvement: 8
+Epoch 19 complete in 34.909358739852905 seconds
+	Train rv:
+		loss: 0.06028081849217415
+		acc: 0.981702302631579
+	Val rv:
+		loss: 0.693163275718689
+		acc: 0.8626644736842105
+Epochs without improvement: 9
+Epoch 20 complete in 34.98638415336609 seconds
+	Train rv:
+		loss: 0.07191916555166245
+		acc: 0.9780016447368421
+	Val rv:
+		loss: 0.6795856952667236
+		acc: 0.8422227443609023
+Epochs without improvement: 10
+Epoch 21 complete in 35.26536774635315 seconds
+	Train rv:
+		loss: 0.12477392703294754
+		acc: 0.9667397660818714
+	Val rv:
+		loss: 0.6843153238296509
+		acc: 0.8485667293233083
+Epochs without improvement: 11
+Epoch 22 complete in 34.92067337036133 seconds
+	Train rv:
+		loss: 0.06828282028436661
+		acc: 0.9800575657894737
+	Val rv:
+		loss: 0.4203457236289978
+		acc: 0.8811090225563909
+Epochs without improvement: 12
+Epoch 23 complete in 34.96162533760071 seconds
+	Train rv:
+		loss: 0.02570301666855812
+		acc: 0.9940378289473685
+	Val rv:
+		loss: 0.5052266716957092
+		acc: 0.8902725563909776
+Epochs without improvement: 13
+Epoch 24 complete in 34.95168709754944 seconds
+	Train rv:
+		loss: 0.04691438749432564
+		acc: 0.9862253289473685
+	Val rv:
+		loss: 0.7527557611465454
+		acc: 0.8653665413533834
+Epochs without improvement: 14
+Epoch 25 complete in 35.14503765106201 seconds
+	Train rv:
+		loss: 0.05195309594273567
+		acc: 0.984420687134503
+	Val rv:
+		loss: 0.6071094274520874
+		acc: 0.880874060150376
+Epochs without improvement: 15
+Epoch 26 complete in 34.818143367767334 seconds
+	Train rv:
+		loss: 0.059991367161273956
+		acc: 0.9814967105263158
+	Val rv:
+		loss: 0.7581644654273987
+		acc: 0.833999060150376
+Epochs without improvement: 16
+Epoch 27 complete in 35.04058265686035 seconds
+	Train rv:
+		loss: 0.03457068279385567
+		acc: 0.9920275950292399
+	Val rv:
+		loss: 0.49529707431793213
+		acc: 0.8762922932330828
+Epochs without improvement: 17
+Epoch 28 complete in 35.279141902923584 seconds
+	Train rv:
+		loss: 0.06635241955518723
+		acc: 0.9814967105263158
+	Val rv:
+		loss: 0.7617577314376831
+		acc: 0.802984022556391
+Epochs without improvement: 18
+Epoch 29 complete in 35.21421241760254 seconds
+	Train rv:
+		loss: 0.05840349942445755
+		acc: 0.985608552631579
+	Val rv:
+		loss: 0.42691317200660706
+		acc: 0.8782894736842105
+Epochs without improvement: 19
+Epoch 30 complete in 35.000839948654175 seconds
+	Train rv:
+		loss: 0.04893766716122627
+		acc: 0.985608552631579
+	Val rv:
+		loss: 0.4298624098300934
+		acc: 0.9057800751879699
+Epochs without improvement: 20
+Epoch 31 complete in 35.292834997177124 seconds
+	Train rv:
+		loss: 0.052831877022981644
+		acc: 0.9864766081871346
+	Val rv:
+		loss: 0.749537467956543
+		acc: 0.824483082706767
+Epochs without improvement: 21
+Epoch 32 complete in 35.12173414230347 seconds
+	Train rv:
+		loss: 0.05335916951298714
+		acc: 0.9823190789473685
+	Val rv:
+		loss: 0.4179542064666748
+		acc: 0.8846334586466166
+Epochs without improvement: 22
+Epoch 33 complete in 35.166844844818115 seconds
+	Train rv:
+		loss: 0.021749498322606087
+		acc: 0.993421052631579
+	Val rv:
+		loss: 0.4435308873653412
+		acc: 0.8893327067669172
+Epochs without improvement: 23
+Epoch 34 complete in 34.97365736961365 seconds
+	Train rv:
+		loss: 0.07224708795547485
+		acc: 0.9794407894736842
+	Val rv:
+		loss: 0.4834820628166199
+		acc: 0.8900375939849624
+Epochs without improvement: 24
+Epoch 35 complete in 35.21635341644287 seconds
+	Train rv:
+		loss: 0.06527236104011536
+		acc: 0.983141447368421
+	Val rv:
+		loss: 0.39626601338386536
+		acc: 0.8838110902255639
+Epochs without improvement: 25
+Epoch 36 complete in 35.2331109046936 seconds
+	Train rv:
+		loss: 0.0072664134204387665
+		acc: 0.9979440789473685
+	Val rv:
+		loss: 0.44540029764175415
+		acc: 0.9043703007518797
+Epochs without improvement: 26
+Epoch 37 complete in 35.00406360626221 seconds
+	Train rv:
+		loss: 0.00103233871050179
+		acc: 0.9997944078947368
+	Val rv:
+		loss: 0.5372489094734192
+		acc: 0.8993186090225564
+Epochs without improvement: 27
+Epoch 38 complete in 35.01320433616638 seconds
+	Train rv:
+		loss: 0.00010610115714371204
+		acc: 1.0
+	Val rv:
+		loss: 0.4379219114780426
+		acc: 0.9167058270676692
+New best model found.
+Epoch 39 complete in 35.00377941131592 seconds
+	Train rv:
+		loss: 1.7955724615603685e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.43007001280784607
+		acc: 0.9183505639097745
+New best model found.
+Epoch 40 complete in 35.01242995262146 seconds
+	Train rv:
+		loss: 1.6513160517206416e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.425982266664505
+		acc: 0.9199953007518797
+New best model found.
+Epoch 41 complete in 35.24261832237244 seconds
+	Train rv:
+		loss: 1.5644622180843726e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4220006465911865
+		acc: 0.9208176691729324
+New best model found.
+Epoch 42 complete in 35.218485832214355 seconds
+	Train rv:
+		loss: 1.5271314623532817e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.41826874017715454
+		acc: 0.9208176691729324
+Epochs without improvement: 1
+Epoch 43 complete in 35.213637590408325 seconds
+	Train rv:
+		loss: 1.495737160439603e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4150497615337372
+		acc: 0.9208176691729324
+Epochs without improvement: 2
+Epoch 44 complete in 35.19800400733948 seconds
+	Train rv:
+		loss: 1.5231912584567908e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.41235339641571045
+		acc: 0.9199953007518797
+Epochs without improvement: 3
+Epoch 45 complete in 35.093341588974 seconds
+	Train rv:
+		loss: 1.4882404684612993e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4095275104045868
+		acc: 0.9208176691729324
+Epochs without improvement: 4
+Epoch 46 complete in 34.97424268722534 seconds
+	Train rv:
+		loss: 1.5613693904015236e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.40720972418785095
+		acc: 0.9232847744360902
+New best model found.
+Epoch 47 complete in 35.30518460273743 seconds
+	Train rv:
+		loss: 1.6122039596666582e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.40566274523735046
+		acc: 0.9224624060150376
+Epochs without improvement: 1
+Epoch 48 complete in 35.20395517349243 seconds
+	Train rv:
+		loss: 1.6174499251064844e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4040750563144684
+		acc: 0.9224624060150376
+Epochs without improvement: 2
+Epoch 49 complete in 35.23428273200989 seconds
+	Train rv:
+		loss: 1.695041464699898e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.40259188413619995
+		acc: 0.921640037593985
+Epochs without improvement: 3
+Epoch 50 complete in 35.4903028011322 seconds
+	Train rv:
+		loss: 1.7479813323006965e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4029155373573303
+		acc: 0.9224624060150376
+Epochs without improvement: 4
+Epoch 51 complete in 35.2672119140625 seconds
+	Train rv:
+		loss: 1.8576944057713263e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.40351343154907227
+		acc: 0.921640037593985
+Epochs without improvement: 5
+Epoch 52 complete in 35.31350755691528 seconds
+	Train rv:
+		loss: 1.8974205886479467e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4027688503265381
+		acc: 0.921640037593985
+Epochs without improvement: 6
+Epoch 53 complete in 35.41971945762634 seconds
+	Train rv:
+		loss: 1.9566468836273998e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4053555727005005
+		acc: 0.9232847744360902
+Epochs without improvement: 7
+Epoch 54 complete in 35.48541831970215 seconds
+	Train rv:
+		loss: 2.0927731384290382e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.40535202622413635
+		acc: 0.9232847744360902
+Epochs without improvement: 8
+Epoch 55 complete in 35.48455023765564 seconds
+	Train rv:
+		loss: 2.0748580936924554e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4143240451812744
+		acc: 0.9199953007518797
+Epochs without improvement: 9
+Epoch 56 complete in 35.49302792549133 seconds
+	Train rv:
+		loss: 2.074551048281137e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4119211733341217
+		acc: 0.9232847744360902
+Epochs without improvement: 10
+Epoch 57 complete in 35.27460265159607 seconds
+	Train rv:
+		loss: 2.1716481569455937e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4203401803970337
+		acc: 0.921640037593985
+Epochs without improvement: 11
+Epoch 58 complete in 35.22994637489319 seconds
+	Train rv:
+		loss: 2.3419905119226314e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4311007559299469
+		acc: 0.9265742481203008
+New best model found.
+Epoch 59 complete in 35.28334283828735 seconds
+	Train rv:
+		loss: 2.1092006136314012e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.427035927772522
+		acc: 0.9232847744360902
+Epochs without improvement: 1
+Epoch 60 complete in 35.10955619812012 seconds
+	Train rv:
+		loss: 2.299813240824733e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.4550759792327881
+		acc: 0.9249295112781956
+Epochs without improvement: 2
+Epoch 61 complete in 35.633408308029175 seconds
+	Train rv:
+		loss: 2.3609742129337974e-05
+		acc: 1.0
+	Val rv:
+		loss: 0.46818557381629944
+		acc: 0.9232847744360902
+Epochs without improvement: 3
+Epoch 62 complete in 35.427074909210205 seconds
+	Train rv:
+		loss: 0.05805068835616112
+		acc: 0.9878472222222222
+	Val rv:
+		loss: 2.241044521331787
+		acc: 0.12770206766917291
+Epochs without improvement: 4
+Epoch 63 complete in 34.88587713241577 seconds
+	Train rv:
+		loss: 1.9787894487380981
+		acc: 0.21276498538011696
+	Val rv:
+		loss: 1.8783643245697021
+		acc: 0.25975093984962405
+Epochs without improvement: 5
+Epoch 64 complete in 34.83735775947571 seconds
+	Train rv:
+		loss: 1.835762619972229
+		acc: 0.27508223684210525
+	Val rv:
+		loss: 1.8200349807739258
+		acc: 0.30274906015037595
+Epochs without improvement: 6
+Epoch 65 complete in 34.890981674194336 seconds
+	Train rv:
+		loss: 1.7737925052642822
+		acc: 0.32965551900584794
+	Val rv:
+		loss: 1.7327804565429688
+		acc: 0.3713580827067669
+Epochs without improvement: 7
+Epoch 66 complete in 34.778419494628906 seconds
+	Train rv:
+		loss: 1.6330899000167847
+		acc: 0.3748857821637427
+	Val rv:
+		loss: 1.5941509008407593
+		acc: 0.41094924812030076
+Epochs without improvement: 8
+Epoch 67 complete in 34.9141948223114 seconds
+	Train rv:
+		loss: 1.4976515769958496
+		acc: 0.43375365497076024
+	Val rv:
+		loss: 1.4589236974716187
+		acc: 0.4397321428571428
+Epochs without improvement: 9
+Epoch 68 complete in 35.0593159198761 seconds
+	Train rv:
+		loss: 1.3866207599639893
+		acc: 0.47176535087719296
+	Val rv:
+		loss: 1.3737413883209229
+		acc: 0.47767857142857145
+Epochs without improvement: 10
+Epoch 69 complete in 35.13955092430115 seconds
+	Train rv:
+		loss: 1.264740228652954
+		acc: 0.5180235745614035
+	Val rv:
+		loss: 1.201674461364746
+		acc: 0.5429981203007519
+Epochs without improvement: 11
+Epoch 70 complete in 34.930110931396484 seconds
+	Train rv:
+		loss: 1.1572853326797485
+		acc: 0.5627055921052632
+	Val rv:
+		loss: 1.2451456785202026
+		acc: 0.5272556390977443
+Epochs without improvement: 12
+Epoch 71 complete in 34.722912073135376 seconds
+	Train rv:
+		loss: 1.0626987218856812
+		acc: 0.6005802266081871
+	Val rv:
+		loss: 1.1192224025726318
+		acc: 0.6058505639097744
+Epochs without improvement: 13
+Epoch 72 complete in 34.7611939907074 seconds
+	Train rv:
+		loss: 1.0033845901489258
+		acc: 0.6211622807017544
+	Val rv:
+		loss: 1.0199695825576782
+		acc: 0.6314614661654135
+Epochs without improvement: 14
+Epoch 73 complete in 34.98587155342102 seconds
+	Train rv:
+		loss: 0.8809254169464111
+		acc: 0.6724004020467836
+	Val rv:
+		loss: 0.9964350461959839
+		acc: 0.6387453007518796
+Epochs without improvement: 15
+Epoch 74 complete in 34.68248414993286 seconds
+	Train rv:
+		loss: 0.8226545453071594
+		acc: 0.6981222587719298
+	Val rv:
+		loss: 1.0473042726516724
+		acc: 0.634281015037594
+Epochs without improvement: 16
+Epoch 75 complete in 34.66726207733154 seconds
+	Train rv:
+		loss: 0.7112776041030884
+		acc: 0.7295093201754387
+	Val rv:
+		loss: 0.9809557199478149
+		acc: 0.6831531954887218
+Epochs without improvement: 17
+Epoch 76 complete in 35.030823945999146 seconds
+	Train rv:
+		loss: 0.6462499499320984
+		acc: 0.7607364766081871
+	Val rv:
+		loss: 1.0467603206634521
+		acc: 0.6837406015037594
+Epochs without improvement: 18
+Epoch 77 complete in 34.791271686553955 seconds
+	Train rv:
+		loss: 0.5351797342300415
+		acc: 0.806423611111111
+	Val rv:
+		loss: 0.9686333537101746
+		acc: 0.6654135338345865
+Epochs without improvement: 19
+Epoch 78 complete in 34.97967529296875 seconds
+	Train rv:
+		loss: 0.4337902069091797
+		acc: 0.8429504751461989
+	Val rv:
+		loss: 0.9531075358390808
+		acc: 0.7087640977443609
+Epochs without improvement: 20
+Epoch 79 complete in 34.961172580718994 seconds
+	Train rv:
+		loss: 0.3479747176170349
+		acc: 0.8724643640350878
+	Val rv:
+		loss: 0.9155098795890808
+		acc: 0.7449483082706767
+Epochs without improvement: 21
+Epoch 80 complete in 35.111273765563965 seconds
+	Train rv:
+		loss: 0.2708325982093811
+		acc: 0.9015899122807017
+	Val rv:
+		loss: 1.043260931968689
+		acc: 0.7147556390977443
+Epochs without improvement: 22
+Epoch 81 complete in 35.01647448539734 seconds
+	Train rv:
+		loss: 0.19843871891498566
+		acc: 0.9313779239766082
+	Val rv:
+		loss: 1.0123047828674316
+		acc: 0.7220394736842105
+Epochs without improvement: 23
+Epoch 82 complete in 34.97830557823181 seconds
+	Train rv:
+		loss: 0.1646694839000702
+		acc: 0.9449926900584795
+	Val rv:
+		loss: 1.0259743928909302
+		acc: 0.7408364661654135
+Epochs without improvement: 24
+Epoch 83 complete in 34.93028283119202 seconds
+	Train rv:
+		loss: 0.1395232230424881
+		acc: 0.9523026315789473
+	Val rv:
+		loss: 1.2970366477966309
+		acc: 0.7194548872180452
+Epochs without improvement: 25
+Epoch 84 complete in 34.75243282318115 seconds
+	Train rv:
+		loss: 0.0982036292552948
+		acc: 0.9716282894736842
+	Val rv:
+		loss: 1.3061549663543701
+		acc: 0.7275610902255639
+Epochs without improvement: 26
+Epoch 85 complete in 34.655057430267334 seconds
+	Train rv:
+		loss: 0.11980324983596802
+		acc: 0.9591328581871346
+	Val rv:
+		loss: 0.9675806760787964
+		acc: 0.7480028195488722
+Epochs without improvement: 27
+Epoch 86 complete in 34.82200598716736 seconds
+	Train rv:
+		loss: 0.06314551830291748
+		acc: 0.9815423976608187
+	Val rv:
+		loss: 1.2763233184814453
+		acc: 0.7445958646616542
+Epochs without improvement: 28
+Epoch 87 complete in 34.69198989868164 seconds
+	Train rv:
+		loss: 0.11535420268774033
+		acc: 0.9624223318713451
+	Val rv:
+		loss: 1.2545677423477173
+		acc: 0.7491776315789473
+Epochs without improvement: 29
+Epoch 88 complete in 34.925023555755615 seconds
+	Train rv:
+		loss: 0.02765357494354248
+		acc: 0.9917763157894737
+	Val rv:
+		loss: 1.4013177156448364
+		acc: 0.7398966165413533
+Epochs without improvement: 30
+Epoch 89 complete in 34.92447328567505 seconds
+	Train rv:
+		loss: 0.0719725489616394
+		acc: 0.9775904605263158
+	Val rv:
+		loss: 1.2596365213394165
+		acc: 0.7449483082706767
+Epochs without improvement: 31
+Epoch 90 complete in 34.87402629852295 seconds
+	Train rv:
+		loss: 0.03997310250997543
+		acc: 0.9874588815789473
+	Val rv:
+		loss: 1.472396969795227
+		acc: 0.7336701127819548
+Epochs without improvement: 32
+Epoch 91 complete in 34.97573232650757 seconds
+	Train rv:
+		loss: 0.06366504728794098
+		acc: 0.9794864766081872
+	Val rv:
+		loss: 1.26624596118927
+		acc: 0.759515977443609
+Epochs without improvement: 33
+Epoch 92 complete in 34.77494287490845 seconds
+	Train rv:
+		loss: 0.022397946566343307
+		acc: 0.9944490131578947
+	Val rv:
+		loss: 1.4596139192581177
+		acc: 0.7542293233082706
+Epochs without improvement: 34
+Epoch 93 complete in 34.755343198776245 seconds
+	Train rv:
+		loss: 0.08985012024641037
+		acc: 0.9712171052631579
+	Val rv:
+		loss: 1.3755898475646973
+		acc: 0.753171992481203
+Epochs without improvement: 35
+Epoch 94 complete in 34.80839681625366 seconds
+	Train rv:
+		loss: 0.05738423392176628
+		acc: 0.981702302631579
+	Val rv:
+		loss: 1.254747986793518
+		acc: 0.7582236842105263
+Epochs without improvement: 36
+Epoch 95 complete in 34.73343062400818 seconds
+	Train rv:
+		loss: 0.007378584239631891
+		acc: 0.9981496710526315
+	Val rv:
+		loss: 1.5246686935424805
+		acc: 0.756578947368421
+Epochs without improvement: 37
+Epoch 96 complete in 34.97655367851257 seconds
+	Train rv:
+		loss: 0.007747330237179995
+		acc: 0.9977384868421053
+	Val rv:
+		loss: 1.7588993310928345
+		acc: 0.7525845864661654
+Epochs without improvement: 38
+Epoch 97 complete in 35.01407766342163 seconds
+	Train rv:
+		loss: 0.12142027169466019
+		acc: 0.9630391081871346
+	Val rv:
+		loss: 1.2434595823287964
+		acc: 0.731203007518797
+Epochs without improvement: 39
+Epoch 98 complete in 35.08846426010132 seconds
+	Train rv:
+		loss: 0.04518616199493408
+		acc: 0.9849917763157895
+	Val rv:
+		loss: 1.3076858520507812
+		acc: 0.7712640977443609
+Epochs without improvement: 40
+Epoch 99 complete in 35.26991105079651 seconds
+	Train rv:
+		loss: 0.01417206134647131
+		acc: 0.9956825657894737
+	Val rv:
+		loss: 1.4049949645996094
+		acc: 0.7713815789473685
+Epochs without improvement: 41
+Epoch 100 complete in 35.0714271068573 seconds
+	Train rv:
+		loss: 0.0009354556677863002
+		acc: 1.0
+	Val rv:
+		loss: 1.5096813440322876
+		acc: 0.7658599624060151
+Epochs without improvement: 42
+Done.
+
+
+
+

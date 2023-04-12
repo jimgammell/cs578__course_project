@@ -216,14 +216,15 @@ class Autoencoder(nn.Module):
     
 # Based off of DomainBed implementation here:
 #   https://github.com/facebookresearch/DomainBed/blob/main/domainbed/networks.py
-class PretrainedRN18(nn.Module):
+class PretrainedRN50(nn.Module):
     def __init__(self, input_shape, n_outputs, *args, pretrained=False, **kwargs):
         super().__init__()
         
-        self.feature_extractor = torchvision.models.resnet18(pretrained=pretrained)
+        self.num_features = 2048
+        self.feature_extractor = torchvision.models.resnet50(pretrained=pretrained)
         del self.feature_extractor.fc
         self.feature_extractor.fc = nn.Identity()
-        self.classifier = nn.Linear(512, n_outputs)
+        self.classifier = nn.Linear(self.num_features, n_outputs)
         self.freeze_bn()
         
     def get_features(self, x):

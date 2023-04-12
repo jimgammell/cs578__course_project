@@ -28,7 +28,7 @@ def train_feature_extractor(
     }
     if not 'MNIST' in constructor_kwargs['dataset_constructor'].__name__:
         constructor_kwargs['dataset_kwargs'].update({'data_transform': get_augmentation_transform() if augment_data else get_default_transform()})
-    set_default('dataloader_kwargs', {'batch_size': 32, 'num_workers': 8})
+    set_default('dataloader_kwargs', {'batch_size': 32, 'num_workers': 10})
     set_default('device', 'cuda' if torch.cuda.is_available() else 'cpu')
     if fe_type in ('random', 'erm', 'fixed_loss_autoencoder'):
         if fe_type == 'random':
@@ -36,7 +36,7 @@ def train_feature_extractor(
         elif fe_type == 'fixed_loss_autoencoder':
             set_default('model_constructor', resnet.Autoencoder)
         elif fe_type == 'erm':
-            set_default('model_constructor', resnet.PretrainedRN18 if not 'MNIST' in constructor_kwargs['dataset_constructor'].__name__ else resnet.Classifier)
+            set_default('model_constructor', resnet.PretrainedRN50 if not 'MNIST' in constructor_kwargs['dataset_constructor'].__name__ else resnet.Classifier)
         if 'MNIST' in constructor_kwargs['dataset_constructor'].__name__:
             set_default('model_kwargs', {
                 'features': 64,
@@ -204,9 +204,10 @@ def train_feature_extractor(
                 epochs_without_improvement = 0
             else:
                 epochs_without_improvement += 1
-            if epochs_without_improvement >= 5:
-                print('Performance gains have saturated. Ending training.')
-                return best_model
+                print('Epochs without improvement: {}'.format(epochs_without_improvement))
+            #if epochs_without_improvement >= 5:
+            #    print('Performance gains have saturated. Ending training.')
+            #    return best_model
         return best_model
     
     def train_fe():
