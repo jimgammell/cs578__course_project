@@ -208,7 +208,7 @@ def train_feature_extractor(
             else:
                 epochs_without_improvement += 1
                 print('Epochs without improvement (at current learning rate): {}'.format(epochs_without_improvement))
-            if epochs_without_improvement > 0:
+            if epochs_without_improvement > 1:
                 print('Performance gains have saturated. Dividing learning rate by 10.')
                 epochs_without_improvement = 0
                 for g in trial_objects['optimizer'].param_groups:
