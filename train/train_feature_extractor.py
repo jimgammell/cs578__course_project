@@ -180,8 +180,11 @@ def train_feature_extractor(
             if not hasattr(item, '__iter__'):
                 print('\t\t{}: {}'.format(key, item))
 
+    def get_state_dict(model):
+        return {k: v.cpu() for k, v in deepcopy(model).state_dict()}
+                
     def train_erm_fe():
-        best_model = deepcopy(trial_objects['model'].state_dict())
+        best_model = get_state_dict(trial_objects['model'])
         best_val_acc = -np.inf
         epochs_without_improvement = 0
         for epoch_idx in range(1, num_epochs+1):
@@ -200,7 +203,7 @@ def train_feature_extractor(
             if val_acc > best_val_acc:
                 print('New best model found.')
                 best_val_acc = val_acc
-                best_model = deepcopy(trial_objects['model'].cpu().state_dict())
+                best_model = get_state_dict(trial_objects['model'])
                 epochs_without_improvement = 0
             else:
                 epochs_without_improvement += 1
