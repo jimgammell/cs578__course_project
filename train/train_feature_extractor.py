@@ -55,7 +55,7 @@ def train_feature_extractor(
                     'endomorphic_blocks': 3
                 })
         set_default('optimizer_constructor', optim.Adam)
-        set_default('optimizer_kwargs', {'lr': 2e-4, 'weight_decay': 1e-4})
+        set_default('optimizer_kwargs', {'lr': 1e-3, 'weight_decay': 1e-4})
         set_default('loss_fn_constructor', nn.CrossEntropyLoss)
         set_default('loss_fn_kwargs', {})
     elif fe_type in ('learned_loss_autoencoder', 'gan', 'cyclegan'):
@@ -185,7 +185,7 @@ def train_feature_extractor(
                 
     def train_erm_fe():
         best_model = get_state_dict(trial_objects['model'])
-        best_val_acc = -np.inf
+        best_train_loss = np.inf
         epochs_without_improvement = 0
         for epoch_idx in range(1, num_epochs+1):
             t0 = time.time()
@@ -199,16 +199,16 @@ def train_feature_extractor(
             print_dict(train_rv)
             print('\tVal rv:')
             print_dict(val_rv)
-            val_acc = val_rv['acc']
-            if val_acc > best_val_acc:
+            train_loss = train_rv['loss']
+            if train_loss < best_train_loss:
                 print('New best model found.')
-                best_val_acc = val_acc
+                best_train_loss = train_loss
                 best_model = get_state_dict(trial_objects['model'])
                 epochs_without_improvement = 0
             else:
                 epochs_without_improvement += 1
                 print('Epochs without improvement (at current learning rate): {}'.format(epochs_without_improvement))
-            if epochs_without_improvement >= 5:
+            if epochs_without_improvement > 0:
                 print('Performance gains have saturated. Dividing learning rate by 10.')
                 epochs_without_improvement = 0
                 for g in trial_objects['optimizer'].param_groups:

@@ -47,7 +47,7 @@ def get_dataloaders(dataset_constructor, holdout_domain, fe_type, seed, batch_si
     )
     train_dataset = ExtractedFeaturesDataset(train_dataset, fe_model, batch_size=32, device=device)
     train_dataset, val_dataset = torch.utils.data.random_split(
-        train_dataset, [len(train_dataset)//6, len(train_dataset)-len(train_dataset)//6]
+        train_dataset, [len(train_dataset)-len(train_dataset)//5, len(train_dataset)//5]
     )
     test_dataset = ExtractedFeaturesDataset(test_dataset, fe_model, batch_size=32, device=device)
     train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=8)
@@ -229,7 +229,7 @@ TRAINER_CLASSES = [
     IRM
 ]
 
-def evaluate_all_trained_models(overwrite=False, batch_size=256, device=None, num_epochs=25):
+def evaluate_all_trained_models(overwrite=False, batch_size=32, device=None, num_epochs=10):
     overwrite = True ###############
     if device is None:
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
