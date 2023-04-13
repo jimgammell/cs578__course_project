@@ -3,3 +3,4 @@ trained_models
 results
 */__pycache__/*
 *.ipynb
+*.pyc

@@ -181,7 +181,7 @@ def train_feature_extractor(
                 print('\t\t{}: {}'.format(key, item))
 
     def get_state_dict(model):
-        return {k: v.cpu() for k, v in deepcopy(model).state_dict()}
+        return {k: v.cpu() for k, v in deepcopy(model).state_dict().items()}
                 
     def train_erm_fe():
         best_model = get_state_dict(trial_objects['model'])
