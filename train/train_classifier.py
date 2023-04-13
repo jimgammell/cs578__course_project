@@ -67,8 +67,8 @@ class Trainer:
         raise NotImplementedError
         
     def eval_step(self, batch):
-        x, y, _ = batch
-        x, y = x.to(device), y.to(device)
+        x, (y, _) = batch
+        x, y = x.to(self.device), y.to(self.device)
         logits = self.classifier(x)
         return {'acc': acc(logits, y)}
 
@@ -80,9 +80,9 @@ class LogisticRegression(Trainer):
         x, y, y_e = x.to(self.device), y.to(self.device), y_e.to(self.device)
         logits = self.classifier(x)
         loss = nn.functional.cross_entropy(logits, y)
-        optimizer.zero_grad()
+        self.optimizer.zero_grad()
         loss.backward()
-        optimizer.step()
+        self.optimizer.step()
         return {'loss': val(loss), 'acc': acc(logits, y)}
 
 class SVM(Trainer):
@@ -94,9 +94,9 @@ class SVM(Trainer):
         x, y, y_e = x.to(self.device), y.to(self.device), y_e.to(self.device)
         logits = self.classifier(x)
         loss = nn.functional.multi_margin_loss(logits, y) + self.hparams['weight_decay']*self.classifier.weight.norm(p=2)
-        optimizer.zero_grad()
+        self.optimizer.zero_grad()
         loss.backward()
-        optimizer.step()
+        self.optimizer.step()
         return {'loss': val(loss), 'acc': acc(logits, y)}
 
 class VREx(Trainer):
@@ -109,9 +109,11 @@ class VREx(Trainer):
             self.num_steps = 0
         self.num_steps += 1
         penalty_weight = self.hparams['penalty_weight'] if self.num_steps >= self.hparams['anneal_iters'] else 1.0
+        if self.num_steps == self.hparams['anneal_iters']:
+            self.optimizer = optim.Adam(self.classifier.parameters(), lr=self.hparams['learning_rate'])
         x, (y, y_e) = batch
         x, y, y_e = x.to(self.device), y.to(self.device), y_e.to(self.device)
-        logits = model(x)
+        logits = self.classifier(x)
         loss = nn.functional.cross_entropy(logits, y, reduction='none')
         mean_loss = loss.mean()
         invariance_penalty = 0.0
@@ -120,9 +122,9 @@ class VREx(Trainer):
             invariance_penalty += (mean_loss - env_loss) ** 2
         invariance_penalty /= len(torch.unique(y_e))
         vrex_loss = mean_loss + penalty_weight*invariance_penalty
-        optimizer.zero_grad()
+        self.optimizer.zero_grad()
         vrex_loss.backward()
-        optimizer.step()
+        self.optimizer.step()
         return {'loss': val(vrex_loss), 'acc': acc(logits, y)}
 
 class IRM(Trainer):
@@ -135,9 +137,11 @@ class IRM(Trainer):
             self.num_steps = 0
         self.num_steps += 1
         penalty_weight = self.hparams['penalty_weight'] if self.num_steps >= self.hparams['anneal_iters'] else 1.0
+        if self.num_steps == self.hparams['anneal_iters']:
+            self.optimizer = optim.Adam(self.classifier.parameters(), lr=self.hparams['learning_rate'])
         x, (y, y_e) = batch
         x, y, y_e = x.to(self.device), y.to(self.device), y_e.to(self.device)
-        logits = model(x)
+        logits = self.classifier(x)
         empirical_risk, invariance_penalty = 0.0, 0.0
         for env_idx in torch.unique(y_e):
             logits_env = logits[y_e==env_idx]
@@ -153,12 +157,12 @@ class IRM(Trainer):
             grad_1 = grad(loss_1, [scale], create_graph=True)[0]
             grad_2 = grad(loss_2, [scale], create_graph=True)[0]
             invariance_penalty += (grad_1 * grad_2).sum()
-        empirical_risk /= torch.unique(y_e)
-        invariance_penalty /= torch.unique(y_e)
+        empirical_risk /= len(torch.unique(y_e))
+        invariance_penalty /= len(torch.unique(y_e))
         irm_loss = empirical_risk + penalty_weight*invariance_penalty
-        optimizer.zero_grad()
+        self.optimizer.zero_grad()
         irm_loss.backward()
-        optimizer.step()
+        self.optimizer.step()
         return {'loss': val(irm_loss), 'acc': acc(logits, y)}
 
 def run_epoch(dataloaders, trainer):
@@ -225,7 +229,7 @@ TRAINER_CLASSES = [
     IRM
 ]
 
-def evaluate_all_trained_models(overwrite=False, batch_size=1024, device=None, num_epochs=25):
+def evaluate_all_trained_models(overwrite=False, batch_size=256, device=None, num_epochs=25):
     overwrite = True ###############
     if device is None:
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -248,5 +252,5 @@ def evaluate_all_trained_models(overwrite=False, batch_size=1024, device=None, n
                                 dataset, holdout_domain, fe_type, trainer_class))
                             continue
                         rv = random_search_hparams(trainer_class, dataloaders, device)
-                        with open(os.path.join(results_dir, classifier_name+'.pickle'), 'wb') as F:
+                        with open(os.path.join(results_dir, trainer_class.__name__+'.pickle'), 'wb') as F:
                             pickle.dump(rv, F)

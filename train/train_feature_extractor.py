@@ -200,17 +200,17 @@ def train_feature_extractor(
             if val_acc > best_val_acc:
                 print('New best model found.')
                 best_val_acc = val_acc
-                best_model = deepcopy(trial_objects['model'].state_dict())
+                best_model = deepcopy(trial_objects['model'].cpu().state_dict())
                 epochs_without_improvement = 0
             else:
                 epochs_without_improvement += 1
                 print('Epochs without improvement (at current learning rate): {}'.format(epochs_without_improvement))
-            if epochs_without_improvement >= 10:
+            if epochs_without_improvement >= 5:
                 print('Performance gains have saturated. Dividing learning rate by 10.')
                 epochs_without_improvement = 0
                 for g in trial_objects['optimizer'].param_groups:
-                    g['lr'] /= 10.0
-        return best_model.cpu()
+                    g['lr'] /= 2.0
+        return best_model
     
     def train_fe():
         if epoch_fn is not None:
