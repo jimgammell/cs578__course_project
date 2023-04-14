@@ -275,11 +275,11 @@ class DARE(Trainer):
         self.whitening_matrices = len(covariances)*[None]
         self.whitened_means = len(means)*[None]
         for env_idx, covariance in covariances.items():
-            Q, L = torch.linalg.eigh(covariance)
+            L, Q = torch.linalg.eigh(covariance)
             sqrt_covariance = Q @ torch.diag(torch.sqrt(nn.functional.relu(L))) @ Q.T
             invsqrt_covariance = torch.linalg.pinv(sqrt_covariance, hermitian=True)
             self.whitening_matrices[env_idx] = invsqrt_covariance
-            self.whitened_means[env_idx] = torch.mm(self.whitening_matrices[idx], means[env_idx].unsqueeze(-1)).squeeze()
+            self.whitened_means[env_idx] = torch.mm(self.whitening_matrices[env_idx], means[env_idx].unsqueeze(-1)).squeeze()
         self.whitening_matrices = torch.stack(self.whitening_matrices)
     
     def train_step(self, batch):

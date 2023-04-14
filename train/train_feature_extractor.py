@@ -249,7 +249,7 @@ def train_feature_extractor(
             hparams['mixup_alpha'] = lambda: 10**np.random.uniform(-1, 1)
         else:
             hparams['mixup_alpha'] = lambda: 0.0
-        if feature_covariance_decay:
+        if covariance_decay:
             hparams['feature_covariance_decay'] = lambda: 10**np.random.uniform(-4, 0)
         else:
             hparams['feature_covariance_decay'] = lambda: 0.0
