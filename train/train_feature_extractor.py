@@ -254,7 +254,7 @@ def train_feature_extractor(
         else:
             hparams['feature_covariance_decay'] = lambda: 0.0
         
-        results, hparams = [], []
+        results, hparams_ = [], []
         print('Sweeping hyperparameters for current feature extractor configuration.')
         for trial_idx in range(20):
             print('Starting trial {}...'.format(trial_idx))
@@ -264,9 +264,9 @@ def train_feature_extractor(
             trial_objects = construct_single_model(**constructor_kwargs)
             _, trial_results = train_fe(10, trial_objects, mixup_alpha=trial_hparams['mixup_alpha'], feature_covariance_decay=trial_hparams['feature_covariance_decay'])
             results.append(trial_results)
-            hparams.append(trial_hparams)
+            hparams_.append(trial_hparams)
         best_val_acc, best_hparams = -np.inf, None
-        for trial_results, trial_hparams in zip(results, hparams):
+        for trial_results, trial_hparams in zip(results, hparams_):
             if np.max(trial_results['val_acc']) > best_val_acc:
                 best_val_acc = np.max(trial_results['val_acc'])
                 best_hparams = trial_hparams
