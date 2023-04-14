@@ -208,31 +208,80 @@ def train_feature_extractor(
             else:
                 epochs_without_improvement += 1
                 print('Epochs without improvement (at current learning rate): {}'.format(epochs_without_improvement))
-            if epochs_without_improvement > 1:
+            if epochs_without_improvement > 5:
                 print('Performance gains have saturated. Dividing learning rate by 10.')
                 epochs_without_improvement = 0
                 for g in trial_objects['optimizer'].param_groups:
                     g['lr'] /= 2.0
         return best_model
     
-    def train_fe():
+    def train_fe(num_epochs, trial_objects, save_int_results=False, mixup_alpha=0.0, feature_covariance_decay=0.0):
+        rv = {}
         if epoch_fn is not None:
             for epoch_idx in range(1, num_epochs+1):
                 t0 = time.time()
                 train_rv, val_rv = epoch_fn(
-                    mixup_alpha=1.0 if mixup else 0.0,
-                    feature_covariance_decay=1.0 if covariance_decay else 0.0,
+                    mixup_alpha=mixup_alpha,
+                    feature_covariance_decay=feature_covariance_decay,
                     **trial_objects)
-                save_results(train_rv, val_rv, epoch_idx)
+                for key, item in train_rv.items():
+                    if not 'train_'+key in rv.keys():
+                        rv['train_'+key] = []
+                    rv['train_'+key].append(item)
+                for key, item in val_rv.items():
+                    if not 'val_'+key in val_rv.items():
+                        val_rv['val_'+key] = []
+                    val_rv['val_'+key].append(item)
+                if save_int_results:
+                    save_results(train_rv, val_rv, epoch_idx)
                 print('Epoch {} complete in {} seconds'.format(epoch_idx, time.time()-t0))
                 print('\tTrain rv:')
                 print_dict(train_rv)
                 print('\tVal rv:')
                 print_dict(val_rv)
-        return trial_objects['model'].cpu().state_dict()
+        return trial_objects['model'].cpu().state_dict(), rv
+    
+    def get_optimal_fe_hparams():
+        nonlocal constructor_kwargs
+        hparams = {'lr': lambda: 10**np.random.uniform(-5, -3.5),
+                   'weight_decay': lambda: 10**np.random.uniform(-6, -2)}
+        if mixup:
+            hparams['mixup_alpha'] = lambda: 10**np.random.uniform(-1, 1)
+        else:
+            hparams['mixup_alpha'] = lambda: 0.0
+        if feature_covariance_decay:
+            hparams['feature_covariance_decay'] = lambda: 10**np.random.uniform(-4, 0)
+        else:
+            hparams['feature_covariance_decay'] = lambda: 0.0
+        
+        results, hparams = [], []
+        print('Sweeping hyperparameters for current feature extractor configuration.')
+        for trial_idx in range(20):
+            print('Starting trial {}...'.format(trial_idx))
+            trial_hparams = {hparam_name: get_hparam_fn() for hparam_name, get_hparam_fn in hparams.items()}
+            constructor_kwargs['optimizer_kwargs']['lr'] = trial_hparams['lr']
+            constructor_kwargs['optimizer_kwargs']['weight_decay'] = trial_hparams['weight_decay']
+            trial_objects = construct_single_model(**constructor_kwargs)
+            _, trial_results = train_fe(10, trial_objects, mixup_alpha=trial_hparams['mixup_alpha'], feature_covariance_decay=trial_hparams['feature_covariance_decay'])
+            results.append(trial_results)
+            hparams.append(trial_hparams)
+        best_val_acc, best_hparams = -np.inf, None
+        for trial_results, trial_hparams in zip(results, hparams):
+            if np.max(trial_results['val_acc']) > best_val_acc:
+                best_val_acc = np.max(trial_results['val_acc'])
+                best_hparams = trial_hparams
+        print('Best hyperparameters found.')
+        print('\tBest validation accuracy: {}'.format(best_val_acc))
+        print('\tBest hyperparameters: {}'.format(best_hparams))
+        constructor_kwargs['optimizer_kwargs']['lr'] = best_hparams['lr']
+        constructor_kwargs['optimizer_kwargs']['weight_decay'] = best_hparams['weight_decay']
+        trial_objects = construct_single_model(**constructor_kwargs)
+        best_model, best_results = train_fe(100, trial_objects, mixup_alpha=best_hparams['mixup_alpha'], feature_covariance_decay=best_hparams['feature_covariance_decay'])
+        print('Done.')
+        return best_model, best_results
     
     if fe_type == 'erm':
-        best_model = train_erm_fe()
+        best_model, _ = get_optimal_fe_hparams()
     else:
         best_model = train_fe()
     

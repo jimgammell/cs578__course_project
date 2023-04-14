@@ -47,16 +47,17 @@ def get_dataloaders(dataset_constructor, holdout_domain, fe_type, seed, batch_si
         train_dataset, [len(train_dataset)-len(train_dataset)//5, len(train_dataset)//5]
     )
     test_dataset = ExtractedFeaturesDataset(test_dataset, fe_model, batch_size=32, device=device)
-    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=8)
-    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=8)
-    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=8)
+    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=len(train_dataset), shuffle=True, num_workers=8)
+    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=len(val_dataset), shuffle=False, num_workers=8)
+    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=len(test_dataset), shuffle=False, num_workers=8)
     
     return train_dataloader, val_dataloader, test_dataloader
 
 class Trainer:
-    def __init__(self, num_features, num_classes, device, hparams):
+    def __init__(self, num_features, num_classes, device, hparams, **kwargs):
         self.classifier = nn.Linear(num_features, num_classes).to(device)
-        self.optimizer = optim.Adam(self.classifier.parameters(), lr=hparams['learning_rate'])
+        self.optimizer = optim.LBFGS(self.classifier.parameters(), history_size=20, line_search_fn='strong_wolfe') 
+        #optim.Adam(self.classifier.parameters(), lr=hparams['learning_rate'])
         self.hparams = hparams
         self.device = device
         
@@ -70,98 +71,236 @@ class Trainer:
         return {'acc': acc(logits, y)}
 
 class LogisticRegression(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-7, -3)}
-    
-    def train_step(self, batch):
-        x, (y, y_e) = batch
-        x, y, y_e = x.to(self.device), y.to(self.device), y_e.to(self.device)
-        logits = self.classifier(x)
-        loss = nn.functional.cross_entropy(logits, y)
-        self.optimizer.zero_grad()
-        loss.backward()
-        self.optimizer.step()
-        return {'loss': val(loss), 'acc': acc(logits, y)}
-
-class SVM(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-7, -3),
+    hparams = {'learning_rate': lambda: 10**np.random.uniform(-2, 0),
                'weight_decay': lambda: 10**np.random.uniform(-6, -2)}
     
     def train_step(self, batch):
         x, (y, y_e) = batch
         x, y, y_e = x.to(self.device), y.to(self.device), y_e.to(self.device)
-        logits = self.classifier(x)
-        loss = nn.functional.multi_margin_loss(logits, y) + self.hparams['weight_decay']*self.classifier.weight.norm(p=2)
-        self.optimizer.zero_grad()
-        loss.backward()
-        self.optimizer.step()
-        return {'loss': val(loss), 'acc': acc(logits, y)}
+        if isinstance(self.optimizer, optim.LBFGS):
+            def get_loss(backprop=True):
+                logits = self.classifier(x)
+                loss = nn.functional.cross_entropy(logits, y) + self.hparams['weight_decay']*self.classifier.weight.norm(p=2)
+                if backprop:
+                    self.optimizer.zero_grad()
+                    loss.backward()
+                    return loss
+                else:
+                    return loss, acc(logits, y)
+            self.optimizer.step(get_loss)
+            loss, accuracy = get_loss(backprop=False)
+            return {'loss': val(loss), 'acc': accuracy}
+        else:
+            logits = self.classifier(x)
+            loss = nn.functional.cross_entropy(logits, y) + self.hparams['weight_decay']*self.classifier.weight.norm(p=2)
+            self.optimizer.zero_grad()
+            loss.backward()
+            self.optimizer.step()
+            return {'loss': val(loss), 'acc': acc(logits, y)}
+
+class SVM(Trainer):
+    hparams = {'learning_rate': lambda: 10**np.random.uniform(-2, 0),
+               'weight_decay': lambda: 10**np.random.uniform(-6, -2)}
+    
+    def train_step(self, batch):
+        x, (y, y_e) = batch
+        x, y, y_e = x.to(self.device), y.to(self.device), y_e.to(self.device)
+        if isinstance(self.optimizer, optim.LBFGS):
+            def get_loss(backprop=True):
+                logits = self.classifier(x)
+                loss = nn.functional.multi_margin_loss(logits, y) + self.hparams['weight_decay']*self.classifier.weight.norm(p=2)
+                if backprop:
+                    self.optimizer.zero_grad()
+                    loss.backward()
+                    return loss
+                else:
+                    return loss, acc(logits, y)
+            self.optimizer.step(get_loss)
+            loss, accuracy = get_loss(backprop=False)
+            return {'loss': val(loss), 'acc': accuracy}
+        else:
+            logits = self.classifier(x)
+            loss = nn.functional.multi_margin_loss(logits, y) + self.hparams['weight_decay']*self.classifier.weight.norm(p=2)
+            self.optimizer.zero_grad()
+            loss.backward()
+            self.optimizer.step()
+            return {'loss': val(loss), 'acc': acc(logits, y)}
 
 class VREx(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-7, -3),
+    hparams = {'learning_rate': lambda: 10**np.random.uniform(-2, 0),
                'penalty_weight': lambda: 10**np.random.uniform(-1, 5),
-               'anneal_iters': lambda: 10**np.random.uniform(0, 4)}
+               'anneal_iters': lambda: 0.0} #lambda: 10**np.random.uniform(0, 4)}
     
     def train_step(self, batch):
         if not hasattr(self, 'num_steps'):
             self.num_steps = 0
         self.num_steps += 1
         penalty_weight = self.hparams['penalty_weight'] if self.num_steps >= self.hparams['anneal_iters'] else 1.0
-        if self.num_steps == self.hparams['anneal_iters']:
-            self.optimizer = optim.Adam(self.classifier.parameters(), lr=self.hparams['learning_rate'])
+        #if self.num_steps == self.hparams['anneal_iters']:
+        #    self.optimizer = optim.Adam(self.classifier.parameters(), lr=self.hparams['learning_rate'])
         x, (y, y_e) = batch
         x, y, y_e = x.to(self.device), y.to(self.device), y_e.to(self.device)
-        logits = self.classifier(x)
-        loss = nn.functional.cross_entropy(logits, y, reduction='none')
-        mean_loss = loss.mean()
-        invariance_penalty = 0.0
-        for env_idx in torch.unique(y_e):
-            env_loss = loss[y_e==env_idx].mean()
-            invariance_penalty += (mean_loss - env_loss) ** 2
-        invariance_penalty /= len(torch.unique(y_e))
-        vrex_loss = mean_loss + penalty_weight*invariance_penalty
-        self.optimizer.zero_grad()
-        vrex_loss.backward()
-        self.optimizer.step()
-        return {'loss': val(vrex_loss), 'acc': acc(logits, y)}
+        if isinstance(self.optimizer, optim.LBFGS):
+            def get_loss(backprop=True):
+                logits = self.classifier(x)
+                loss = nn.functional.cross_entropy(logits, y, reduction='none')
+                mean_loss = loss.mean()
+                invariance_penalty = 0.0
+                for env_idx in torch.unique(y_e):
+                    env_loss = loss[y_e==env_idx].mean()
+                    invariance_penalty += (mean_loss - env_loss) ** 2
+                invariance_penalty /= len(torch.unique(y_e))
+                vrex_loss = mean_loss + penalty_weight*invariance_penalty
+                if backprop:
+                    self.optimizer.zero_grad()
+                    vrex_loss.backward()
+                    return vrex_loss
+                else:
+                    return vrex_loss, acc(logits, y)
+            self.optimizer.step(get_loss)
+            loss, accuracy = get_loss(backprop=False)
+            return {'loss': val(loss), 'acc': accuracy}
+        else:
+            logits = self.classifier(x)
+            loss = nn.functional.cross_entropy(logits, y, reduction='none')
+            mean_loss = loss.mean()
+            invariance_penalty = 0.0
+            for env_idx in torch.unique(y_e):
+                env_loss = loss[y_e==env_idx].mean()
+                invariance_penalty += (mean_loss - env_loss) ** 2
+            invariance_penalty /= len(torch.unique(y_e))
+            vrex_loss = mean_loss + penalty_weight*invariance_penalty
+            self.optimizer.zero_grad()
+            vrex_loss.backward()
+            self.optimizer.step()
+            return {'loss': val(vrex_loss), 'acc': acc(logits, y)}
 
 class IRM(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-7, -3),
+    hparams = {'learning_rate': lambda: 10**np.random.uniform(-2, 0),
                'penalty_weight': lambda: 10**np.random.uniform(-1, 5),
-               'anneal_iters': lambda: 10**np.random.uniform(0, 4)}
+               'anneal_iters': lambda: 0.0} # lambda: 10**np.random.uniform(0, 4)}
     
     def train_step(self, batch):
         if not hasattr(self, 'num_steps'):
             self.num_steps = 0
         self.num_steps += 1
         penalty_weight = self.hparams['penalty_weight'] if self.num_steps >= self.hparams['anneal_iters'] else 1.0
-        if self.num_steps == self.hparams['anneal_iters']:
-            self.optimizer = optim.Adam(self.classifier.parameters(), lr=self.hparams['learning_rate'])
+        #if self.num_steps == self.hparams['anneal_iters']:
+        #    self.optimizer = optim.Adam(self.classifier.parameters(), lr=self.hparams['learning_rate'])
         x, (y, y_e) = batch
         x, y, y_e = x.to(self.device), y.to(self.device), y_e.to(self.device)
-        logits = self.classifier(x)
-        empirical_risk, invariance_penalty = 0.0, 0.0
-        for env_idx in torch.unique(y_e):
-            logits_env = logits[y_e==env_idx]
-            y_env = y[y_e==env_idx]
-            empirical_risk += nn.functional.cross_entropy(logits_env, y_env)
-            logits_1, logits_2 = logits_env[::2], logits_env[1::2]
-            y_1, y_2 = y_env[::2], y_env[1::2]
-            n = np.max((len(y_1), len(y_2)))
-            logits_1, logits_2, y_1, y_2 = logits_1[:n], logits_2[:n], y_1[:n], y_2[:n]
-            scale = torch.tensor(1.0, device=logits.device, requires_grad=True)
-            loss_1 = nn.functional.cross_entropy(logits_1*scale, y_1)
-            loss_2 = nn.functional.cross_entropy(logits_2*scale, y_2)
-            grad_1 = grad(loss_1, [scale], create_graph=True)[0]
-            grad_2 = grad(loss_2, [scale], create_graph=True)[0]
-            invariance_penalty += (grad_1 * grad_2).sum()
-        empirical_risk /= len(torch.unique(y_e))
-        invariance_penalty /= len(torch.unique(y_e))
-        irm_loss = empirical_risk + penalty_weight*invariance_penalty
-        self.optimizer.zero_grad()
-        irm_loss.backward()
-        self.optimizer.step()
-        return {'loss': val(irm_loss), 'acc': acc(logits, y)}
+        if isinstance(self.optimizer, optim.LBFGS):
+            def get_loss(backprop=True):
+                logits = self.classifier(x)
+                empirical_risk, invariance_penalty = 0.0, 0.0
+                for env_idx in torch.unique(y_e):
+                    logits_env = logits[y_e==env_idx]
+                    y_env = y[y_e==env_idx]
+                    empirical_risk += nn.functional.cross_entropy(logits_env, y_env)
+                    logits_1, logits_2 = logits_env[::2], logits_env[1::2]
+                    y_1, y_2 = y_env[::2], y_env[1::2]
+                    n = np.max((len(y_1), len(y_2)))
+                    logits_1, logits_2, y_1, y_2 = logits_1[:n], logits_2[:n], y_1[:n], y_2[:n]
+                    scale = torch.tensor(1.0, device=logits.device, requires_grad=True)
+                    loss_1 = nn.functional.cross_entropy(logits_1*scale, y_1)
+                    loss_2 = nn.functional.cross_entropy(logits_2*scale, y_2)
+                    grad_1 = grad(loss_1, [scale], create_graph=True)[0]
+                    grad_2 = grad(loss_2, [scale], create_graph=True)[0]
+                    invariance_penalty += (grad_1 * grad_2).sum()
+                empirical_risk /= len(torch.unique(y_e))
+                invariance_penalty /= len(torch.unique(y_e))
+                irm_loss = empirical_risk + penalty_weight*invariance_penalty
+                if backprop:
+                    self.optimizer.zero_grad()
+                    irm_loss.backward()
+                    return irm_loss
+                else:
+                    return irm_loss, acc(logits, y)
+            self.optimizer.step(get_loss)
+            loss, accuracy = get_loss(backprop=False)
+            return {'loss': val(loss), 'acc': accuracy}
+        else:
+            logits = self.classifier(x)
+            empirical_risk, invariance_penalty = 0.0, 0.0
+            for env_idx in torch.unique(y_e):
+                logits_env = logits[y_e==env_idx]
+                y_env = y[y_e==env_idx]
+                empirical_risk += nn.functional.cross_entropy(logits_env, y_env)
+                logits_1, logits_2 = logits_env[::2], logits_env[1::2]
+                y_1, y_2 = y_env[::2], y_env[1::2]
+                n = np.max((len(y_1), len(y_2)))
+                logits_1, logits_2, y_1, y_2 = logits_1[:n], logits_2[:n], y_1[:n], y_2[:n]
+                scale = torch.tensor(1.0, device=logits.device, requires_grad=True)
+                loss_1 = nn.functional.cross_entropy(logits_1*scale, y_1)
+                loss_2 = nn.functional.cross_entropy(logits_2*scale, y_2)
+                grad_1 = grad(loss_1, [scale], create_graph=True)[0]
+                grad_2 = grad(loss_2, [scale], create_graph=True)[0]
+                invariance_penalty += (grad_1 * grad_2).sum()
+            empirical_risk /= len(torch.unique(y_e))
+            invariance_penalty /= len(torch.unique(y_e))
+            irm_loss = empirical_risk + penalty_weight*invariance_penalty
+            self.optimizer.zero_grad()
+            irm_loss.backward()
+            self.optimizer.step()
+            return {'loss': val(irm_loss), 'acc': acc(logits, y)}
 
+class DARE(Trainer):
+    hparams = {'learning_rate': lambda: 10**np.random.uniform(-2, 0),
+               'lambda': lambda: 10**np.random.uniform(-1, 1)}
+    def __init__(self, *args, dataloaders=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        train_dataloader = dataloaders[0]
+        self.calculate_environment_statistics(train_dataloader)
+    
+    def calculate_environment_statistics(self, dataloader, rho=0.1):
+        means, covariances = {}, {}
+        for bidx, batch in enumerate(dataloader):
+            x, (_, y_e) = batch
+            x, y_e = x.to(self.device), y_e.to(self.device)
+            for env_idx in torch.unique(y_e):
+                env_mean = x[y_e==env_idx].mean(dim=0, keepdims=True)
+                features_zc = x[y_e==env_idx] - env_mean
+                env_cov = torch.mm(features_zc.permute(1, 0), features_zc)
+                env_cov = (1-rho)*env_cov + rho*torch.eye(env_cov.shape[0], dtype=env_cov.dtype, device=env_cov.device)
+                
+                if not env_idx in means.keys():
+                    means[env_idx] = env_mean.squeeze()
+                else:
+                    means[env_idx] = (1/(bidx+1))*env_mean.squeeze() + (bidx/(bidx+1))*means[env_idx]
+                if not env_idx in covariances.keys():
+                    covariances[env_idx] = env_cov
+                else:
+                    covariances[env_idx] = (1/(bidx+1))*env_cov + (bidx/(bidx+1))*covariances[env_idx]
+        covariances[len(covariances)] = torch.stack(list(covariances.values())).mean(dim=0)
+        self.whitening_matrices = len(covariances)*[None]
+        self.whitened_means = len(means)*[None]
+        for env_idx, covariance in covariances.items():
+            Q, L = torch.linalg.eigh(covariance)
+            sqrt_covariance = Q @ torch.diag(torch.sqrt(nn.functional.relu(L))) @ Q.T
+            invsqrt_covariance = torch.linalg.pinv(sqrt_covariance, hermitian=True)
+            self.whitening_matrices[env_idx] = invsqrt_covariance
+            self.whitened_means[env_idx] = torch.mm(self.whitening_matrices[idx], means[env_idx].unsqueeze(-1)).squeeze()
+        self.whitening_matrices = torch.stack(self.whitening_matrices)
+    
+    def train_step(self, batch):
+        x, (y, y_env) = batch
+        x, y, y_env = x.to(self.device), y.to(self.device), y_env.to(self.device)
+        x_whitened = torch.bmm(self.whitening_matrices[y_env], x.unsqueeze(-1)).squeeze()
+        def get_model_loss(backprop=True):
+            logits = self.classifier(x_whitened)
+            empirical_loss = nn.functional.cross_entropy(logits, y)
+            uniform_mean_loss = -(nn.functional.softmax(torch.ones_like(logits), dim=-1) * nn.functional.log_softmax(logits, dim=-1)).sum() / logits.size(0) # cross entropy with soft target
+            loss = empirical_loss + self.hparams['lambda']*uniform_mean_loss
+            if backprop:
+                self.optimizer.zero_grad()
+                self.loss.backward()
+                return loss
+            else:
+                return loss, acc(logits, y)
+        self.optimizer.step(get_model_loss)
+        loss, accuracy = get_model_loss(backprop=False)
+        return {'loss': val(loss), 'acc': accuracy}
+    
 def run_epoch(dataloaders, trainer):
     if len(dataloaders) == 3:
         train_dataloader, val_dataloader, test_dataloader = dataloaders
@@ -192,6 +331,25 @@ def run_epoch(dataloaders, trainer):
         rv[key] = np.mean(item)
     return rv
     
+def run_until_saturation(run_fn, key, max_epochs=1, max_epochs_without_improvement=20):
+    epochs_without_improvement = 0
+    best_return = -np.inf
+    results = {}
+    for current_epoch in range(1, max_epochs+1):
+        epoch_rv = run_fn()
+        for key, item in epoch_rv.items():
+            if not key in results.keys():
+                results[key] = []
+            results[key].append(item)
+        if epoch_rv[key] > best_return:
+            best_return = epoch_rv[key]
+            epochs_without_improvement = 0
+        else:
+            epochs_without_improvement += 1
+        if epochs_without_improvement >= max_epochs_without_improvement:
+            break
+    return results, current_epoch
+    
 def get_baseline_results(dataloaders, device, epochs_per_trial=100):
     print('Evaluating accuracy of logistic regression trained on the target domain.')
     train_dataset = dataloaders[0].dataset.dataset
@@ -201,19 +359,38 @@ def get_baseline_results(dataloaders, device, epochs_per_trial=100):
     full_dataset = torch.utils.data.ConcatDataset((train_dataset, target_train_dataset))
     num_features = train_dataset.dataset.num_features
     num_classes = train_dataset.dataset.num_classes
-    train_dataloader = torch.utils.data.DataLoader(full_dataset, shuffle=True, batch_size=32)
-    test_dataloader = torch.utils.data.DataLoader(target_test_dataset, shuffle=False, batch_size=32)
-    logistic_regression_trainer = LogisticRegression(num_features, num_classes, device, {'learning_rate': 2e-4})
-    baseline_results = {}
-    for epoch_idx in range(epochs_per_trial):
-        epoch_rv = run_epoch((train_dataloader, test_dataloader), logistic_regression_trainer)
-        for key, item in epoch_rv.items():
-            if not key in baseline_results.keys():
-                baseline_results[key] = []
-            baseline_results[key].append(item)
+    train_dataloader = torch.utils.data.DataLoader(full_dataset, shuffle=True, batch_size=len(full_dataset))
+    test_dataloader = torch.utils.data.DataLoader(target_test_dataset, shuffle=False, batch_size=len(target_test_dataset))
+    results = []
+    for trial_idx in tqdm(range(20)):
+        hparams = {
+            hparam_name: get_hparam_fn() for hparam_name, get_hparam_fn in LogisticRegression.hparams.items()
+        }
+        trainer = LogisticRegression(num_features, num_classes, device, hparams)
+        trial_results = {}
+        for epoch_idx in range(1):#0):#epochs_per_trial):
+            epoch_rv = run_epoch(dataloaders, trainer)
+            for key, item in epoch_rv.items():
+                if not key in trial_results.keys():
+                    trial_results[key] = []
+                trial_results[key].append(item)
+        best_epoch_idx = np.argmax(trial_results['val_acc'])
+        for key, item in trial_results.items():
+            trial_results[key] = item[best_epoch_idx]
+        results.append((hparams, trial_results))
+    #best_trial_results, best_hparams = {'val_acc': -np.inf}, None
+    best_holdout_results, best_holdout_hparams = {'val_acc': -np.inf}, None
+    for hparams, trial_results in results:
+        if trial_results['val_acc'] > best_holdout_results['val_acc']:
+            best_holdout_results = trial_results
+            best_holdout_hparams = hparams
+    print('Sweep complete. Running longer trials with the optimal parameters.')
+    logistic_regression_trainer = LogisticRegression(num_features, num_classes, device, best_holdout_hparams)
+    baseline_results, total_epochs = run_until_saturation(lambda: run_epoch((train_dataloader, test_dataloader), logistic_regression_trainer), 'val_acc')
     best_epoch_idx = np.argmax(baseline_results['val_acc'])
     print('Best results when training on the target domain:')
     print('\t'+', '.join(['{}: {}'.format(key, item[best_epoch_idx]) for key, item in baseline_results.items()]))
+    print('Epochs taken to saturate return: {}'.format(total_epochs))
     return baseline_results
     
 def random_search_hparams(trainer_class, dataloaders, device, n_trials=20, epochs_per_trial=100):
@@ -227,9 +404,9 @@ def random_search_hparams(trainer_class, dataloaders, device, n_trials=20, epoch
         hparams = {
             hparam_name: get_hparam_fn() for hparam_name, get_hparam_fn in trainer_class.hparams.items()
         }
-        trainer = trainer_class(num_features, num_classes, device, hparams)
+        trainer = trainer_class(num_features, num_classes, device, hparams, dataloaders=dataloaders)
         trial_results = {}
-        for epoch_idx in range(epochs_per_trial):
+        for epoch_idx in range(1):#0):#epochs_per_trial):
             epoch_rv = run_epoch(dataloaders, trainer)
             for key, item in epoch_rv.items():
                 if not key in trial_results.keys():
@@ -249,10 +426,18 @@ def random_search_hparams(trainer_class, dataloaders, device, n_trials=20, epoch
         if trial_results['test_acc'] > best_oracle_results['test_acc']:
             best_oracle_results = trial_results
             best_oracle_hparams = hparams
-    print('Sweep complete.')
-    print('\tBest holdout results: {}'.format(best_holdout_results))
+    print('Sweep complete. Running longer trials with the optimal parameters.')
+    trainer = trainer_class(num_features, num_classes, device, best_holdout_hparams, dataloaders=dataloaders)
+    best_holdout_results, total_epochs = run_until_saturation(lambda: run_epoch(dataloaders, trainer), 'val_acc')
+    print('\tDone training with optimal holdout parameters. Epochs taken: {}'.format(total_epochs))
+    best_holdout_idx = np.argmax(best_holdout_results['val_acc'])
+    trainer = trainer_class(num_features, num_classes, device, best_oracle_hparams, dataloaders=dataloaders)
+    best_oracle_results, total_epochs = run_until_saturation(lambda: run_epoch(dataloaders, trainer), 'test_acc')
+    print('\tDone training with optimal oracle parameters. Epochs taken: {}'.format(total_epochs))
+    best_oracle_idx = np.argmax(best_oracle_results['test_acc'])
+    print('\tBest holdout results: {}'.format({key: item[best_holdout_idx] for key, item in best_holdout_results.items()}))
     print('\tBest holdout hparams: {}'.format(best_holdout_hparams))
-    print('\tBest oracle results: {}'.format(best_oracle_results))
+    print('\tBest oracle results: {}'.format({key: item[best_oracle_idx] for key, item in best_oracle_results.items()}))
     print('\tBest oracle hparams: {}'.format(best_oracle_hparams))
     print('\n\n')
     return {'best_holdout_results': best_holdout_results, 'best_holdout_hparams': best_holdout_hparams,
@@ -260,6 +445,7 @@ def random_search_hparams(trainer_class, dataloaders, device, n_trials=20, epoch
             'all_results': results}
 
 TRAINER_CLASSES = [
+    DARE,
     LogisticRegression,
     SVM,
     VREx,
