@@ -259,6 +259,7 @@ def train_feature_extractor(
         for trial_idx in range(20):
             print('Starting trial {}...'.format(trial_idx))
             trial_hparams = {hparam_name: get_hparam_fn() for hparam_name, get_hparam_fn in hparams.items()}
+            print('\tHyperparameters: {}'.format(trial_hparams))
             constructor_kwargs['optimizer_kwargs']['lr'] = trial_hparams['lr']
             constructor_kwargs['optimizer_kwargs']['weight_decay'] = trial_hparams['weight_decay']
             trial_objects = construct_single_model(**constructor_kwargs)
@@ -276,7 +277,7 @@ def train_feature_extractor(
         constructor_kwargs['optimizer_kwargs']['lr'] = best_hparams['lr']
         constructor_kwargs['optimizer_kwargs']['weight_decay'] = best_hparams['weight_decay']
         trial_objects = construct_single_model(**constructor_kwargs)
-        best_model, best_results = train_fe(100, trial_objects, mixup_alpha=best_hparams['mixup_alpha'], feature_covariance_decay=best_hparams['feature_covariance_decay'])
+        best_model, best_results = train_erm_fe(100, trial_objects, mixup_alpha=best_hparams['mixup_alpha'], feature_covariance_decay=best_hparams['feature_covariance_decay'])
         print('Done.')
         return best_model, best_results
     

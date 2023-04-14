@@ -279,13 +279,17 @@ class DARE(Trainer):
             sqrt_covariance = Q @ torch.diag(torch.sqrt(nn.functional.relu(L))) @ Q.T
             invsqrt_covariance = torch.linalg.pinv(sqrt_covariance, hermitian=True)
             self.whitening_matrices[env_idx] = invsqrt_covariance
-            self.whitened_means[env_idx] = torch.mm(self.whitening_matrices[env_idx], means[env_idx].unsqueeze(-1)).squeeze()
+            if env_idx < len(covariances)-1:
+                self.whitened_means[env_idx] = torch.mm(self.whitening_matrices[env_idx], means[env_idx].unsqueeze(-1)).squeeze()
         self.whitening_matrices = torch.stack(self.whitening_matrices)
     
     def train_step(self, batch):
         x, (y, y_env) = batch
         x, y, y_env = x.to(self.device), y.to(self.device), y_env.to(self.device)
-        x_whitened = torch.bmm(self.whitening_matrices[y_env], x.unsqueeze(-1)).squeeze()
+        x_whitened = []
+        for xx, yy_env in zip(torch.split(x, 32, dim=0), torch.split(y_env, 32, dim=0)): # can't fit n_datapoints * whitening_matrix in vram, so splitting it up
+            x_whitened.append(torch.bmm(self.whitening_matrices[yy_env], xx.unsqueeze(-1)).squeeze())
+        x_whitened = torch.cat(x_whitened, dim=0)
         def get_model_loss(backprop=True):
             logits = self.classifier(x_whitened)
             empirical_loss = nn.functional.cross_entropy(logits, y)
@@ -293,7 +297,7 @@ class DARE(Trainer):
             loss = empirical_loss + self.hparams['lambda']*uniform_mean_loss
             if backprop:
                 self.optimizer.zero_grad()
-                self.loss.backward()
+                loss.backward()
                 return loss
             else:
                 return loss, acc(logits, y)

@@ -53,7 +53,7 @@ def covariance_penalty(features):
     penalty = (covariance - torch.diagonal(covariance)).norm(p=2) / (len(features)**2 - len(features))
     return penalty
 
-def run_epoch(dataloader, step_fn, *step_args, compress_fn=np.mean, **step_kwargs):
+def run_epoch(dataloader, step_fn, *step_args, compress_fn=np.nanmean, **step_kwargs):
     rv = {}
     for batch in dataloader:
         step_rv = step_fn(batch, *step_args, **step_kwargs)
