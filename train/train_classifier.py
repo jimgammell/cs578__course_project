@@ -25,14 +25,11 @@ def get_dataloaders(dataset_constructor, holdout_domain, fe_type, seed, batch_si
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
     fe_path = os.path.join('.', 'trained_models', dataset_constructor.__name__, 'omit_'+holdout_domain, fe_type, 'model__%d.pth'%(seed))
     if not 'MNIST' in dataset_constructor.__name__:
-        if 'erm' in fe_type:
-            fe_model = resnet.PretrainedRN50(dataset_constructor.input_shape, dataset_constructor.num_classes,
-                                             pretrained=True if fe_type=='random_pretrained' else False)
-        else:
-            raise NotImplementedError
+        fe_model = resnet.PretrainedRN50(dataset_constructor.input_shape, dataset_constructor.num_classes,
+                                         pretrained=True if fe_type=='imagenet_trained' else False)
     else:
         raise NotImplementedError
-    if fe_type != 'random':
+    if not fe_type in ['random', 'imagenet_pretrained']:
         fe_model.load_state_dict(torch.load(fe_path, map_location=device))
     fe_model.eval()
     fe_model.requires_grad = False
@@ -73,7 +70,7 @@ class Trainer:
         return {'acc': acc(logits, y)}
 
 class LogisticRegression(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-5, -3.5)}
+    hparams = {'learning_rate': lambda: 10**np.random.uniform(-7, -3)}
     
     def train_step(self, batch):
         x, (y, y_e) = batch
@@ -86,7 +83,7 @@ class LogisticRegression(Trainer):
         return {'loss': val(loss), 'acc': acc(logits, y)}
 
 class SVM(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-5, -3.5),
+    hparams = {'learning_rate': lambda: 10**np.random.uniform(-7, -3),
                'weight_decay': lambda: 10**np.random.uniform(-6, -2)}
     
     def train_step(self, batch):
@@ -100,7 +97,7 @@ class SVM(Trainer):
         return {'loss': val(loss), 'acc': acc(logits, y)}
 
 class VREx(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-5, -3.5),
+    hparams = {'learning_rate': lambda: 10**np.random.uniform(-7, -3),
                'penalty_weight': lambda: 10**np.random.uniform(-1, 5),
                'anneal_iters': lambda: 10**np.random.uniform(0, 4)}
     
@@ -128,7 +125,7 @@ class VREx(Trainer):
         return {'loss': val(vrex_loss), 'acc': acc(logits, y)}
 
 class IRM(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-5, -3.5),
+    hparams = {'learning_rate': lambda: 10**np.random.uniform(-7, -3),
                'penalty_weight': lambda: 10**np.random.uniform(-1, 5),
                'anneal_iters': lambda: 10**np.random.uniform(0, 4)}
     
@@ -166,7 +163,11 @@ class IRM(Trainer):
         return {'loss': val(irm_loss), 'acc': acc(logits, y)}
 
 def run_epoch(dataloaders, trainer):
-    train_dataloader, val_dataloader, test_dataloader = dataloaders
+    if len(dataloaders) == 3:
+        train_dataloader, val_dataloader, test_dataloader = dataloaders
+    elif len(dataloaders) == 2:
+        train_dataloader, val_dataloader = dataloaders
+        test_dataloader = None
     rv = {}
     for batch in train_dataloader:
         step_rv = trainer.train_step(batch)
@@ -180,21 +181,48 @@ def run_epoch(dataloaders, trainer):
             if not 'val_'+key in rv.keys():
                 rv['val_'+key] = []
             rv['val_'+key].append(item)
-    for batch in test_dataloader:
-        step_rv = trainer.eval_step(batch)
-        for key, item in step_rv.items():
-            if not 'test_'+key in rv.keys():
-                rv['test_'+key] = []
-            rv['test_'+key].append(item)
+    if test_dataloader is not None:
+        for batch in test_dataloader:
+            step_rv = trainer.eval_step(batch)
+            for key, item in step_rv.items():
+                if not 'test_'+key in rv.keys():
+                    rv['test_'+key] = []
+                rv['test_'+key].append(item)
     for key, item in rv.items():
         rv[key] = np.mean(item)
     return rv
     
-def random_search_hparams(trainer_class, dataloaders, device, n_trials=25, epochs_per_trial=100):
+def get_baseline_results(dataloaders, device, epochs_per_trial=100):
+    print('Evaluating accuracy of logistic regression trained on the target domain.')
+    train_dataset = dataloaders[0].dataset.dataset
+    train_dataset, _ = torch.utils.data.random_split(train_dataset, [len(train_dataset)-len(train_dataset)//2, len(train_dataset)//2])
+    test_dataset = dataloaders[2].dataset
+    target_train_dataset, target_test_dataset = torch.utils.data.random_split(test_dataset, [len(test_dataset)-len(test_dataset)//2, len(test_dataset)//2])
+    full_dataset = torch.utils.data.ConcatDataset((train_dataset, target_train_dataset))
+    num_features = train_dataset.dataset.num_features
+    num_classes = train_dataset.dataset.num_classes
+    train_dataloader = torch.utils.data.DataLoader(full_dataset, shuffle=True, batch_size=32)
+    test_dataloader = torch.utils.data.DataLoader(target_test_dataset, shuffle=False, batch_size=32)
+    logistic_regression_trainer = LogisticRegression(num_features, num_classes, device, {'learning_rate': 2e-4})
+    baseline_results = {}
+    for epoch_idx in range(epochs_per_trial):
+        epoch_rv = run_epoch((train_dataloader, test_dataloader), logistic_regression_trainer)
+        for key, item in epoch_rv.items():
+            if not key in baseline_results.keys():
+                baseline_results[key] = []
+            baseline_results[key].append(item)
+    best_epoch_idx = np.argmax(baseline_results['val_acc'])
+    print('Best results when training on the target domain:')
+    print('\t'+', '.join(['{}: {}'.format(key, item[best_epoch_idx]) for key, item in baseline_results.items()]))
+    return baseline_results
+    
+def random_search_hparams(trainer_class, dataloaders, device, n_trials=20, epochs_per_trial=100):
     print('Sweeping hyperparams for trainer class {}'.format(trainer_class))
     num_features = dataloaders[0].dataset.dataset.num_features
     num_classes = dataloaders[0].dataset.dataset.num_classes
     results = []
+    
+    # Randomly sweep different sets of hyperparameters
     for trial_idx in tqdm(range(n_trials)):
         hparams = {
             hparam_name: get_hparam_fn() for hparam_name, get_hparam_fn in trainer_class.hparams.items()
@@ -211,16 +239,25 @@ def random_search_hparams(trainer_class, dataloaders, device, n_trials=25, epoch
         for key, item in trial_results.items():
             trial_results[key] = item[best_epoch_idx]
         results.append((hparams, trial_results))
-    best_trial_results, best_hparams = {'val_acc': -np.inf}, None
+    #best_trial_results, best_hparams = {'val_acc': -np.inf}, None
+    best_holdout_results, best_holdout_hparams = {'val_acc': -np.inf}, None
+    best_oracle_results, best_oracle_hparams = {'test_acc': -np.inf}, None
     for hparams, trial_results in results:
-        if trial_results['val_acc'] > best_trial_results['val_acc']:
-            best_trial_results = trial_results
-            best_hparams = hparams
+        if trial_results['val_acc'] > best_holdout_results['val_acc']:
+            best_holdout_results = trial_results
+            best_holdout_hparams = hparams
+        if trial_results['test_acc'] > best_oracle_results['test_acc']:
+            best_oracle_results = trial_results
+            best_oracle_hparams = hparams
     print('Sweep complete.')
-    print('\tBest results: {}'.format(best_trial_results))
-    print('\tBest hparams: {}'.format(best_hparams))
+    print('\tBest holdout results: {}'.format(best_holdout_results))
+    print('\tBest holdout hparams: {}'.format(best_holdout_hparams))
+    print('\tBest oracle results: {}'.format(best_oracle_results))
+    print('\tBest oracle hparams: {}'.format(best_oracle_hparams))
     print('\n\n')
-    return {'best_trial_results': best_trial_results, 'best_hparams': best_hparams, 'all_results': results}
+    return {'best_holdout_results': best_holdout_results, 'best_holdout_hparams': best_holdout_hparams,
+            'best_oracle_results': best_oracle_results, 'best_oracle_hparams': best_oracle_hparams,
+            'all_results': results}
 
 TRAINER_CLASSES = [
     LogisticRegression,
@@ -229,24 +266,41 @@ TRAINER_CLASSES = [
     IRM
 ]
 
-def evaluate_all_trained_models(overwrite=False, batch_size=32, device=None, num_epochs=10):
-    overwrite = True ###############
+def evaluate_trained_models(
+    classifiers='all', seeds='all', datasets='all',
+    overwrite=False, batch_size=32, device=None, num_epochs=100
+):
     if device is None:
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    if 'all' in classifiers:
+        classifiers = [c.__name__ for c in TRAINER_CLASSES]
     base_dir = os.path.join('.', 'results')
     for dataset in os.listdir(base_dir):
+        if not('all' in datasets) and not(dataset in datasets):
+            continue
         dataset_constructor = getattr(domainbed, dataset)
         for holdout_dir in os.listdir(os.path.join(base_dir, dataset)):
             holdout_domain = holdout_dir.split('_')[-1]
-            for fe_type in os.listdir(os.path.join(base_dir, dataset, holdout_dir)):
-                for trial_dir in os.listdir(os.path.join(base_dir, dataset, holdout_dir, fe_type)):
-                    seed = int(trial_dir.split('_')[-1])
+            for fe_type in ['random', 'imagenet_pretrained'] + list(os.listdir(os.path.join(base_dir, dataset, holdout_dir))) :
+                if 'mixup' in fe_type:
+                    continue
+                for seed in seeds:
+                    trial_dir = os.path.join(base_dir, dataset, holdout_dir, fe_type, 'trial_%d'%(seed))
+                    os.makedirs(trial_dir, exist_ok=True)
                     dataloaders = get_dataloaders(dataset_constructor, holdout_domain, fe_type, seed,
                                                   batch_size=batch_size, device=device)
                     print('Finished generating dataloaders for {} / {} / {} / {}'.format(dataset, holdout_domain, fe_type, seed))
                     results_dir = os.path.join(base_dir, dataset, holdout_dir, fe_type, trial_dir, 'results', 'linear_classifiers')
                     os.makedirs(results_dir, exist_ok=True)
+                    if overwrite or not(os.path.exists(os.path.join(results_dir, 'baseline_results.pickle'))):
+                        baseline_results = get_baseline_results(dataloaders, device, num_epochs)
+                        with open(os.path.join(results_dir, 'baseline_results.pickle'), 'wb') as F:
+                            pickle.dump(baseline_results, F)
+                    else:
+                        print('Preexisting target-domain results exist; skipping baseline trial.')
                     for trainer_class in TRAINER_CLASSES:
+                        if not trainer_class.__name__ in classifiers:
+                            continue
                         if not(overwrite) and os.path.exists(os.path.join(results_dir, classifier_name+'.pickle')):
                             print('Found a pre-existing linear classifier for {} / {} / {} / {}'.format(
                                 dataset, holdout_domain, fe_type, trainer_class))

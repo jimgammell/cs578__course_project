@@ -50,7 +50,7 @@ def covariance_penalty(features):
     features_mn = features.mean(dim=0, keepdims=True)
     features_zc = features - features_mn
     covariance = torch.mm(features_zc.permute(1, 0), features_zc)
-    penalty = (covariance - torch.diagonal(covariance)).norm(p=2) / len(features)
+    penalty = (covariance - torch.diagonal(covariance)).norm(p=2) / (len(features)**2 - len(features))
     return penalty
 
 def run_epoch(dataloader, step_fn, *step_args, compress_fn=np.mean, **step_kwargs):

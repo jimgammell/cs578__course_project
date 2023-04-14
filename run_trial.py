@@ -5,15 +5,23 @@ import numpy as np
 import torch
 from torch import nn, optim
 from train.train_feature_extractor import train_feature_extractor
-from train.train_classifier import evaluate_all_trained_models
+from train.train_classifier import evaluate_trained_models
 from datasets import mnist_variants, domainbed
 
 FEATURE_EXTRACTOR_CHOICES = [
     'random',
+    'imagenet_trained',
     'erm',
     'fixed_loss_autoencoder',
     'learned_loss_autoencoder',
     'gan'
+]
+
+LINEAR_CLASSIFIER_CHOICES = [
+    'LogisticRegression',
+    'SVM',
+    'VREx',
+    'IRM'
 ]
 
 DATASET_CHOICES = OrderedDict([
@@ -47,6 +55,10 @@ def main():
         help='Specify the training setup for the feature extractor.'
     )
     parser.add_argument(
+        '--lc-trainer', choices=LINEAR_CLASSIFIER_CHOICES+['all'], default='all', nargs='*',
+        help='Specify the training setup for the linear classifier.'
+    )
+    parser.add_argument(
         '--device', default=None,
         help='Specify the device to use for training.'
     )
@@ -59,7 +71,7 @@ def main():
         help='Specify the random seed to use for training.'
     )
     parser.add_argument(
-        '--restart', default=True, type=bool,
+        '--restart', default=False, action='store_true',
         help='Specify whether to restart training if there are already model checkpoints for the specified configuration.'
     )
     parser.add_argument(
@@ -80,7 +92,6 @@ def main():
     )
     
     args = parser.parse_args()
-    assert args.restart == True
     
     if args.train_fe:
         if 'all' in args.dataset:
@@ -95,6 +106,8 @@ def main():
         num_epochs = args.num_epochs
         for dataset in datasets:
             for fe_type in fe_types:
+                if fe_type in ['random', 'imagenet_trained']:
+                    continue
                 for random_seed in seeds:
                     for omitted_domain in range(len(dataset.domains)):
                         try:
@@ -112,7 +125,11 @@ def main():
                         except Exception:
                             traceback.print_exc()
     if args.train_lc:
-        evaluate_all_trained_models(overwrite=False, batch_size=32, device=args.device, num_epochs=25)
+        evaluate_trained_models(
+            classifiers=args.lc_trainer, seeds=args.seed,
+            datasets=[DATASET_CHOICES[ds_arg].__name__ for ds_arg in args.dataset],
+            overwrite=args.restart, batch_size=32, device=args.device, num_epochs=args.num_epochs
+        )
     
 if __name__ == '__main__':
     main()
