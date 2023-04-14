@@ -35,7 +35,6 @@ def train_step(batch, model, optimizer, loss_fn, device, feature_covariance_deca
         logits = model.classify_features(model_features)
         loss = criterion(logits)
     loss = loss + feature_covariance_decay*covariance_penalty(model_features)
-    print(loss)
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()

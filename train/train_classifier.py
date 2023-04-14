@@ -335,7 +335,7 @@ def run_epoch(dataloaders, trainer):
         rv[key] = np.mean(item)
     return rv
     
-def run_until_saturation(run_fn, key, max_epochs=1, max_epochs_without_improvement=20):
+def run_until_saturation(run_fn, key, max_epochs=1000, max_epochs_without_improvement=20):
     epochs_without_improvement = 0
     best_return = -np.inf
     results = {}
@@ -372,7 +372,7 @@ def get_baseline_results(dataloaders, device, epochs_per_trial=100):
         }
         trainer = LogisticRegression(num_features, num_classes, device, hparams)
         trial_results = {}
-        for epoch_idx in range(1):#0):#epochs_per_trial):
+        for epoch_idx in range(10):#epochs_per_trial):
             epoch_rv = run_epoch(dataloaders, trainer)
             for key, item in epoch_rv.items():
                 if not key in trial_results.keys():
@@ -410,7 +410,7 @@ def random_search_hparams(trainer_class, dataloaders, device, n_trials=20, epoch
         }
         trainer = trainer_class(num_features, num_classes, device, hparams, dataloaders=dataloaders)
         trial_results = {}
-        for epoch_idx in range(1):#0):#epochs_per_trial):
+        for epoch_idx in range(10):#epochs_per_trial):
             epoch_rv = run_epoch(dataloaders, trainer)
             for key, item in epoch_rv.items():
                 if not key in trial_results.keys():
