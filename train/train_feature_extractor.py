@@ -229,9 +229,9 @@ def train_feature_extractor(
                         rv['train_'+key] = []
                     rv['train_'+key].append(item)
                 for key, item in val_rv.items():
-                    if not 'val_'+key in val_rv.items():
-                        val_rv['val_'+key] = []
-                    val_rv['val_'+key].append(item)
+                    if not 'val_'+key in rv.items():
+                        rv['val_'+key] = []
+                    rv['val_'+key].append(item)
                 if save_int_results:
                     save_results(train_rv, val_rv, epoch_idx)
                 print('Epoch {} complete in {} seconds'.format(epoch_idx, time.time()-t0))
