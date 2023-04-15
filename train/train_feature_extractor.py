@@ -186,6 +186,7 @@ def train_feature_extractor(
     def train_erm_fe(num_epochs, trial_objects, save_int_results=False, mixup_alpha=0.0, feature_covariance_decay=0.0):
         best_model = get_state_dict(trial_objects['model'])
         best_train_loss = np.inf
+        best_val_acc = -np.inf
         epochs_without_improvement = 0
         for epoch_idx in range(1, num_epochs+1):
             t0 = time.time()
@@ -200,20 +201,22 @@ def train_feature_extractor(
             print_dict(train_rv)
             print('\tVal rv:')
             print_dict(val_rv)
+            if val_rv['acc'] > best_val_acc:
+                print('New best model found.')
+                best_val_acc = val_rv['acc']
+                best_model = get_state_dict(trial_objects['model'])
             train_loss = train_rv['loss']
             if train_loss < best_train_loss:
-                print('New best model found.')
                 best_train_loss = train_loss
-                best_model = get_state_dict(trial_objects['model'])
                 epochs_without_improvement = 0
             else:
                 epochs_without_improvement += 1
-                print('Epochs without improvement (at current learning rate): {}'.format(epochs_without_improvement))
+                print('Epochs without training loss decrease (at current learning rate): {}'.format(epochs_without_improvement))
             if epochs_without_improvement > 5:
-                print('Performance gains have saturated. Dividing learning rate by 10.')
+                print('Training loss improvement has saturated. Dividing learning rate by 10.')
                 epochs_without_improvement = 0
                 for g in trial_objects['optimizer'].param_groups:
-                    g['lr'] /= 2.0
+                    g['lr'] /= 10.0
         return best_model
     
     def train_fe(num_epochs, trial_objects, save_int_results=False, mixup_alpha=0.0, feature_covariance_decay=0.0):

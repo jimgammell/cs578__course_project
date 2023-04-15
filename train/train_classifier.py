@@ -47,9 +47,9 @@ def get_dataloaders(dataset_constructor, holdout_domain, fe_type, seed, batch_si
         train_dataset, [len(train_dataset)-len(train_dataset)//5, len(train_dataset)//5]
     )
     test_dataset = ExtractedFeaturesDataset(test_dataset, fe_model, batch_size=32, device=device)
-    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=len(train_dataset), shuffle=True, num_workers=8)
-    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=len(val_dataset), shuffle=False, num_workers=8)
-    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=len(test_dataset), shuffle=False, num_workers=8)
+    train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=len(train_dataset), shuffle=True)#, num_workers=8)
+    val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=len(val_dataset), shuffle=False)#, num_workers=8)
+    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=len(test_dataset), shuffle=False)#, num_workers=8)
     
     return train_dataloader, val_dataloader, test_dataloader
 
@@ -71,7 +71,7 @@ class Trainer:
         return {'acc': acc(logits, y)}
 
 class LogisticRegression(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-2, 0),
+    hparams = {'learning_rate': lambda: 1,#lambda: 10**np.random.uniform(-2, 0),
                'weight_decay': lambda: 10**np.random.uniform(-6, -2)}
     
     def train_step(self, batch):
@@ -99,7 +99,7 @@ class LogisticRegression(Trainer):
             return {'loss': val(loss), 'acc': acc(logits, y)}
 
 class SVM(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-2, 0),
+    hparams = {'learning_rate': lambda: 1,#10**np.random.uniform(-2, 0),
                'weight_decay': lambda: 10**np.random.uniform(-6, -2)}
     
     def train_step(self, batch):
@@ -127,7 +127,7 @@ class SVM(Trainer):
             return {'loss': val(loss), 'acc': acc(logits, y)}
 
 class VREx(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-2, 0),
+    hparams = {'learning_rate': lambda: 1,#10**np.random.uniform(-2, 0),
                'penalty_weight': lambda: 10**np.random.uniform(-1, 5),
                'anneal_iters': lambda: 0.0} #lambda: 10**np.random.uniform(0, 4)}
     
@@ -176,7 +176,7 @@ class VREx(Trainer):
             return {'loss': val(vrex_loss), 'acc': acc(logits, y)}
 
 class IRM(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-2, 0),
+    hparams = {'learning_rate': lambda: 1,#10**np.random.uniform(-2, 0),
                'penalty_weight': lambda: 10**np.random.uniform(-1, 5),
                'anneal_iters': lambda: 0.0} # lambda: 10**np.random.uniform(0, 4)}
     
@@ -245,7 +245,7 @@ class IRM(Trainer):
             return {'loss': val(irm_loss), 'acc': acc(logits, y)}
 
 class DARE(Trainer):
-    hparams = {'learning_rate': lambda: 10**np.random.uniform(-2, 0),
+    hparams = {'learning_rate': lambda: 1,#10**np.random.uniform(-2, 0),
                'lambda': lambda: 10**np.random.uniform(-1, 1)}
     def __init__(self, *args, dataloaders=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -471,15 +471,15 @@ def evaluate_trained_models(
         dataset_constructor = getattr(domainbed, dataset)
         for holdout_dir in os.listdir(os.path.join(base_dir, dataset)):
             holdout_domain = holdout_dir.split('_')[-1]
-            for fe_type in ['random', 'imagenet_pretrained'] + list(os.listdir(os.path.join(base_dir, dataset, holdout_dir))) :
+            for fe_type in list(os.listdir(os.path.join(base_dir, dataset, holdout_dir))) + ['random', 'imagenet_pretrained']:
                 if 'mixup' in fe_type:
                     continue
                 for seed in seeds:
                     trial_dir = os.path.join(base_dir, dataset, holdout_dir, fe_type, 'trial_%d'%(seed))
                     os.makedirs(trial_dir, exist_ok=True)
+                    print('Generating dataloaders for {} / {} / {} / {}'.format(dataset, holdout_domain, fe_type, seed))
                     dataloaders = get_dataloaders(dataset_constructor, holdout_domain, fe_type, seed,
                                                   batch_size=batch_size, device=device)
-                    print('Finished generating dataloaders for {} / {} / {} / {}'.format(dataset, holdout_domain, fe_type, seed))
                     results_dir = os.path.join(base_dir, dataset, holdout_dir, fe_type, trial_dir, 'results', 'linear_classifiers')
                     os.makedirs(results_dir, exist_ok=True)
                     if overwrite or not(os.path.exists(os.path.join(results_dir, 'baseline_results.pickle'))):
