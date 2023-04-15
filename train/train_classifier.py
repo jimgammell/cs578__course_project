@@ -282,6 +282,7 @@ class DARE(Trainer):
             if env_idx < len(covariances)-1:
                 self.whitened_means[env_idx] = torch.mm(self.whitening_matrices[env_idx], means[env_idx].unsqueeze(-1)).squeeze()
         self.whitening_matrices = torch.stack(self.whitening_matrices)
+        self.whitened_means = torch.stack(self.whitened_means)
     
     def train_step(self, batch):
         x, (y, y_env) = batch
@@ -293,7 +294,8 @@ class DARE(Trainer):
         def get_model_loss(backprop=True):
             logits = self.classifier(x_whitened)
             empirical_loss = nn.functional.cross_entropy(logits, y)
-            uniform_mean_loss = -(nn.functional.softmax(torch.ones_like(logits), dim=-1) * nn.functional.log_softmax(logits, dim=-1)).sum() / logits.size(0) # cross entropy with soft target
+            mean_logits = self.classifier(self.whitened_means)
+            uniform_mean_loss = -(nn.functional.softmax(torch.ones_like(mean_logits), dim=-1) * nn.functional.log_softmax(mean_logits, dim=-1)).sum() / logits.size(0) # cross entropy with soft target
             loss = empirical_loss + self.hparams['lambda']*uniform_mean_loss
             if backprop:
                 self.optimizer.zero_grad()
@@ -360,7 +362,7 @@ def get_baseline_results(dataloaders, device, epochs_per_trial=100):
     train_dataset, _ = torch.utils.data.random_split(train_dataset, [len(train_dataset)-len(train_dataset)//5, len(train_dataset)//5])
     test_dataset = dataloaders[2].dataset
     target_train_dataset, target_test_dataset = torch.utils.data.random_split(test_dataset, [len(test_dataset)-len(test_dataset)//5, len(test_dataset)//5])
-    full_dataset = torch.utils.data.ConcatDataset((train_dataset, target_train_dataset))
+    full_dataset = torch.utils.data.ConcatDataset((target_train_dataset,))#train_dataset, target_train_dataset))
     num_features = train_dataset.dataset.num_features
     num_classes = train_dataset.dataset.num_classes
     train_dataloader = torch.utils.data.DataLoader(full_dataset, shuffle=True, batch_size=len(full_dataset))

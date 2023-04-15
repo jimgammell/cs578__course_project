@@ -267,7 +267,7 @@ def train_feature_extractor(
             constructor_kwargs['optimizer_kwargs']['lr'] = trial_hparams['lr']
             constructor_kwargs['optimizer_kwargs']['weight_decay'] = trial_hparams['weight_decay']
             trial_objects = construct_single_model(**constructor_kwargs)
-            _, trial_results = train_fe(1, trial_objects, mixup_alpha=trial_hparams['mixup_alpha'], feature_covariance_decay=trial_hparams['feature_covariance_decay']) #####
+            _, trial_results = train_fe(10, trial_objects, mixup_alpha=trial_hparams['mixup_alpha'], feature_covariance_decay=trial_hparams['feature_covariance_decay'])
             results.append(trial_results)
             hparams_.append(trial_hparams)
         best_val_acc, best_hparams = -np.inf, None
@@ -281,7 +281,7 @@ def train_feature_extractor(
         constructor_kwargs['optimizer_kwargs']['lr'] = best_hparams['lr']
         constructor_kwargs['optimizer_kwargs']['weight_decay'] = best_hparams['weight_decay']
         trial_objects = construct_single_model(**constructor_kwargs)
-        best_model = train_erm_fe(1, trial_objects, mixup_alpha=best_hparams['mixup_alpha'], feature_covariance_decay=best_hparams['feature_covariance_decay']) #####
+        best_model = train_erm_fe(100, trial_objects, mixup_alpha=best_hparams['mixup_alpha'], feature_covariance_decay=best_hparams['feature_covariance_decay'], save_int_results=True)
         print('Done.')
         return best_model
     
