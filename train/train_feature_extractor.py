@@ -204,7 +204,6 @@ def train_feature_extractor(
             if val_rv['acc'] > best_val_acc:
                 print('New best model found.')
                 best_val_acc = val_rv['acc']
-                best_results = 
                 best_model = get_state_dict(trial_objects['model'])
             train_loss = train_rv['loss']
             if train_loss < best_train_loss:
