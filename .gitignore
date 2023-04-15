@@ -4,3 +4,4 @@ results
 */__pycache__/*
 *.ipynb
 *.pyc
+run_erm_trials.sh
