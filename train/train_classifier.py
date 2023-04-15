@@ -357,9 +357,9 @@ def run_until_saturation(run_fn, key, max_epochs=1000, max_epochs_without_improv
 def get_baseline_results(dataloaders, device, epochs_per_trial=100):
     print('Evaluating accuracy of logistic regression trained on the target domain.')
     train_dataset = dataloaders[0].dataset.dataset
-    train_dataset, _ = torch.utils.data.random_split(train_dataset, [len(train_dataset)-len(train_dataset)//2, len(train_dataset)//2])
+    train_dataset, _ = torch.utils.data.random_split(train_dataset, [len(train_dataset)-len(train_dataset)//5, len(train_dataset)//5])
     test_dataset = dataloaders[2].dataset
-    target_train_dataset, target_test_dataset = torch.utils.data.random_split(test_dataset, [len(test_dataset)-len(test_dataset)//2, len(test_dataset)//2])
+    target_train_dataset, target_test_dataset = torch.utils.data.random_split(test_dataset, [len(test_dataset)-len(test_dataset)//5, len(test_dataset)//5])
     full_dataset = torch.utils.data.ConcatDataset((train_dataset, target_train_dataset))
     num_features = train_dataset.dataset.num_features
     num_classes = train_dataset.dataset.num_classes

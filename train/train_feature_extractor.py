@@ -286,7 +286,7 @@ def train_feature_extractor(
         return best_model
     
     if fe_type == 'erm':
-        best_model, _ = get_optimal_fe_hparams()
+        best_model = get_optimal_fe_hparams()
     else:
         best_model = train_fe()
     
