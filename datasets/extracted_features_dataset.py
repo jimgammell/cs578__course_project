@@ -20,13 +20,14 @@ class ExtractedFeaturesDataset(Dataset):
                 self.y_env.append(y_env)
             batch = torch.stack(xx).to(device)
             with torch.no_grad():
-                feature_batch = feature_extractor.get_features(batch).detach().cpu()
-            logits = feature_extractor.classify_features(x)
-            loss.append(val(nn.functional.cross_entropy(logits, torch.stack(self.y[-batch_size:]))))
-            accuracy.append(acc(logits, torch.stack(self.y[-batch_size:])))
+                feature_batch = feature_extractor.get_features(batch).detach()
+                logits = feature_extractor.classify_features(feature_batch)
+            feature_batch = feature_batch.cpu()
+            loss.append(val(nn.functional.cross_entropy(logits, torch.stack(self.y[-batch_size:]).to(device))))
+            accuracy.append(acc(logits, torch.stack(self.y[-batch_size:]).to(device)))
             self.x.extend(torch.unbind(feature_batch))
         loss, accuracy = np.mean(loss), np.mean(accuracy)
-        print('\tDone. Loss: {}. Accuracy: {}.')
+        print('\tDone. Loss: {}. Accuracy: {}.'.format(loss, accuracy))
         self.num_features = feature_extractor.num_features
         self.num_classes = raw_dataset.__class__.num_classes
         self.domains = raw_dataset.__class__.domains

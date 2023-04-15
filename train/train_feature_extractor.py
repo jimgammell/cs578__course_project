@@ -204,6 +204,7 @@ def train_feature_extractor(
             if val_rv['acc'] > best_val_acc:
                 print('New best model found.')
                 best_val_acc = val_rv['acc']
+                best_results = 
                 best_model = get_state_dict(trial_objects['model'])
             train_loss = train_rv['loss']
             if train_loss < best_train_loss:
@@ -281,9 +282,9 @@ def train_feature_extractor(
         constructor_kwargs['optimizer_kwargs']['lr'] = best_hparams['lr']
         constructor_kwargs['optimizer_kwargs']['weight_decay'] = best_hparams['weight_decay']
         trial_objects = construct_single_model(**constructor_kwargs)
-        best_model, best_results = train_erm_fe(1, trial_objects, mixup_alpha=best_hparams['mixup_alpha'], feature_covariance_decay=best_hparams['feature_covariance_decay']) #####
+        best_model = train_erm_fe(1, trial_objects, mixup_alpha=best_hparams['mixup_alpha'], feature_covariance_decay=best_hparams['feature_covariance_decay']) #####
         print('Done.')
-        return best_model, best_results
+        return best_model
     
     if fe_type == 'erm':
         best_model, _ = get_optimal_fe_hparams()
