@@ -34,7 +34,7 @@ def download_and_extract_dataset(url, dest, remove=True):
         os.remove(dest)
 
 class MultiDomainDataset(Dataset):
-    def __init__(self, root, domains_to_use, url=None, download_extension=None, download=True, data_transform=None, target_transform=None):
+    def __init__(self, root, domains_to_use, all_domains, url=None, download_extension=None, download=True, data_transform=None, target_transform=None):
         super().__init__()
         
         self.domains_to_use = domains_to_use
@@ -44,10 +44,10 @@ class MultiDomainDataset(Dataset):
         assert all(domain in os.listdir(root) for domain in domains_to_use)
         self.environments = [
             DomainDataset(domain, root, data_transform=data_transform, target_transform=target_transform)
-            for domain in self.domains_to_use
+            if domain in domains_to_use else () for domain in all_domains#self.domains_to_use
         ]
         self.num_datapoints = sum(len(d) for d in self.environments)
-        self.classes = list(self.environments[0].data_files.keys())
+        self.classes = list([env for env in self.environments if isinstance(env, DomainDataset)][0].data_files.keys())
         
     def __getitem__(self, idx):
         for d_idx, d in enumerate(self.environments):

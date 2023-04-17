@@ -48,7 +48,7 @@ class OfficeHome(MultiDomainDataset):
             download_and_extract_dataset(r'https://drive.google.com/uc?id=1uY0pj7oFsjMxRwaD3Sxy0jgel0fsYXLC',
                                          os.path.join('.', 'downloads', 'temp.zip'))
             os.rename(os.path.join('.', 'downloads', 'OfficeHomeDataset_10072016'), root)
-        super().__init__(root, domains_to_use, **kwargs)
+        super().__init__(root, domains_to_use, OfficeHome.domains, **kwargs)
 
 class VLCS(MultiDomainDataset):
     domains = ['Caltech101', 'LabelMe', 'SUN09', 'VOC2007']
@@ -69,7 +69,7 @@ class VLCS(MultiDomainDataset):
             os.makedirs(root, exist_ok=True)
             download_and_extract_dataset(r'https://drive.google.com/uc?id=1skwblH1_okBwxWxmRsp9_qi15hyPpxg8',
                                          os.path.join('.', 'downloads', 'temp.tar.gz'))
-        super().__init__(root, domains_to_use, **kwargs)
+        super().__init__(root, domains_to_use, VLCS.domains, **kwargs)
 
 class PACS(MultiDomainDataset):
     domains = ['art_painting', 'cartoon', 'photo', 'sketch']
@@ -90,7 +90,7 @@ class PACS(MultiDomainDataset):
             download_and_extract_dataset(r'https://drive.google.com/uc?id=1JFr8f805nMUelQWWmfnJR3y4_SYoN5Pd',
                                          os.path.join('.', 'downloads', 'temp.zip'))
             os.rename(os.path.join('.', 'downloads', 'kfold'), root)
-        super().__init__(root, domains_to_use, **kwargs)
+        super().__init__(root, domains_to_use, PACS.domains, **kwargs)
 
 class Sviro(MultiDomainDataset):
     domains = ['aclass', 'escape', 'hilux', 'i3', 'lexus', 'tesla', 'tiguan', 'tucson', 'x5', 'zoe']
@@ -111,7 +111,7 @@ class Sviro(MultiDomainDataset):
             download_and_extract_dataset(r'https://sviro.kl.dfki.de/?wpdmdl=1731',
                                  os.path.join('.', 'downloads', 'temp.zip'))
             os.rename(os.path.join('.', 'downloads', 'SVIRO_DOMAINBED'), root)
-        super().__init__(root, domains_to_use, **kwargs)
+        super().__init__(root, domains_to_use, Sviro.domains, **kwargs)
 
 class DomainNet(MultiDomainDataset):
     domains = ['clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch']
@@ -146,7 +146,7 @@ class DomainNet(MultiDomainDataset):
                         os.remove(os.path.join(root, line.strip()))
                     except OSError:
                         pass
-        super().__init__(root, domains_to_use, **kwargs)
+        super().__init__(root, domains_to_use, DomainNet.domains, **kwargs)
 
 class TerraIncognita(MultiDomainDataset):
     domains = ['location_100', 'location_38', 'location_43', 'location_46']
@@ -212,4 +212,4 @@ class TerraIncognita(MultiDomainDataset):
                             shutil.move(src_path, dst_path)
             shutil.rmtree(images_folder)
             os.remove(annotations_file)
-        super().__init__(root, domains_to_use, **kwargs)
+        super().__init__(root, domains_to_use, TerraIncognita.domains, **kwargs)
