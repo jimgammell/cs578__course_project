@@ -27,7 +27,7 @@ def get_dataloaders(dataset_constructor, holdout_domain, fe_type, seed, batch_si
     fe_path = os.path.join('.', 'trained_models', dataset_constructor.__name__, 'omit_'+holdout_domain, fe_type, 'model__%d.pth'%(seed))
     if not 'MNIST' in dataset_constructor.__name__:
         fe_model = resnet.PretrainedRN50(dataset_constructor.input_shape, dataset_constructor.num_classes,
-                                         pretrained=True if fe_type=='imagenet_trained' else False)
+                                         pretrained=True if fe_type=='imagenet_pretrained' else False)
     else:
         raise NotImplementedError
     if not fe_type in ['random', 'imagenet_pretrained']:
@@ -414,13 +414,13 @@ def run_until_saturation(run_fn, key, max_epochs=1000, max_epochs_without_improv
     
 def get_baseline_results(dataloaders, device, epochs_per_trial=100):
     print('Evaluating accuracy of logistic regression trained on the target domain.')
+    num_features = dataloaders[0].dataset.dataset.num_features
+    num_classes = dataloaders[0].dataset.dataset.num_classes
     train_dataset = torch.utils.data.ConcatDataset((dataloaders[0].dataset.dataset, dataloaders[1].dataset.dataset))
     train_dataset, val_dataset = torch.utils.data.random_split(train_dataset, [len(train_dataset)-len(train_dataset)//5, len(train_dataset)//5])
     test_dataset = dataloaders[2].dataset
     target_train_dataset, target_test_dataset = torch.utils.data.random_split(test_dataset, [len(test_dataset)-len(test_dataset)//5, len(test_dataset)//5])
     full_dataset = torch.utils.data.ConcatDataset((train_dataset, target_train_dataset))
-    num_features = train_dataset.dataset.num_features
-    num_classes = train_dataset.dataset.num_classes
     train_dataloader = torch.utils.data.DataLoader(full_dataset, shuffle=True, batch_size=len(full_dataset))
     val_dataloader = torch.utils.data.DataLoader(torch.utils.data.ConcatDataset((val_dataset, target_test_dataset)), shuffle=False, batch_size=len(val_dataset)+len(target_test_dataset))
     test_dataloader = torch.utils.data.DataLoader(target_test_dataset, shuffle=False, batch_size=len(target_test_dataset))
@@ -534,32 +534,37 @@ def evaluate_trained_models(
         for holdout_dir in os.listdir(os.path.join(base_dir, dataset)):
             holdout_domain = holdout_dir.split('_')[-1]
             for fe_type in list(os.listdir(os.path.join(base_dir, dataset, holdout_dir))) + ['random', 'imagenet_pretrained']:
-                if 'mixup' in fe_type:
-                    continue
                 for seed in seeds:
                     random.seed(seed)
                     np.random.seed(seed)
                     torch.manual_seed(seed)
                     trial_dir = os.path.join(base_dir, dataset, holdout_dir, fe_type, 'trial_%d'%(seed))
                     os.makedirs(trial_dir, exist_ok=True)
-                    print('Generating dataloaders for {} / {} / {} / {}'.format(dataset, holdout_domain, fe_type, seed))
-                    dataloaders = get_dataloaders(dataset_constructor, holdout_domain, fe_type, seed,
-                                                  batch_size=batch_size, device=device)
+                    dataloaders = None
+                    def make_dataloaders():
+                        nonlocal dataloaders
+                        if dataloaders is None:
+                            print('Generating dataloaders for {} / {} / {} / {}'.format(dataset, holdout_domain, fe_type, seed))
+                            dataloaders = get_dataloaders(dataset_constructor, holdout_domain, fe_type, seed,
+                                                          batch_size=batch_size, device=device)
                     results_dir = os.path.join(base_dir, dataset, holdout_dir, fe_type, 'linear_classifiers')
                     os.makedirs(results_dir, exist_ok=True)
                     if overwrite or not(os.path.exists(os.path.join(results_dir, 'baseline_results.pickle'))):
+                        make_dataloaders()
                         baseline_results = get_baseline_results(dataloaders, device, num_epochs)
                         with open(os.path.join(results_dir, 'baseline_results.pickle'), 'wb') as F:
                             pickle.dump(baseline_results, F)
                     else:
-                        print('Preexisting target-domain results exist; skipping baseline trial.')
+                        print('Skipping trial; found pre-existing results in {}'.format(
+                            os.path.join(results_dir, 'baseline_results.pickle')))
                     for trainer_class in TRAINER_CLASSES:
                         if not trainer_class.__name__ in classifiers:
                             continue
-                        if not(overwrite) and os.path.exists(os.path.join(results_dir, classifier_name+'.pickle')):
-                            print('Found a pre-existing linear classifier for {} / {} / {} / {}'.format(
-                                dataset, holdout_domain, fe_type, trainer_class))
+                        if not(overwrite) and os.path.exists(os.path.join(results_dir, trainer_class.__name__+'.pickle')):
+                            print('Skipping trial; found pre-existing results in {}'.format(
+                                os.path.join(results_dir, trainer_class.__name__+'.pickle')))
                             continue
+                        make_dataloaders()
                         rv = random_search_hparams(trainer_class, dataloaders, device)
                         with open(os.path.join(results_dir, trainer_class.__name__+'.pickle'), 'wb') as F:
                             pickle.dump(rv, F)
