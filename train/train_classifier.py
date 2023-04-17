@@ -139,7 +139,7 @@ class VREx(Trainer):
     hparam_options = {'learning_rate': lambda: 0.2,#10**np.random.uniform(-2, 0),
                       'penalty_weight': lambda: 10**np.random.uniform(-1, 5),
                       'weight_decay': lambda: 10**np.random.uniform(-6, -2),
-                      'anneal_iters': lambda: np.random.choice([0, 1, 2, 3, 4, 5])} #lambda: 10**np.random.uniform(0, 4)}
+                      'anneal_iters': lambda: np.random.choice([0, 1, 2])} #lambda: 10**np.random.uniform(0, 4)}
     
     def train_step(self, batch):
         if not hasattr(self, 'num_steps'):
@@ -189,7 +189,7 @@ class IRM(Trainer):
     hparam_options = {'learning_rate': lambda: 0.2,#10**np.random.uniform(-2, 0),
                       'penalty_weight': lambda: 10**np.random.uniform(-1, 5),
                       'weight_decay': lambda: 10**np.random.uniform(-6, -2),
-                      'anneal_iters': lambda: np.random.choice([0, 1, 2, 3, 4, 5])} # lambda: 10**np.random.uniform(0, 4)}
+                      'anneal_iters': lambda: np.random.choice([0, 1, 2])} # lambda: 10**np.random.uniform(0, 4)}
     
     def train_step(self, batch):
         if not hasattr(self, 'num_steps'):
@@ -254,7 +254,7 @@ class IRM(Trainer):
             return {'loss': val(irm_loss), 'acc': acc(logits, y)}
 
 class Mixup(Trainer):
-    hparam_options = {'learning_rate': lambda: 0.2,
+    hparam_options = {'learning_rate': lambda: 1,
                       'weight_decay': lambda: 10**np.random.uniform(-6, -2),
                       'mixup_alpha': lambda: 10**np.random.uniform(-1, 1)}
     
@@ -276,7 +276,7 @@ class Mixup(Trainer):
         def get_loss(backprop=True):
             logits = self.classifier(x_mu)
             objective = (lambdas*nn.functional.cross_entropy(logits, y_a, reduction='none')).mean() + \
-                        ((1-lambdas)*nn.functional.cross_entropy(logits, y_b, reduction='none')).mean() + + self.hparams['weight_decay']*self.classifier.weight.norm(p=2)
+                        ((1-lambdas)*nn.functional.cross_entropy(logits, y_b, reduction='none')).mean() + self.hparams['weight_decay']*self.classifier.weight.norm(p=2)
             if backprop:
                 self.optimizer.zero_grad()
                 objective.backward()
@@ -334,7 +334,7 @@ class DARE(Trainer):
         x, (y, y_env) = batch
         x, y, y_env = x.to(self.device), y.to(self.device), y_env.to(self.device)
         x_whitened = []
-        for xx, yy_env in zip(torch.split(x, 1024, dim=0), torch.split(y_env, 1024, dim=0)): # can't fit n_datapoints * whitening_matrix in vram, so splitting it up
+        for xx, yy_env in zip(torch.split(x, 256, dim=0), torch.split(y_env, 256, dim=0)): # can't fit n_datapoints * whitening_matrix in vram, so splitting it up
             x_whitened.append(torch.bmm(self.whitening_matrices[yy_env], xx.unsqueeze(-1)).squeeze())
         x_whitened = torch.cat(x_whitened, dim=0)
         def get_model_loss(backprop=True):
@@ -357,7 +357,7 @@ class DARE(Trainer):
         x, (y, y_env) = batch
         x, y, y_env = x.to(self.device), y.to(self.device), y_env.to(self.device)
         x_whitened = []
-        for xx, yy_env in zip(torch.split(x, 1024, dim=0), torch.split(y_env, 1024, dim=0)):
+        for xx, yy_env in zip(torch.split(x, 256, dim=0), torch.split(y_env, 256, dim=0)):
             x_whitened.append(torch.bmm(self.whitening_matrices[yy_env], xx.unsqueeze(-1)).squeeze())
         x_whitened = torch.cat(x_whitened, dim=0)
         logits = self.classifier(x_whitened)
@@ -414,14 +414,15 @@ def run_until_saturation(run_fn, key, max_epochs=1000, max_epochs_without_improv
     
 def get_baseline_results(dataloaders, device, epochs_per_trial=100):
     print('Evaluating accuracy of logistic regression trained on the target domain.')
-    train_dataset = dataloaders[0].dataset.dataset
-    train_dataset, _ = torch.utils.data.random_split(train_dataset, [len(train_dataset)-len(train_dataset)//5, len(train_dataset)//5])
+    train_dataset = torch.utils.data.ConcatDataset((dataloaders[0].dataset.dataset, dataloaders[1].dataset.dataset))
+    train_dataset, val_dataset = torch.utils.data.random_split(train_dataset, [len(train_dataset)-len(train_dataset)//5, len(train_dataset)//5])
     test_dataset = dataloaders[2].dataset
     target_train_dataset, target_test_dataset = torch.utils.data.random_split(test_dataset, [len(test_dataset)-len(test_dataset)//5, len(test_dataset)//5])
     full_dataset = torch.utils.data.ConcatDataset((train_dataset, target_train_dataset))
     num_features = train_dataset.dataset.num_features
     num_classes = train_dataset.dataset.num_classes
     train_dataloader = torch.utils.data.DataLoader(full_dataset, shuffle=True, batch_size=len(full_dataset))
+    val_dataloader = torch.utils.data.DataLoader(torch.utils.data.ConcatDataset((val_dataset, target_test_dataset)), shuffle=False, batch_size=len(val_dataset)+len(target_test_dataset))
     test_dataloader = torch.utils.data.DataLoader(target_test_dataset, shuffle=False, batch_size=len(target_test_dataset))
     results = []
     for trial_idx in tqdm(range(20)):
@@ -429,7 +430,7 @@ def get_baseline_results(dataloaders, device, epochs_per_trial=100):
             hparam_name: get_hparam_fn() for hparam_name, get_hparam_fn in LogisticRegression.hparam_options.items()
         }
         trainer = LogisticRegression(num_features, num_classes, device, hparams)
-        trial_results, _ = run_until_saturation(lambda: run_epoch((train_dataloader, test_dataloader), trainer), 'train_loss')
+        trial_results, _ = run_until_saturation(lambda: run_epoch((train_dataloader, val_dataloader, test_dataloader), trainer), 'train_loss')
         best_epoch_idx = np.argmax(trial_results['val_acc'])
         for key, item in trial_results.items():
             trial_results[key] = item[best_epoch_idx]
@@ -509,7 +510,7 @@ def random_search_hparams(trainer_class, dataloaders, device, n_trials=20, epoch
             'all_results': (oracle_results, holdout_results)}
 
 TRAINER_CLASSES = [
-    #DARE,
+    DARE,
     Mixup,
     LogisticRegression,
     SVM,
@@ -532,11 +533,7 @@ def evaluate_trained_models(
         dataset_constructor = getattr(domainbed, dataset)
         for holdout_dir in os.listdir(os.path.join(base_dir, dataset)):
             holdout_domain = holdout_dir.split('_')[-1]
-            if not holdout_domain in ['Clipart', 'Art']: ########
-                continue
             for fe_type in list(os.listdir(os.path.join(base_dir, dataset, holdout_dir))) + ['random', 'imagenet_pretrained']:
-                if not fe_type == 'erm_pretrained_augmented':
-                    continue
                 if 'mixup' in fe_type:
                     continue
                 for seed in seeds:
@@ -548,7 +545,7 @@ def evaluate_trained_models(
                     print('Generating dataloaders for {} / {} / {} / {}'.format(dataset, holdout_domain, fe_type, seed))
                     dataloaders = get_dataloaders(dataset_constructor, holdout_domain, fe_type, seed,
                                                   batch_size=batch_size, device=device)
-                    results_dir = os.path.join(base_dir, dataset, holdout_dir, fe_type, trial_dir, 'results', 'linear_classifiers')
+                    results_dir = os.path.join(base_dir, dataset, holdout_dir, fe_type, 'linear_classifiers')
                     os.makedirs(results_dir, exist_ok=True)
                     if overwrite or not(os.path.exists(os.path.join(results_dir, 'baseline_results.pickle'))):
                         baseline_results = get_baseline_results(dataloaders, device, num_epochs)
