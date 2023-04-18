@@ -533,7 +533,9 @@ def evaluate_trained_models(
         dataset_constructor = getattr(domainbed, dataset)
         for holdout_dir in os.listdir(os.path.join(base_dir, dataset)):
             holdout_domain = holdout_dir.split('_')[-1]
-            for fe_type in list(os.listdir(os.path.join(base_dir, dataset, holdout_dir))) + ['random', 'imagenet_pretrained']:
+            for fe_type in [x for x in os.listdir(os.path.join(base_dir, dataset, holdout_dir)) if not x in ['random', 'imagenet_pretrained']] + ['random', 'imagenet_pretrained']:
+                if fe_type in ['erm_covariance_decay', 'erm_mixup']:
+                    continue
                 for seed in seeds:
                     random.seed(seed)
                     np.random.seed(seed)
@@ -552,19 +554,19 @@ def evaluate_trained_models(
                     if overwrite or not(os.path.exists(os.path.join(results_dir, 'baseline_results.pickle'))):
                         make_dataloaders()
                         baseline_results = get_baseline_results(dataloaders, device, num_epochs)
-                        with open(os.path.join(results_dir, 'baseline_results.pickle'), 'wb') as F:
+                        with open(os.path.join(results_dir, 'baseline_results_{}.pickle'.format(seed)), 'wb') as F:
                             pickle.dump(baseline_results, F)
                     else:
                         print('Skipping trial; found pre-existing results in {}'.format(
-                            os.path.join(results_dir, 'baseline_results.pickle')))
+                            os.path.join(results_dir, 'baseline_results_{}.pickle'.format(seed))))
                     for trainer_class in TRAINER_CLASSES:
                         if not trainer_class.__name__ in classifiers:
                             continue
                         if not(overwrite) and os.path.exists(os.path.join(results_dir, trainer_class.__name__+'.pickle')):
                             print('Skipping trial; found pre-existing results in {}'.format(
-                                os.path.join(results_dir, trainer_class.__name__+'.pickle')))
+                                os.path.join(results_dir, trainer_class.__name__+'_{}.pickle'.format(seed))))
                             continue
                         make_dataloaders()
                         rv = random_search_hparams(trainer_class, dataloaders, device)
-                        with open(os.path.join(results_dir, trainer_class.__name__+'.pickle'), 'wb') as F:
+                        with open(os.path.join(results_dir, trainer_class.__name__+'_{}.pickle'.format(seed)), 'wb') as F:
                             pickle.dump(rv, F)
